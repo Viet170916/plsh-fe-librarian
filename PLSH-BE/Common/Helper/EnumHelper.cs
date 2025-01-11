@@ -96,7 +96,8 @@ namespace Common.Helper
         public string Description { get; set; }
         public bool Equals(ValueName other)
         {
-            throw new NotImplementedException();
+            return false;
+            // throw new NotImplementedException();
         }
     }
 }
