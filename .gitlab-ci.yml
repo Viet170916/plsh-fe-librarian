@@ -10,14 +10,14 @@ stages:
 
 build_fe_borrower_project:
   stage: test
-  image: node:22.12.2
+  image: node:22.13.0
   cache:
     paths:
       - node_modules/
   before_script:
     - source ~/.profile
     - source ~/.bashrc
-    - export PATH="$PATH:~/.nvm/versions/node/v22.12.2/bin"
+    - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
   script:
     - cd ./plsh-fe-borrower
     - yarn install
@@ -29,14 +29,14 @@ build_fe_borrower_project:
 
 build_fe_librarian_project:
   stage: test
-  image: node:22.12.2
+  image: node:22.13.0
   cache:
     paths:
       - node_modules/
   before_script:
     - source ~/.profile
     - source ~/.bashrc
-    - export PATH="$PATH:~/.nvm/versions/node/v22.12.2/bin"
+    - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
   script:
     - cd ./plsh-fe-librarian
     - yarn install
