@@ -28,7 +28,7 @@ export const file_FilesToUrl = (file_s: File | File[]): string | string[] => {
         return (imageUrl);
     }
 };
-export const objectToFormData = (obj: any, formData = new FormData(), parentKey = "") => {
+export const objectToFormData = (obj: object, formData = new FormData(), parentKey = "") => {
     Object.entries(obj).forEach(([key, value]) => {
         const fieldName = parentKey ? `${parentKey}[${key}]` : key;
 

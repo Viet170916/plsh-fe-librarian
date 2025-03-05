@@ -17,7 +17,7 @@ import {FaHeadphones} from "react-icons/fa6";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import {AvailabilityItem} from "@/components/book-table/BookRowItem";
-import {Author, Availability, Resource} from "@/helpers/appType";
+import {AnyObject, Author, Availability, Resource} from "@/helpers/appType";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/stores/store";
 import {SubmitHandler, useForm} from "react-hook-form";
@@ -193,7 +193,7 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
     );
 }
 
-type AudioBookAvailabilityProps = {}
+type AudioBookAvailabilityProps = AnyObject
 const AudioBookAvailability =
     memo(function AudioBookAvailability(props: AudioBookAvailabilityProps) {
         const dispatch = useDispatch();
@@ -201,7 +201,7 @@ const AudioBookAvailability =
         const pysicAvaiRef = useRef<Resource | undefined>(undefined);
         useEffect(() => {
             console.log(availabilities)
-        }, [])
+        }, [availabilities])
 
         function handleSave() {
             const av = availabilities.find(a => a.kind === "audio");
@@ -280,15 +280,12 @@ const AudioBookAvailability =
         )
 
     });
-type EBookAvailabilityProps = {}
+type EBookAvailabilityProps = AnyObject
 const EBookAvailability =
     memo(function EBookAvailability(props: EBookAvailabilityProps) {
         const dispatch = useDispatch();
         const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
         const eBookAvaiRef = useRef<Resource | undefined>(undefined);
-        useEffect(() => {
-            console.log(availabilities)
-        }, [])
 
         function handleSave() {
             if (!eBookAvaiRef.current) return;
@@ -368,15 +365,12 @@ const EBookAvailability =
         )
 
     });
-type PhysicBookAvailabilityProps = {}
+type PhysicBookAvailabilityProps = AnyObject
 const PhysicBookAvailability =
     memo(function PhysicBookAvailability(props: PhysicBookAvailabilityProps) {
         const dispatch = useDispatch();
         const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
         const pysicAvaiRef = useRef<string | undefined>(undefined);
-        useEffect(() => {
-            console.log(availabilities)
-        }, [])
 
         function handleSave() {
             if (!pysicAvaiRef.current) return;
@@ -487,9 +481,10 @@ const AddAuthor =
             }
         }, [])
         const handleSave = useCallback(() => {
-            authorState && dispatch(setAuthor(authorState));
+            if (authorState)
+                dispatch(setAuthor(authorState));
             setOpen(false);
-        }, [authorState]);
+        }, [authorState, dispatch]);
         const [open, setOpen] = React.useState(false);
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);

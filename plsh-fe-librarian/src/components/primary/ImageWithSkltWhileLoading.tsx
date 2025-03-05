@@ -8,7 +8,7 @@ import {memo, useState} from "react";
 type IProps =
     {
         children?: React.ReactNode,
-        src: string | StaticImageData | null,
+        src?: string | StaticImageData | null,
         width?: number,
         height?: number,
         fill?: boolean,
@@ -16,9 +16,9 @@ type IProps =
     }
 
 function ImageWithSkltWhileLoading(props: IProps) {
-    const [src, setSrc] = useState<string | StaticImageData | undefined>(props.src);
+    const [src, setSrc] = useState<string | StaticImageData | undefined>(props.src??undefined);
     useEffect(() => {
-        setSrc(props.src);
+        setSrc(props.src??undefined);
     }, [props.src]);
     const [isLoaded, setLoading] = useState<boolean>(true);
     return (<>

@@ -60,8 +60,8 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
         const response = await addAuthor(objectToFormData(data));
         if (response?.error) {
             toast.error(appStrings.author.error.ADD_FAILURE);
-        } else if (response?.data) {
-            response.data?.data && dispatch(setAuthor(response.data?.data));
+        } else if (response?.data?.data) {
+            dispatch(setAuthor(response.data?.data));
         }
         setOpen(false);
     };

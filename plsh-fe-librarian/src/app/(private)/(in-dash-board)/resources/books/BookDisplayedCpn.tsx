@@ -19,9 +19,9 @@ const mock: BookData[] = [{
     rating: 3.5,
     id: 1,
     availabilities: [
-        {isChecked: false, title: "E-book"},
-        {isChecked: true, title: "Physical book"},
-        {isChecked: true, title: "Audio book"}],
+        {kind: "e-book", isChecked: false, title: "E-book"},
+        {kind: "physical", isChecked: true, title: "Physical book"},
+        {kind: "audio", isChecked: true, title: "Audio book"}],
     bookStatus: {
         bookId: 0,
         position: "A R2-C4",
@@ -38,9 +38,9 @@ const mock: BookData[] = [{
         rating: 3.5,
         id: 2,
         availabilities: [
-            {isChecked: false, title: "E-book"},
-            {isChecked: true, title: "Physical book"},
-            {isChecked: true, title: "Audio book"}],
+            {kind: "e-book", isChecked: false, title: "E-book"},
+            {kind: "physical", isChecked: false, title: "Physical book"},
+            {kind: "audio", isChecked: true, title: "Audio book"}],
         bookStatus: {
             bookId: 0,
             position: "A R2-C4",
@@ -57,9 +57,9 @@ const mock: BookData[] = [{
         rating: 3.5,
         id: 3,
         availabilities: [
-            {isChecked: false, title: "E-book"},
-            {isChecked: true, title: "Physical book"},
-            {isChecked: true, title: "Audio book"}],
+            {kind: "e-book", isChecked: false, title: "E-book"},
+            {kind: "physical", isChecked: true, title: "Physical book"},
+            {kind: "audio", isChecked: false, title: "Audio book"}],
         bookStatus: {
             bookId: 0,
             position: "A R2-C4",

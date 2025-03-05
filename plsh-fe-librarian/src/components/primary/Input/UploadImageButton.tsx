@@ -8,7 +8,7 @@ import {truncateTextStyle} from "@/style/text.style";
 import {BiImageAdd} from "react-icons/bi";
 
 interface IProps {
-    children?: React.ReactNode;
+    // children?: React.ReactNode;
     onImageChange?: (resource: Resource, file?: { localUrl: string, file?: File }) => void;
 }
 
@@ -27,7 +27,7 @@ function UploadImageButton(props: IProps) {
         }
         setResource(render);
         props.onImageChange?.(render, {localUrl: file_FilesToUrl(file as File) as string, file});
-    }, [resource]);
+    }, [ props]);
     return (
         <ImageButton
             sx={{

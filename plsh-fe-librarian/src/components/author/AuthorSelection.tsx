@@ -7,20 +7,22 @@ import Grid from "@mui/material/Grid2";
 import Typography from "@/components/primary/typography";
 import appStrings from "@/helpers/appStrings";
 import {Author} from "@/helpers/appType";
+import Image from "next/image";
+import {width} from "@mui/system";
 
 interface IProps {
     children?: React.ReactNode;
-    onSelected?: (author?: Author|null) => void;
+    onSelected?: (author?: Author | null) => void;
 }
 
 function AuthorSelection(props: IProps) {
-    let [keyWord, setKeyWord] = useState<string>("");
+    const [keyWord, setKeyWord] = useState<string>("");
     const debouncedSetKeyWord = useMemo(
         () => debounce((value: string) => setKeyWord(value), 500), []);
     const onInputChange =
         useCallback((e: SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => {
             debouncedSetKeyWord(value)
-        }, []);
+        }, [debouncedSetKeyWord]);
     const {data, error, isLoading, refetch} = useGetAuthorQuery({keyWord}, {});
     const errorMessageComp = useMemo(() => {
         if (error) {
@@ -31,12 +33,12 @@ function AuthorSelection(props: IProps) {
     }, [error])
     useEffect(() => {
         refetch();
-    }, [keyWord]);
+    }, [keyWord, refetch]);
     return (
         <Grid container spacing={2}>
             {errorMessageComp}
             <Autocomplete
-                onChange={(e, author)=>{
+                onChange={(e, author) => {
                     props.onSelected?.(author);
                 }}
                 id="country-select-demo"
@@ -45,7 +47,7 @@ function AuthorSelection(props: IProps) {
                 autoHighlight
                 loading={isLoading}
                 onInputChange={onInputChange}
-                getOptionLabel={(author) => author.name}
+                getOptionLabel={(author) => author.name ?? ""}
                 renderOption={(props, author) => {
                     const {key, ...optionProps} = props;
                     return (
@@ -55,13 +57,19 @@ function AuthorSelection(props: IProps) {
                             sx={{'& > img': {mr: 2, flexShrink: 0}}}
                             {...optionProps}
                         >
-                            <img
-                                loading="lazy"
-                                width="20"
-                                srcSet={`${author.avatarUrl}`}
-                                src={`${author.avatarUrl}`}
-                                alt={author.name}
-                            />
+                            <div style={{
+                                width: 20,
+                                height: 20,
+                                position: "relative"
+                            }}>
+                                <Image
+                                    loading="lazy"
+                                    fill
+                                    // srcSet={`${author.avatarUrl}`}
+                                    src={`${author.avatarUrl}`}
+                                    alt={author.name ?? ""}
+                                />
+                            </div>
                             {author.name},
                             ({`${author.lifeSpan?.birthYear}${author.lifeSpan?.deadYear ? `-${author.lifeSpan?.deadYear}` : ""}`})
                         </Box>
