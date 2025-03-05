@@ -141,8 +141,8 @@ export type ShortBookInfo = {
 }
 export type Author = {
     id?: number,
-    name: string,
-    avatarUrl: string,
+    name?: string,
+    avatarUrl?: string,
     resource?: Resource,
     description?: string,
     summaryDescription?: string,

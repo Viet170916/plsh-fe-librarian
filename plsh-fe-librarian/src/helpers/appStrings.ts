@@ -116,8 +116,15 @@ const appStrings =
         },
         book: {
             PHYSIC_BOOK:"Sách vật lý",
+            AVAILABILITY: "Sẵn có",
+            POSITION: "Vị trí trên kệ",
+            E_BOOK: "Sách điện tử",
+            AUDIO_BOOK: "Sách nói",
 
-        }
+
+        },
+        REMOVE: "Xoá",
+        PDF_PREVIEW: "Đọc sách PDF"
     };
 export default appStrings;
 

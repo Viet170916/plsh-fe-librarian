@@ -2,37 +2,42 @@
 import React, {JSX, memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
+    Autocomplete,
     Box,
     Button,
-    IconButton,
-    Input,
     List,
     ListItem,
     ListItemIcon,
-    ListItemText, Modal, TextField,
+    ListItemText,
+    Modal,
+    TextField,
     Typography,
 } from "@mui/material";
 import {FaHeadphones} from "react-icons/fa6";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
-import {theme} from "@/components/BasicLayout";
-import StarRating from "@/components/primary/StarRating";
 import {AvailabilityItem} from "@/components/book-table/BookRowItem";
-import {Author, Availability} from "@/helpers/appType";
+import {Author, Availability, Resource} from "@/helpers/appType";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/stores/store";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {BookBaseInfo, setAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
+import {
+    addBookAvailability,
+    BookBaseInfo,
+    modifyBookAvailability, removeBookAvailability,
+    setAuthor
+} from "@/stores/slices/book-states/book.add-edit.slice";
 import appStrings from "@/helpers/appStrings";
 import {TiUserAdd} from "react-icons/ti";
 import Container from "@/components/primary/Container";
-import WithClientOnly from "@/components/primary/WithClientOnly";
 import AuthorSelection from "@/components/author/AuthorSelection";
 import BookAuthor from "@/components/book-page/view-only/BookAuthor";
 import FormModalAddEditAuthor from "@/components/author/FormModalAddEditAuthor";
 import {TextFieldNoBorder} from "@/components/primary/Input/TextFieldNoBorder";
 import {BasicButton} from "@/components/primary/Input/BasicButton";
 import ModalPanel from "@/components/primary/ModalPanel";
+import PdfUploader from "@/components/primary/PdfUpload";
+import AudioUpload from "@/components/primary/AudioUpload";
 
 interface IProps {
     children?: React.ReactNode;
@@ -106,24 +111,12 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                         </Typography>
                         <Grid container>
                             <Grid>
-                                <BasicButton>
-                                    <AvailabilityItem kind={"physical"} title={appStrings.book.PHYSIC_BOOK}
-                                                      isChecked={false}/>
-                                </BasicButton>
-
+                                <PhysicBookAvailability/>
+                                <EBookAvailability/>
+                                <AudioBookAvailability/>
                             </Grid>
 
                         </Grid>
-
-                        <List>
-                            {availability
-                                .map(i => (
-                                    <ListItem key={i.title}>
-                                        <AvailabilityItem kind={i.kind} title={i.title} isChecked={i.isChecked}/>
-                                    </ListItem>
-                                ))}
-                            {/*</Grid>*/}
-                        </List>
                     </Box>
                     <Box>
                         <Typography
@@ -200,17 +193,266 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
     );
 }
 
+type AudioBookAvailabilityProps = {}
+const AudioBookAvailability =
+    memo(function AudioBookAvailability(props: AudioBookAvailabilityProps) {
+        const dispatch = useDispatch();
+        const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
+        const pysicAvaiRef = useRef<Resource | undefined>(undefined);
+        useEffect(() => {
+            console.log(availabilities)
+        }, [])
+
+        function handleSave() {
+            const av = availabilities.find(a => a.kind === "audio");
+            const newAv = {...av} as Availability
+            if (av) {
+                if (newAv.kind === "audio") {
+                    newAv.kind = "audio";
+                    newAv.isChecked = true;
+                    newAv.resource = {...pysicAvaiRef.current, file: undefined} as Resource;
+                }
+                dispatch(modifyBookAvailability(newAv));
+                // baseInfo && (baseInfo.position = value);
+            } else {
+                dispatch(addBookAvailability({
+                    kind: "audio",
+                    resource: {...pysicAvaiRef.current, file: undefined} as Resource,
+                    isChecked: true,
+                    title: appStrings.book.PHYSIC_BOOK,
+                }));
+            }
+
+        }
+
+        function handleRemove() {
+            dispatch(removeBookAvailability("audio"));
+        }
+
+        function onAudioUploadChange(event: React.SyntheticEvent, value: Resource | null) {
+            pysicAvaiRef.current = value ?? undefined;
+        }
+
+        return (
+            <Grid container spacing={1}>
+                <ModalPanel
+                    containerProps={{
+                        sx: {
+                            maxWidth: 600,
+                        }
+                    }}
+                    buttonContent={
+
+                        <AvailabilityItem kind={"audio"} title={appStrings.book.AUDIO_BOOK}
+                                          isChecked={availabilities.find(a => a.kind === "audio")?.isChecked}/>
+                    }
+                >
+                    <Grid container spacing={1} width={"100%"}>
+                        <Grid size={12}>
+                            <Typography variant="body2" sx={{fontWeight: "bold", fontSize: 35, color: color.DARK_TEXT}}>
+                                {appStrings.book.PHYSIC_BOOK}
+                            </Typography>
+                        </Grid>
+                        <Grid size={12}>
+                            <AudioUpload/>
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleSave} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.COMFORT}}>
+                                {appStrings.SAVE}
+                            </Button>
+
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleRemove} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.SERIOUS}}>
+                                {appStrings.REMOVE}
+                            </Button>
+                        </Grid>
+
+
+                    </Grid>
+
+                </ModalPanel>
+
+
+            </Grid>
+        )
+
+    });
+type EBookAvailabilityProps = {}
+const EBookAvailability =
+    memo(function EBookAvailability(props: EBookAvailabilityProps) {
+        const dispatch = useDispatch();
+        const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
+        const eBookAvaiRef = useRef<Resource | undefined>(undefined);
+        useEffect(() => {
+            console.log(availabilities)
+        }, [])
+
+        function handleSave() {
+            if (!eBookAvaiRef.current) return;
+            const av = availabilities.find(a => a.kind === "e-book");
+            const newAv = {...av} as Availability
+            if (av) {
+                if (newAv.kind === "e-book") {
+                    newAv.kind = "e-book";
+                    newAv.isChecked = true;
+                    newAv.resource = ({...eBookAvaiRef.current, file: undefined} as Resource);
+                }
+                dispatch(modifyBookAvailability(newAv));
+                // baseInfo && (baseInfo.position = value);
+            } else {
+                dispatch(addBookAvailability({
+                    kind: "e-book",
+                    resource: ({...eBookAvaiRef.current, file: undefined} as Resource),
+                    isChecked: true,
+                    title: appStrings.book.E_BOOK,
+                }));
+            }
+
+        }
+
+        function handleRemove() {
+            dispatch(removeBookAvailability("e-book"));
+        }
+
+        function eBookChange(value: Resource | undefined) {
+            eBookAvaiRef.current = value ?? undefined;
+        }
+
+        return (
+            <Grid container spacing={1}>
+                <ModalPanel
+                    containerProps={{
+                        sx: {
+                            maxWidth: 600,
+                        }
+                    }}
+                    buttonContent={
+
+                        <AvailabilityItem kind={"physical"} title={appStrings.book.E_BOOK}
+                                          isChecked={availabilities.find(a => a.kind === "e-book")?.isChecked}/>
+                    }
+                >
+                    <Grid container spacing={1} width={"100%"}>
+                        <Grid size={12}>
+                            <Typography variant="body2" sx={{fontWeight: "bold", fontSize: 35, color: color.DARK_TEXT}}>
+                                {appStrings.book.PHYSIC_BOOK}
+                            </Typography>
+                        </Grid>
+                        <Grid size={12}>
+                            <PdfUploader onUpload={eBookChange}/>
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleSave} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.COMFORT}}>
+                                {appStrings.SAVE}
+                            </Button>
+
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleRemove} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.SERIOUS}}>
+                                {appStrings.REMOVE}
+                            </Button>
+                        </Grid>
+
+
+                    </Grid>
+
+                </ModalPanel>
+
+
+            </Grid>
+        )
+
+    });
 type PhysicBookAvailabilityProps = {}
 const PhysicBookAvailability =
     memo(function PhysicBookAvailability(props: PhysicBookAvailabilityProps) {
+        const dispatch = useDispatch();
+        const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
+        const pysicAvaiRef = useRef<string | undefined>(undefined);
+        useEffect(() => {
+            console.log(availabilities)
+        }, [])
+
+        function handleSave() {
+            if (!pysicAvaiRef.current) return;
+            const av = availabilities.find(a => a.kind === "physical");
+            const newAv = {...av} as Availability
+            if (av) {
+                if (newAv.kind === "physical") {
+                    newAv.kind = "physical";
+                    newAv.isChecked = true;
+                    newAv.position = pysicAvaiRef.current ?? undefined;
+                }
+                dispatch(modifyBookAvailability(newAv));
+                // baseInfo && (baseInfo.position = value);
+            } else {
+                dispatch(addBookAvailability({
+                    kind: "physical",
+                    position: pysicAvaiRef.current ?? undefined,
+                    isChecked: true,
+                    title: appStrings.book.PHYSIC_BOOK,
+                }));
+            }
+
+        }
+
+        function handleRemove() {
+            dispatch(removeBookAvailability("physical"));
+        }
+
+        function physicSelectChange(event: React.SyntheticEvent, value: string | null) {
+            pysicAvaiRef.current = value ?? undefined;
+        }
+
         return (
             <Grid container spacing={1}>
-
                 <ModalPanel
-                    buttonContent={<BasicButton>
-                        <AvailabilityItem kind={"physical"} title={appStrings.book.PHYSIC_BOOK} isChecked={false}/>
-                    </BasicButton>}>
-                    <Grid container spacing={1}>
+                    containerProps={{
+                        sx: {
+                            maxWidth: 600,
+                        }
+                    }}
+                    buttonContent={
+
+                        <AvailabilityItem kind={"physical"} title={appStrings.book.PHYSIC_BOOK}
+                                          isChecked={availabilities.find(a => a.kind === "physical")?.isChecked}/>
+                    }
+                >
+                    <Grid container spacing={1} width={"100%"}>
+                        <Grid size={12}>
+                            <Typography variant="body2" sx={{fontWeight: "bold", fontSize: 35, color: color.DARK_TEXT}}>
+                                {appStrings.book.PHYSIC_BOOK}
+                            </Typography>
+                        </Grid>
+                        <Grid size={12}>
+                            <Autocomplete
+                                onChange={physicSelectChange}
+                                renderInput={(params) => {
+                                    return (
+                                        <TextField variant={"outlined"} {...params} label={appStrings.book.POSITION}/>)
+                                }
+                                }
+                                options={["A-R1-C1"]}
+                            />
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleSave} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.COMFORT}}>
+                                {appStrings.SAVE}
+                            </Button>
+
+                        </Grid>
+                        <Grid size={3}>
+                            <Button onClick={handleRemove} variant={"contained"}
+                                    sx={{color: color.LIGHT_TEXT, backgroundColor: color.SERIOUS}}>
+                                {appStrings.REMOVE}
+                            </Button>
+                        </Grid>
 
 
                     </Grid>

@@ -145,9 +145,11 @@ function AvailabilityTable(props: {
     const availabilityItems = useMemo(() => {
         return (
             props.availabilityDataItems.map((availability, i) => (
-                <AvailabilityItem title={availability.title}
-                                  isChecked={availability.isChecked}
-                                  key={availability.title}/>))
+                <AvailabilityItem
+                    kind={availability.kind}
+                    title={availability.title}
+                    isChecked={availability.isChecked}
+                    key={availability.title}/>))
         );
     }, [props.availabilityDataItems]);
     return (

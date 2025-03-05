@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
 
     // Lọc tác giả dựa trên từ khóa (không phân biệt hoa thường)
     const filteredAuthors = authors.filter((author) =>
-        author.name.toLowerCase().includes(keyWord.toLowerCase())
+        author.name?.toLowerCase().includes(keyWord.toLowerCase())
     );
     return NextResponse.json({data: filteredAuthors});
 }
