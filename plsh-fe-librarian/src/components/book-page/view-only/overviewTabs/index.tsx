@@ -5,7 +5,7 @@ import React, {memo} from "react";
 import {Box, Chip, Link, Paper, Stack, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import WithClientOnly from "@/components/primary/WithClientOnly";
-import TabBar from "@/components/book-page/view-only/overviewTabs/TabBar";
+import TabBar from "@/components/primary/TabBar";
 import {TabItem} from "@/helpers/appType";
 import Overview from "@/components/book-page/view-only/overviewTabs/overview";
 
@@ -26,27 +26,38 @@ const mockBook = {
 const BookOverviewTabs = (props: IProps) => {
 
     const tabs: TabItem[] = [{
+        kind: "normal",
         title: "Overview",
         content: <Overview/>,
     }, {
+        kind: "normal",
+
         title: "Editions",
         content: <Typography variant="body2">View 166 Editions content goes here.</Typography>,
     }, {
+        kind: "normal",
+
         title: "Details",
         content:
             <Typography variant="body2">Details content goes here.</Typography>
         ,
     }, {
+        kind: "normal",
+
         title: "Reviews",
         content:
             <Typography variant="body2">4.1k Reviews content goes here.</Typography>
         ,
     }, {
+        kind: "normal",
+
         title: "Lists",
         content:
             <Typography variant="body2">Lists content goes here.</Typography>
         ,
     }, {
+        kind: "normal",
+
         title: "Related Books",
         content:
             <Typography variant="body2">Related Books content goes here.</Typography>

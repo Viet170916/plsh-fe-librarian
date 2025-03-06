@@ -109,13 +109,13 @@ const appStrings =
 
             },
             error: {
-                ADD_FAILURE:"Thêm tác giả không thành công"
+                ADD_FAILURE: "Thêm tác giả không thành công"
 
             }
 
         },
         book: {
-            PHYSIC_BOOK:"Sách vật lý",
+            PHYSIC_BOOK: "Sách vật lý",
             AVAILABILITY: "Sẵn có",
             POSITION: "Vị trí trên kệ",
             E_BOOK: "Sách điện tử",
@@ -124,7 +124,16 @@ const appStrings =
 
         },
         REMOVE: "Xoá",
-        PDF_PREVIEW: "Đọc sách PDF"
+        PDF_PREVIEW: "Đọc sách PDF",
+        member: {
+            BASE_INFO: "Thông tin cơ bản",
+            BORROW_REQUEST:"Lượt mượn",
+            READING:"Thống kê",
+            HISTORY:"Lịch sử",
+            CARD: "Thẻ",
+            SETTING:"Tuỳ chọn"
+
+        }
     };
 export default appStrings;
 

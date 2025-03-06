@@ -1,5 +1,5 @@
 "use client"
-import React, {memo} from "react";
+import React, {memo, useEffect} from "react";
 
 import {Box, ContainerProps, Modal, ModalProps, SxProps, Theme} from "@mui/material";
 import {BasicButton} from "@/components/primary/Input/BasicButton";
@@ -13,10 +13,11 @@ import {
 } from "@mui/system";
 
 interface IProps {
-    children?: React.ReactNode;
-    buttonContent?: React.ReactNode;
-    buttonStyle?: SxProps<Theme>;
-    containerProps?: ContainerProps;
+    children?: React.ReactNode,
+    buttonContent?: React.ReactNode,
+    buttonStyle?: SxProps<Theme>,
+    containerProps?: ContainerProps,
+    close?: boolean
 }
 
 type Sx =
@@ -43,6 +44,9 @@ function ModalPanel(props: IProps & ContainerProps) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    useEffect(() => {
+        setOpen(false)
+    }, [props.close]);
     style = {...style, ...props.containerProps?.sx};
     return (
         <Box>

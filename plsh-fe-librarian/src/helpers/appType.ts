@@ -117,13 +117,18 @@ export type NextImageProps = React.ForwardRefExoticComponent<Omit<React.Detailed
 } & React.RefAttributes<HTMLImageElement | null>>
 
 export type TabItem = {
+    kind: "normal";
     title: string;
     content: React.ReactNode;
+} | {
+    kind: "link";
+    segment?: string,
+    title: string;
 }
 
 export type Resource = {
     id?: number,
-    type: "image" | "pdf",
+    type: "image" | "pdf" | "audio",
     name?: string,
     sizeByte?: number,
     fileType?: FileType | string | "image/jpeg" | "image/png" | "image/heic" | "application/pdf",

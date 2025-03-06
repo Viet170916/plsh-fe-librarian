@@ -8,7 +8,7 @@ export const color = {
     THIRD: "#F34040",
     LOVELY: "#F34040",
     SERIOUS: "#F34040",
-    FOUR: "#6E23CD",
+    FOUR: "#926CFF",
     FIFTH: "#EC6C9A",
     SIXTH: "#F09643",
     WARNING: "#F09643",

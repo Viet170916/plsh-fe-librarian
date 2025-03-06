@@ -198,44 +198,49 @@ const AudioBookAvailability =
     memo(function AudioBookAvailability(props: AudioBookAvailabilityProps) {
         const dispatch = useDispatch();
         const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
-        const pysicAvaiRef = useRef<Resource | undefined>(undefined);
-        useEffect(() => {
-            console.log(availabilities)
-        }, [availabilities])
+        const audioAvaiRef = useRef<Resource | undefined>(undefined);
+        const [triggerCloseModal, setTriggerCloseModal] = React.useState(false);
 
         function handleSave() {
-            const av = availabilities.find(a => a.kind === "audio");
-            const newAv = {...av} as Availability
-            if (av) {
-                if (newAv.kind === "audio") {
-                    newAv.kind = "audio";
-                    newAv.isChecked = true;
-                    newAv.resource = {...pysicAvaiRef.current, file: undefined} as Resource;
+            if (audioAvaiRef.current) {
+                const av = availabilities.find(a => a.kind === "audio");
+                const newAv = {...av} as Availability
+                if (av) {
+                    if (newAv.kind === "audio") {
+                        newAv.kind = "audio";
+                        newAv.isChecked = true;
+                        newAv.resource = {...audioAvaiRef.current, file: undefined} as Resource;
+                    }
+                    dispatch(modifyBookAvailability(newAv));
+                    // baseInfo && (baseInfo.position = value);
+                } else {
+                    dispatch(addBookAvailability({
+                        kind: "audio",
+                        resource: {...audioAvaiRef.current, file: undefined} as Resource,
+                        isChecked: true,
+                        title: appStrings.book.PHYSIC_BOOK,
+                    }));
                 }
-                dispatch(modifyBookAvailability(newAv));
-                // baseInfo && (baseInfo.position = value);
-            } else {
-                dispatch(addBookAvailability({
-                    kind: "audio",
-                    resource: {...pysicAvaiRef.current, file: undefined} as Resource,
-                    isChecked: true,
-                    title: appStrings.book.PHYSIC_BOOK,
-                }));
             }
+            setTriggerCloseModal(!triggerCloseModal);
 
         }
 
         function handleRemove() {
             dispatch(removeBookAvailability("audio"));
+            audioAvaiRef.current = undefined;
+            setTriggerCloseModal(!triggerCloseModal);
+
         }
 
-        function onAudioUploadChange(event: React.SyntheticEvent, value: Resource | null) {
-            pysicAvaiRef.current = value ?? undefined;
+        function onAudioUploadChange(value: Resource | undefined) {
+            audioAvaiRef.current = value ?? undefined;
         }
 
         return (
             <Grid container spacing={1}>
                 <ModalPanel
+                    close={triggerCloseModal}
                     containerProps={{
                         sx: {
                             maxWidth: 600,
@@ -254,7 +259,7 @@ const AudioBookAvailability =
                             </Typography>
                         </Grid>
                         <Grid size={12}>
-                            <AudioUpload/>
+                            <AudioUpload onAudioUpload={onAudioUploadChange}/>
                         </Grid>
                         <Grid size={3}>
                             <Button onClick={handleSave} variant={"contained"}
@@ -286,32 +291,37 @@ const EBookAvailability =
         const dispatch = useDispatch();
         const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
         const eBookAvaiRef = useRef<Resource | undefined>(undefined);
+        const [triggerCloseModal, setTriggerCloseModal] = React.useState(false);
 
         function handleSave() {
-            if (!eBookAvaiRef.current) return;
-            const av = availabilities.find(a => a.kind === "e-book");
-            const newAv = {...av} as Availability
-            if (av) {
-                if (newAv.kind === "e-book") {
-                    newAv.kind = "e-book";
-                    newAv.isChecked = true;
-                    newAv.resource = ({...eBookAvaiRef.current, file: undefined} as Resource);
+            if (eBookAvaiRef.current) {
+                const av = availabilities.find(a => a.kind === "e-book");
+                const newAv = {...av} as Availability
+                if (av) {
+                    if (newAv.kind === "e-book") {
+                        newAv.kind = "e-book";
+                        newAv.isChecked = true;
+                        newAv.resource = ({...eBookAvaiRef.current, file: undefined} as Resource);
+                    }
+                    dispatch(modifyBookAvailability(newAv));
+                    // baseInfo && (baseInfo.position = value);
+                } else {
+                    dispatch(addBookAvailability({
+                        kind: "e-book",
+                        resource: ({...eBookAvaiRef.current, file: undefined} as Resource),
+                        isChecked: true,
+                        title: appStrings.book.E_BOOK,
+                    }));
                 }
-                dispatch(modifyBookAvailability(newAv));
-                // baseInfo && (baseInfo.position = value);
-            } else {
-                dispatch(addBookAvailability({
-                    kind: "e-book",
-                    resource: ({...eBookAvaiRef.current, file: undefined} as Resource),
-                    isChecked: true,
-                    title: appStrings.book.E_BOOK,
-                }));
             }
+            setTriggerCloseModal(!triggerCloseModal);
 
         }
 
         function handleRemove() {
             dispatch(removeBookAvailability("e-book"));
+            eBookAvaiRef.current = undefined;
+            setTriggerCloseModal(!triggerCloseModal);
         }
 
         function eBookChange(value: Resource | undefined) {
@@ -321,6 +331,8 @@ const EBookAvailability =
         return (
             <Grid container spacing={1}>
                 <ModalPanel
+                    close={triggerCloseModal}
+
                     containerProps={{
                         sx: {
                             maxWidth: 600,
@@ -371,32 +383,37 @@ const PhysicBookAvailability =
         const dispatch = useDispatch();
         const availabilities = useSelector((state: RootState) => state.addEditBookData.baseInfo?.availability ?? [])
         const pysicAvaiRef = useRef<string | undefined>(undefined);
+        const [triggerCloseModal, setTriggerCloseModal] = React.useState(false);
 
         function handleSave() {
-            if (!pysicAvaiRef.current) return;
-            const av = availabilities.find(a => a.kind === "physical");
-            const newAv = {...av} as Availability
-            if (av) {
-                if (newAv.kind === "physical") {
-                    newAv.kind = "physical";
-                    newAv.isChecked = true;
-                    newAv.position = pysicAvaiRef.current ?? undefined;
+            if (pysicAvaiRef.current) {
+                const av = availabilities.find(a => a.kind === "physical");
+                const newAv = {...av} as Availability
+                if (av) {
+                    if (newAv.kind === "physical") {
+                        newAv.kind = "physical";
+                        newAv.isChecked = true;
+                        newAv.position = pysicAvaiRef.current ?? undefined;
+                    }
+                    dispatch(modifyBookAvailability(newAv));
+                    // baseInfo && (baseInfo.position = value);
+                } else {
+                    dispatch(addBookAvailability({
+                        kind: "physical",
+                        position: pysicAvaiRef.current ?? undefined,
+                        isChecked: true,
+                        title: appStrings.book.PHYSIC_BOOK,
+                    }));
                 }
-                dispatch(modifyBookAvailability(newAv));
-                // baseInfo && (baseInfo.position = value);
-            } else {
-                dispatch(addBookAvailability({
-                    kind: "physical",
-                    position: pysicAvaiRef.current ?? undefined,
-                    isChecked: true,
-                    title: appStrings.book.PHYSIC_BOOK,
-                }));
             }
+            setTriggerCloseModal(!triggerCloseModal);
 
         }
 
         function handleRemove() {
             dispatch(removeBookAvailability("physical"));
+            pysicAvaiRef.current = undefined;
+            setTriggerCloseModal(!triggerCloseModal);
         }
 
         function physicSelectChange(event: React.SyntheticEvent, value: string | null) {
@@ -406,6 +423,8 @@ const PhysicBookAvailability =
         return (
             <Grid container spacing={1}>
                 <ModalPanel
+                    close={triggerCloseModal}
+
                     containerProps={{
                         sx: {
                             maxWidth: 600,

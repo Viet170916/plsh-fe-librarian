@@ -63,11 +63,12 @@ function TabBar(props: IProps): JSX.Element {
                 ))}
             </Tabs>
             {
-                props.tabs.map((tab, index) => (
-                    <TabPanel style={{width: "100%"}} key={tab.title} value={value} index={index}>
-                        {tab.content}
-                    </TabPanel>
-                ))
+                props.tabs.map((tab, index) => {
+                    if (tab.kind === "normal")
+                        return (<TabPanel style={{width: "100%"}} key={tab.title} value={value} index={index}>
+                            {tab.content}
+                        </TabPanel>)
+                })
             }
         </Box>
     );

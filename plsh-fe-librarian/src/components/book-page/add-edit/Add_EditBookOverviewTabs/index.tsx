@@ -5,7 +5,7 @@ import React, {memo} from "react";
 import {Box, Chip, Link, Paper, Stack, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import WithClientOnly from "@/components/primary/WithClientOnly";
-import TabBar from "@/components/book-page/view-only/overviewTabs/TabBar";
+import TabBar from "@/components/primary/TabBar";
 import {TabItem} from "@/helpers/appType";
 import Overview from "@/components/book-page/view-only/overviewTabs/overview";
 
