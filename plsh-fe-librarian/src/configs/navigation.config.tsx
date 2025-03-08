@@ -20,8 +20,14 @@ export const NAVIGATION: Navigation = [
         },
         {
             segment: "borrow",
-            title: " Borrow",
+            title: " Mượn sách",
             icon: <FaBookBookmark color={color.PRIMARY} size={24}/>,
+
+            children: [{
+                segment: "add",
+                title: "Tạo phiên giao dịch",
+                icon: <HiOutlineViewGridAdd color={color.PRIMARY} size={24}/>,
+            },]
         }
         ,
         {
@@ -38,7 +44,7 @@ export const NAVIGATION: Navigation = [
                 segment: "add",
                 title: "Add Book",
                 icon: <HiOutlineViewGridAdd color={color.PRIMARY} size={24}/>,
-            },{
+            }, {
                 segment: "manage",
                 title: "Manage Book",
                 icon: <ImBooks color={color.PRIMARY} size={24}/>,

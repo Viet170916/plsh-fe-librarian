@@ -27,3 +27,6 @@ export const concaveContainerStyle: SxProps = {
     borderRadius: "10px !important",
     boxShadow: `inset 0.2rem 0.2rem 0.5rem ${color.CONCAVE_SHADOW}, inset -0.2rem -0.2rem 0.5rem ${color.CONCAVE_HIGHLIGHT}`,
 };
+export const shadowContainerStyle: SxProps<Theme> = {
+    boxShadow: `0px 0px 4px ${color.SHADOW}`,
+}

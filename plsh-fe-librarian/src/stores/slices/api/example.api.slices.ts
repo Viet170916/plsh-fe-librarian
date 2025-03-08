@@ -25,14 +25,14 @@ export const exampleApiSlice = createApi( {
         // providesTags( result ){
         //   if( result && result.data && result.data.items ){
         //     return [
-        //       ...result.data.items.map( ( { id }: { id: string } ) => ( {
+        //       ...result.data.items.map( ( { [id] }: { [id]: string } ) => ( {
         //         type: "Order" as const,
-        //         id,
+        //         [id],
         //       } ) ),
-        //       { type: "Order" as const, id: "LIST" },
+        //       { type: "Order" as const, [id]: "LIST" },
         //     ];
         //   }
-        //   return [ { type: "Order", id: "LIST" } ];
+        //   return [ { type: "Order", [id]: "LIST" } ];
         // },
       } ),
     postCreateExample: builder.mutation( {
@@ -42,7 +42,7 @@ export const exampleApiSlice = createApi( {
         body,
       } ),
       // invalidatesTags: ( result, error, body: { param: string } ) =>
-      //   error ? [] : [ { type: "Order", id: "LIST" } ],
+      //   error ? [] : [ { type: "Order", [id]: "LIST" } ],
     } ),
   } ),
 } );

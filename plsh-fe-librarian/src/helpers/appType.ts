@@ -2,6 +2,7 @@ import {Session} from "next-auth";
 import React from "react";
 import type {OnLoadingComplete, PlaceholderValue} from "next/dist/shared/lib/get-img-props";
 import {FileType} from "next/dist/lib/file-exists";
+import appStrings from "@/helpers/appStrings";
 
 export type VoidFunc = () => void;
 export type VoidFuncAsync = () => Promise<void>;
@@ -262,3 +263,100 @@ export type AuthorData = {
     birthYear?: string;
     deathYear?: string;
 }
+export type Borrower = {
+    aboutRole?: {
+        kind: "student",
+        title: "Sinh viên";
+        classRoom: string;
+        address: string
+    } | {
+        kind: "teacher",
+        title: "Giáo viên";
+        address: string;
+    } | {
+        title: "Khách";
+        kind: "guest",
+        address: string;
+    } | {
+        title: "Người dùng khác";
+        who?: string;
+        kind: "other",
+        address: string;
+    }
+    identityCardNumber?: number;
+    id?: number;
+    name?: string;
+    avatarUrl?: string;
+    email: string;
+    phone?: string;
+    analytics?: {
+        contribution?: {
+            count?: number;
+        },
+        bookReading?: {
+            count?: number;
+        };
+        loan?: {
+            count?: number;
+        };
+        totalAmountTransaction?: {
+            count?: number;
+        };
+    }
+
+}
+export type BorrowStatus = {
+    kind: "overdue";
+    title: string;
+    overdueDateCount: number;
+
+} | {
+    kind: "on-loan",
+    title: string;
+    dayLeftCount: number;
+} | {
+    kind: "returned";
+    title: string;
+} | {
+    kind: "partially-returned";
+    title: string;
+    total: number;
+    returnedCount: number;
+    leftCount: number;
+
+}
+export type BorrowedBook = {
+    id?: number;
+    code?: string;
+    book?: BookData;
+    beforeBorrow?: {
+        imageUrl?: string[];
+        note?: string;
+        status?: BookDamageStatus;
+    };
+    borrowStatus?: BorrowStatus;
+    afterBorrow?: {
+        imageUrl?: string[];
+        note?: string;
+        status: BookDamageStatus;
+    };
+    count?: number;
+    borrowDateRange?: {
+        start: string;
+        end: string;
+    };
+}
+export type BookDamageStatus = "new" | "normal" | "slight-damage" | "moderate-damage" | "heavy-damage" | "destroyed"
+export type BorrowItemData = {
+    borrowDate?: string;
+    id?: number;
+    code: string;
+    note?: string;
+    borrower: Borrower;
+    status: BorrowStatus;
+    bookCount: number;
+    borrowedBooks: BorrowedBook[];
+    dayUsageCount: number;
+
+};
+

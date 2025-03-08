@@ -8,12 +8,14 @@ import sessionReducer from "@/stores/slices/session.slice";
 import {bookApiMiddleware, bookApiReducer, bookApiReducerPath} from "@/stores/slices/api/book.api.slice";
 import addEditBookDataReducer from "@/stores/slices/book-states/book.add-edit.slice";
 import {authorApiMiddleware, authorApiReducer, authorApiReducerPath} from "@/stores/slices/api/author.api.slice";
+import addEditBorrowDataReducer from "@/stores/slices/borrow-state/borrow.add-edit.slice";
 
 export const store = configureStore({
     reducer: {
         //app states
         session: sessionReducer,
         addEditBookData: addEditBookDataReducer,
+        addEditBorrowData: addEditBorrowDataReducer,
         //apis
         analytic: analyticsApiReducer,
         [analyticsApiReducerPath]: analyticsApiReducer,
@@ -21,6 +23,7 @@ export const store = configureStore({
         [bookApiReducerPath]: bookApiReducer,
         _authorApi: authorApiReducer,
         [authorApiReducerPath]: authorApiReducer,
+
 
 
     },

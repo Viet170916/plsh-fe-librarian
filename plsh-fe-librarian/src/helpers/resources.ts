@@ -1,4 +1,5 @@
 import {createTheme} from "@mui/material";
+import {viVN} from '@mui/x-date-pickers/locales';
 
 export const color = {
     PRIMARY: "#FA7C54",
@@ -44,6 +45,15 @@ export const theme = createTheme({
     cssVariables: {
         colorSchemeSelector: 'data-toolpad-color-scheme',
     },
+    typography: {
+        subtitle1: {fontSize: 13, fontWeight: 'lighter'},
+        h1: {fontSize: 35,},
+        h2: {fontSize: 30},
+        h3: {fontSize: 25},
+        h4: {fontSize: 20},
+        h5: {fontSize: 14},
+        h6: {fontSize: 12},
+    },
     breakpoints: {
         values: {
             xs: 0,
@@ -53,4 +63,4 @@ export const theme = createTheme({
             xl: 1536,
         },
     },
-});
+}, viVN);

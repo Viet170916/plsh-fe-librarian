@@ -19,6 +19,7 @@ import {color, theme} from "@/helpers/resources";
 import {usePathname} from "next/navigation";
 import Link from 'next/link';
 import {FaCaretDown, FaCaretUp} from "react-icons/fa6";
+import Grid from "@mui/material/Grid2";
 
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -188,7 +189,7 @@ function NavList({items, open, pathname, segment}: {
                                     display: 'block',
                                     borderRadius: item.segment && pathname.includes(item.segment) ? 1 : 0,
                                     background: (item.segment && pathname.includes(item.segment)) ? color.PRIMARY_O10 : undefined,
-                                }} href={`/${segment ? `${segment}/`:""}${item.segment}`}>
+                                }} href={`/${segment ? `${segment}/` : ""}${item.segment}`}>
                                     <ListItemButton
                                         sx={[{
                                             minHeight: 48,
@@ -233,37 +234,59 @@ const CollapseList = memo(function CollapseList({items, open, pathname, segment,
         }, []);
         return (<>
             <ListItem disablePadding
-                      onClick={handleClick}
                       sx={{
                           display: 'block',
                           padding: 1,
                       }}>
-                <Link style={{
-                    display: 'block',
-                    borderRadius: segment && pathname.includes(segment) ? 1 : 0,
-                    background: (segment && pathname.includes(segment)) ? color.PRIMARY_O10 : undefined,
-                }} href={`/${segment}`}>
-                    <ListItemButton
-                        sx={[{
-                            minHeight: 48,
-                            px: 2.5,
-                        }, open ? {justifyContent: 'initial',} : {justifyContent: 'center'},]}
-                    >
-                        <ListItemIcon
-                            sx={[{
-                                minWidth: 0,
-                                justifyContent: 'center',
-                            }, open ? {mr: 3,} : {mr: 'auto',},]}
+
+                <ListItemButton
+                    sx={[{
+                        width: "100%",
+                        display: 'block',
+                        borderRadius: segment && pathname.includes(segment) ? 1 : 0,
+                        background: (segment && pathname.includes(segment)) ? color.PRIMARY_O10 : undefined,
+                        minHeight: 48,
+                        px: 2.5,
+
+                    }, open ? {justifyContent: 'initial',} : {justifyContent: 'center'},]}
+                >
+                    <Grid container>
+                        <Grid size={"grow"}>
+                            <Link href={`/${segment}`}>
+                                <Grid container alignItems="center">
+                                    <ListItemIcon
+                                        sx={[{
+                                            minWidth: 0,
+                                            justifyContent: 'center',
+                                        }, open ? {mr: 3,} : {mr: 'auto',},]}
+                                    >
+                                        {icon}
+                                    </ListItemIcon>
+                                    <Grid size={"grow"}>
+                                        <ListItemText
+                                            primary={title}
+                                            sx={[open ? {opacity: 1,} : {opacity: 0,},]}
+                                        />
+                                    </Grid>
+
+                                </Grid>
+
+                            </Link>
+                        </Grid>
+                        <Box
+                            onClick={handleClick}
+                            sx={{
+                                padding: 0, display: "grid",
+                                '&:hover': {
+                                    color: color.PRIMARY,
+                                },
+                                justifyContent: 'center', alignItems: 'center'
+                            }}
                         >
-                            {icon}
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={title}
-                            sx={[open ? {opacity: 1,} : {opacity: 0,},]}
-                        />
-                        {isOpen ?  <FaCaretUp/>:<FaCaretDown/> }
-                    </ListItemButton>
-                </Link>
+                            {isOpen ? <FaCaretUp/> : <FaCaretDown/>}
+                        </Box>
+                    </Grid>
+                </ListItemButton>
             </ListItem>
             <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <NavList items={items} open={open} pathname={pathname} segment={segment}/>

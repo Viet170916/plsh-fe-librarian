@@ -32,6 +32,7 @@ type Sx =
 function ModalPanel(props: IProps & ContainerProps) {
     let style: Sx = {
         position: 'absolute',
+        maxHeight: '100%',
         backgroundColor: color.WHITE,
         top: '50%',
         left: '50%',
@@ -56,6 +57,7 @@ function ModalPanel(props: IProps & ContainerProps) {
             <Modal
                 open={open}
                 onClose={handleClose}
+                sx={{padding: 10}}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Container

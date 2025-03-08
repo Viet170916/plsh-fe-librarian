@@ -1,5 +1,5 @@
 export const ADDRESS = "Địa chỉ";
-export const ROLE_IN_SCHOOL = "Bạn là";
+export const ROLE_IN_SCHOOL = "Vai trò";
 export const IDENTITY_CARD_NUMBER = "CCCD";
 export const CLASS_ROOM = "Lớp";
 export const PHONE_NUMBER = "Số điện thoai";
@@ -24,6 +24,26 @@ export const LOGOUT = "Đăng xuất";
 const appStrings =
     {
         TOTAL_BOOK: "Tổng số sách",
+        borrow: {
+            OVERDUE: "Quá hạn",
+            USAGE_DATE_COUNT: "Ngày đọc",
+            STATUS: "Trạng thái mượn",
+            RETURNED: "Đã trả",
+            LEFT: "Còn lại",
+            DAY_LEFT: "Số ngày còn lại",
+
+            BORROW_DATE: "Ngày mượn",
+
+            RETURN_DATE: "Ngày trả", DUE_DATE: "Hạn trả",
+            BOOK_DAMAGE_BEFORE_BORROW: "Tình trạng sách trước mượn",
+            BOOK_DAMAGE_AFTER_BORROW: "Tình trạng sách sau mượn",
+            BOOK_IMAGE_BEFORE_BORROW: "Hình ảnh sách trước khi mượn",
+            BORROW_STATUS: "Trạng thái mượn",
+            NO_BOOK_SELECTED: "Không có sách được chọn",
+            EDIT_BOOK_SELECTED: "Sách mượn"
+
+
+        },
         BORROWED_BOOK: "Sách được mượn",
         OVERDUE: "Sách quá hạn",
         MEMBERS: "Thành viên",
@@ -78,6 +98,8 @@ const appStrings =
             BOOK: "cuốn",
             PEOPLE: "người",
             MEMBER: "thành viên",
+            DAY: "ngày"
+
         },
         CHECKED_OUT__UNAVAILABLE: "Tạm hết",
         VERSION: "Phiên bản",
@@ -115,11 +137,14 @@ const appStrings =
 
         },
         book: {
-            PHYSIC_BOOK: "Sách vật lý",
+            PHYSIC_BOOK: "Sách cứng",
             AVAILABILITY: "Sẵn có",
             POSITION: "Vị trí trên kệ",
             E_BOOK: "Sách điện tử",
             AUDIO_BOOK: "Sách nói",
+            BOOK_COUNT: "Số lượng",
+            NAME: "Tên sách",
+            CODE: "Mã sách"
 
 
         },
@@ -127,13 +152,22 @@ const appStrings =
         PDF_PREVIEW: "Đọc sách PDF",
         member: {
             BASE_INFO: "Thông tin cơ bản",
-            BORROW_REQUEST:"Lượt mượn",
-            READING:"Thống kê",
-            HISTORY:"Lịch sử",
+            BORROW_REQUEST: "Lượt mượn",
+            READING: "Thống kê",
+            HISTORY: "Lịch sử",
             CARD: "Thẻ",
-            SETTING:"Tuỳ chọn"
+            SETTING: "Tuỳ chọn",
+            IDENTITY_CARD_NUMBER: "CCCD"
 
-        }
+        },
+        OTHER: "Khác",
+        READING: "Đã đọc",
+        CONTRIBUTION: "Đóng góp",
+        SEE_PROFILE: "Xem profile",
+        EMAIL: "Email",
+        UPLOAD_IMAGE: "Tải ảnh lên",
+        DOWNLOAD_IMAGE: "Tải ảnh xuống",
+        NOTE: "Ghi chú",
     };
 export default appStrings;
 

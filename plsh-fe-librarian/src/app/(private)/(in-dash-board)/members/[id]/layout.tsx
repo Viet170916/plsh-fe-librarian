@@ -41,16 +41,16 @@ const tabLinks: TabItem[] = [{
 
 function MemberLayout(props: IProps) {
     // const router = useRouter()
-    // const id = router.query.id;
+    // const [id] = router.query.[id];
     // const tabs = tabLinks.map((tab, index) => {
-    //     return {...tab, segment: `${id}${tab.kind === "link" && tab.segment ? `/${tab.segment}` : undefined}`};
+    //     return {...tab, segment: `${[id]}${tab.kind === "link" && tab.segment ? `/${tab.segment}` : undefined}`};
     // })
     return (
         <Stack direction={"column"} height={"100%"}>
             <Box flexGrow={0}>
                 <NavTabs tabs={tabLinks}/>
             </Box>
-            <Box flexGrow={1} bottom={0} overflow={"auto"} padding={"10px"}>
+            <Box flexGrow={1} bottom={0} overflow={"auto"} padding={"40px"}>
                 {props.children}
             </Box>
 

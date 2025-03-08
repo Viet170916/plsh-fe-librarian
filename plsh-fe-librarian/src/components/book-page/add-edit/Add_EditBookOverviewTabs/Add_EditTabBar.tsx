@@ -65,7 +65,7 @@ function Add_EditTabBar(props: IProps): JSX.Element {
             {
                 props.tabs.map((tab, index) => (
                     <TabPanel style={{width: "100%"}} key={tab.title} value={value} index={index}>
-                        {tab.content}
+                        {tab.kind === "normal" ? tab.content : undefined}
                     </TabPanel>
                 ))
             }

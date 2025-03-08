@@ -25,10 +25,41 @@ body {
     color: var(--foreground);
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
-    background-image: url("/images/bookhive-background.svg");
-    background-size: cover;
-    background-repeat: no-repeat;
+
     /*background-position: center;*/
 
 
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(1)::after {
+    content: "2";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(2)::after {
+    content: "3";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(3)::after {
+    content: "4";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(4)::after {
+    content: "5";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(5)::after {
+    content: "6";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(6)::after {
+    content: "7";
+}
+
+.MuiDayCalendar-weekDayLabel:nth-of-type(7)::after {
+    content: "N";
+}
+
+.MuiDayCalendar-weekDayLabel::before {
+    content: "";
+    display: none;
 }

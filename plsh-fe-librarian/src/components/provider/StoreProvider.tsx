@@ -27,7 +27,7 @@ export function Providers({children, session, dataSession}: IProps) {
         store.dispatch(setSession(dataSession));
     }, [dataSession]);
     return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="vi">
             <AppRouterCacheProvider options={{enableCssLayer: false}}>
                 <Suspense fallback={<LinearProgress/>}>
                     <ThemeProvider theme={theme}>
