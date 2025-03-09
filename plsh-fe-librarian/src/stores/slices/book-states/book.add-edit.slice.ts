@@ -5,7 +5,7 @@ import {Author, Availability, Language, Resource, ShortBookInfo} from "@/helpers
 // type
 export type BookResources = {
     coverImage?: Resource;
-    pdf?: Resource;
+    previewPdf?: Resource;
 }
 export type BookBaseInfo = {
     title?: "Clean Code",
