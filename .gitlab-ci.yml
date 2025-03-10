@@ -10,7 +10,7 @@ stages:
   - deploy
 
 variables:
-  VM_USER: "vietvq170916"
+  VM_USER: "vietvqhe170916"
   VM_HOST: "book-hive.space"
   DEPLOY_PATH: "/var/www/plsh-fe-librarian"
 
@@ -21,24 +21,6 @@ before_script:
   - chmod 600 ~/.ssh/google_compute_engine
   - ssh-add ~/.ssh/google_compute_engine
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
-# test_fe_librarian_project:
-#   stage: test
-#   image: node:22.13.0
-#   cache:
-#     paths:
-#       - node_modules/
-#   before_script:
-#     - source ~/.profile
-#     - source ~/.bashrc
-#     - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
-#   script:
-#     - cd ./plsh-fe-librarian
-#     - yarn install
-#     - npm run build
-#   only:
-#     - merge_requests
-#     - client/librarian/develop
-
 
 
 build_plsh-fe-librarian:
