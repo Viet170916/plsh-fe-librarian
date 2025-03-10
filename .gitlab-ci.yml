@@ -39,27 +39,27 @@ before_script:
 
 
 
-build_blsh-fe-librarian:
+build_plsh-fe-librarian:
   stage: build
   image: node:20.18.3
   script:
-    - cd blsh-fe-librarian
+    - cd plsh-fe-librarian
     - yarn install
     - yarn run build
   artifacts:
     paths:
-      - blsh-fe-librarian/.next
-      - blsh-fe-librarian/node_modules
+      - plsh-fe-librarian/.next
+      - plsh-fe-librarian/node_modules
   only:
     - merge_requests
     - client/librarian/develop
 
-deploy_blsh-fe-librarian:
+deploy_plsh-fe-librarian:
   stage: deploy
   script:
     - ssh $VM_USER@$VM_HOST "mkdir -p $DEPLOY_PATH"
-    - scp -r blsh-fe-librarian/.next blsh-fe-librarian/node_modules blsh-fe-librarian/package.json $VM_USER@$VM_HOST:$DEPLOY_PATH
-    - ssh $VM_USER@$VM_HOST "cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name blsh-fe-librarian"
+    - scp -r plsh-fe-librarian/.next plsh-fe-librarian/node_modules plsh-fe-librarian/package.json $VM_USER@$VM_HOST:$DEPLOY_PATH
+    - ssh $VM_USER@$VM_HOST "cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name plsh-fe-librarian"
   only:
     - merge_requests
     - client/librarian/develop
