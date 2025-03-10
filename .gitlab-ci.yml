@@ -12,7 +12,7 @@ stages:
 variables:
   VM_USER: "vietvq170916"
   VM_HOST: "book-hive.space"
-  DEPLOY_PATH: "/var/www/bh-fe-librarian"
+  DEPLOY_PATH: "/var/www/blsh-fe-librarian"
 
 before_script:
   - mkdir -p ~/.ssh
@@ -39,27 +39,27 @@ before_script:
 
 
 
-build_bh-fe-librarian:
+build_blsh-fe-librarian:
   stage: build
   image: node:20.18.3
   script:
-    - cd bh-fe-librarian
+    - cd blsh-fe-librarian
     - yarn install
     - yarn run build
   artifacts:
     paths:
-      - bh-fe-librarian/.next
-      - bh-fe-librarian/node_modules
+      - blsh-fe-librarian/.next
+      - blsh-fe-librarian/node_modules
   only:
     - merge_requests
     - client/librarian/develop
 
-deploy_bh-fe-librarian:
+deploy_blsh-fe-librarian:
   stage: deploy
   script:
     - ssh $VM_USER@$VM_HOST "mkdir -p $DEPLOY_PATH"
-    - scp -r bh-fe-librarian/.next bh-fe-librarian/node_modules bh-fe-librarian/package.json $VM_USER@$VM_HOST:$DEPLOY_PATH
-    - ssh $VM_USER@$VM_HOST "cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name bh-fe-librarian"
+    - scp -r blsh-fe-librarian/.next blsh-fe-librarian/node_modules blsh-fe-librarian/package.json $VM_USER@$VM_HOST:$DEPLOY_PATH
+    - ssh $VM_USER@$VM_HOST "cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name blsh-fe-librarian"
   only:
     - merge_requests
     - client/librarian/develop
