@@ -16,6 +16,7 @@ variables:
 
 before_script:
   - mkdir -p ~/.ssh
+  - eval "$(ssh-agent -s)"
   - 'echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/google_compute_engine'
   - chmod 600 ~/.ssh/google_compute_engine
   - ssh-add ~/.ssh/google_compute_engine
