@@ -15,6 +15,7 @@ variables:
   DEPLOY_PATH: "/var/www/bh-fe-librarian"
 
 before_script:
+  - mkdir -p ~/.ssh/google_compute_engine
   - 'echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/google_compute_engine'
   - chmod 600 ~/.ssh/google_compute_engine
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
