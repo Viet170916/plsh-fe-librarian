@@ -64,8 +64,8 @@ deploy_bh-fe-librarian:
     - client/librarian/develop
 
 
-test_fe_borrower_project:
-  stage: test
+build_fe_borrower_project:
+  stage: build
   image: node:22.13.0
   cache:
     paths:
