@@ -12,7 +12,7 @@ stages:
 variables:
   VM_USER: "vietvq170916"
   VM_HOST: "book-hive.space"
-  DEPLOY_PATH: "/var/www/blsh-fe-librarian"
+  DEPLOY_PATH: "/var/www/plsh-fe-librarian"
 
 before_script:
   - mkdir -p ~/.ssh
