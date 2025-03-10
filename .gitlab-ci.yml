@@ -41,9 +41,11 @@ build_plsh-fe-librarian:
 deploy_plsh-fe-librarian:
   stage: deploy
   script:
+    - ls
+    - ls plsh-fe-librarian
     - ssh $VM_USER@$VM_HOST "sudo mkdir -p $DEPLOY_PATH"
     - scp -r plsh-fe-librarian/.next plsh-fe-librarian/node_modules plsh-fe-librarian/package.json $VM_USER@$VM_HOST:$DEPLOY_PATH
-    - ssh $VM_USER@$VM_HOST "sudo cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name plsh-fe-librarian"
+    - ssh $VM_USER@$VM_HOST "sudo cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart plsh-fe-librarian || pm2 start 'yarn run start' --name plsh-fe-librarian"
   only:
     - merge_requests
     - client/librarian/develop
