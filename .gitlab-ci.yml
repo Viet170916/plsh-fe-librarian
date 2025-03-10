@@ -6,7 +6,6 @@
 # Note that environment variables can be set in several places
 # See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-  - test
   - build
   - deploy
 
@@ -19,29 +18,29 @@ before_script:
   - 'echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/google_compute_engine'
   - chmod 600 ~/.ssh/google_compute_engine
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
-build_fe_librarian_project:
-  stage: test
-  image: node:22.13.0
-  cache:
-    paths:
-      - node_modules/
-  before_script:
-    - source ~/.profile
-    - source ~/.bashrc
-    - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
-  script:
-    - cd ./plsh-fe-librarian
-    - yarn install
-    - npm run build
-  only:
-    - merge_requests
-    - client/librarian/develop
+# test_fe_librarian_project:
+#   stage: test
+#   image: node:22.13.0
+#   cache:
+#     paths:
+#       - node_modules/
+#   before_script:
+#     - source ~/.profile
+#     - source ~/.bashrc
+#     - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
+#   script:
+#     - cd ./plsh-fe-librarian
+#     - yarn install
+#     - npm run build
+#   only:
+#     - merge_requests
+#     - client/librarian/develop
 
 
 
 build_bh-fe-librarian:
   stage: build
-  image: node:20
+  image: node:20.18.3
   script:
     - cd bh-fe-librarian
     - yarn install
@@ -52,7 +51,7 @@ build_bh-fe-librarian:
       - bh-fe-librarian/node_modules
   only:
     - merge_requests
-    - client/borrower/develop
+    - client/librarian/develop
 
 deploy_bh-fe-librarian:
   stage: deploy
@@ -62,7 +61,7 @@ deploy_bh-fe-librarian:
     - ssh $VM_USER@$VM_HOST "cd $DEPLOY_PATH && yarn install --omit=dev && pm2 restart project-b || pm2 start 'yarn run start' --name bh-fe-librarian"
   only:
     - merge_requests
-    - client/borrower/develop
+    - client/librarian/develop
 
 
 test_fe_borrower_project:
