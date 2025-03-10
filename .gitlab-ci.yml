@@ -17,8 +17,8 @@ variables:
 before_script:
   - mkdir -p ~/.ssh
   - 'echo "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/google_compute_engine'
-  - ssh-add ~/.ssh/google_compute_engine
   - chmod 600 ~/.ssh/google_compute_engine
+  - ssh-add ~/.ssh/google_compute_engine
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
 # test_fe_librarian_project:
 #   stage: test
