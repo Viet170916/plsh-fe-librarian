@@ -144,9 +144,9 @@ const appStrings =
             AUDIO_BOOK: "Sách nói",
             BOOK_COUNT: "Số lượng",
             NAME: "Tên sách",
-            CODE: "Mã sách"
-
-
+            CODE: "Mã sách",
+            ADD_BOOK: "Thêm sách",
+            SEE_BOOK: "Quản lý kệ sách"
         },
         REMOVE: "Xoá",
         PDF_PREVIEW: "Đọc sách PDF",
@@ -168,6 +168,21 @@ const appStrings =
         UPLOAD_IMAGE: "Tải ảnh lên",
         DOWNLOAD_IMAGE: "Tải ảnh xuống",
         NOTE: "Ghi chú",
+        LIBRARY_ROOM: "Phòng sách",
+        ADD_SHELF: "Thêm kệ",
+        shelf: {
+            ADD_SHELF: "Thêm kệ",
+            COL_SIZE: "Số cột",
+            ROW_SIZE: "Số hàng",
+            NEW_SHELF: "Kệ mới",
+            UN_LABEL: "Không có nhãn",
+            SHELF_NAME: "Tên kệ",
+            SHELF_LABEL:"Nhãn"
+        },
+        ACTION: "Hành động",
+        EDIT: "Chỉnh sửa",
+        CLOSE: "Đóng"
+
     };
 export default appStrings;
 

@@ -9,6 +9,9 @@ import {bookApiMiddleware, bookApiReducer, bookApiReducerPath} from "@/stores/sl
 import addEditBookDataReducer from "@/stores/slices/book-states/book.add-edit.slice";
 import {authorApiMiddleware, authorApiReducer, authorApiReducerPath} from "@/stores/slices/api/author.api.slice";
 import addEditBorrowDataReducer from "@/stores/slices/borrow-state/borrow.add-edit.slice";
+import libraryRoomStateSliceReducer from "@/stores/slices/lib-room-state/lib-room.slice";
+import {useStore} from "react-redux";
+import shelfStateSliceReducer from "@/stores/slices/lib-room-state/shelf.slice";
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +19,8 @@ export const store = configureStore({
         session: sessionReducer,
         addEditBookData: addEditBookDataReducer,
         addEditBorrowData: addEditBorrowDataReducer,
+        libraryRoomState: libraryRoomStateSliceReducer,
+        shelfState: shelfStateSliceReducer,
         //apis
         analytic: analyticsApiReducer,
         [analyticsApiReducerPath]: analyticsApiReducer,
@@ -23,7 +28,6 @@ export const store = configureStore({
         [bookApiReducerPath]: bookApiReducer,
         _authorApi: authorApiReducer,
         [authorApiReducerPath]: authorApiReducer,
-
 
 
     },
@@ -37,4 +41,5 @@ export const store = configureStore({
     },
 });
 export type AppDispatch = typeof store.dispatch;
+export const useAppStore = () => useStore<RootState>();
 export type RootState = ReturnType<typeof store.getState>;

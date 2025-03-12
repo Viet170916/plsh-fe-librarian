@@ -25,7 +25,7 @@ export type AuthorAddEditResponse = {
 const httpMethods = constants.http.method
 
 const baseQ = fetchBaseQuery({
-    baseUrl: "http://localhost:3000/api/v1",
+    baseUrl: "/api/v1",
     prepareHeaders: (headers, api) => {
         const token = (api.getState() as RootState).session.accessToken;
         if (token) {

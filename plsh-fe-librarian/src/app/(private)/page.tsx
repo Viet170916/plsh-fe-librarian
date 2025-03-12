@@ -1,15 +1,5 @@
-import BasicLayout from "@/components/BasicLayout";
-import React from "react";
-import {Button} from "@mui/material";
+import {redirect} from "next/navigation";
 
-export default function Home(){
-  return (
-    <div>
-      <Button variant="contained" color="primary">
-        ABC
-      </Button>
-
-    </div>
-    // <BasicLayout/>
-  );
+export default async function Home() {
+    redirect(`/dashboard`);
 }

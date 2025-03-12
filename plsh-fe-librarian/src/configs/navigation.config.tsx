@@ -7,6 +7,8 @@ import {ImBooks} from "react-icons/im";
 import {IoLogOut, IoSettings} from "react-icons/io5";
 import React from "react";
 import {HiOutlineViewGridAdd} from "react-icons/hi";
+import appStrings from "@/helpers/appStrings";
+import {CiMap} from "react-icons/ci";
 
 export const NAVIGATION: Navigation = [
         {
@@ -25,7 +27,7 @@ export const NAVIGATION: Navigation = [
 
             children: [{
                 segment: "add",
-                title: "Tạo phiên giao dịch",
+                title: "Tạo phiên mượn sách",
                 icon: <HiOutlineViewGridAdd color={color.PRIMARY} size={24}/>,
             },]
         }
@@ -38,16 +40,16 @@ export const NAVIGATION: Navigation = [
         ,
         {
             segment: "resources/books",
-            title: " Resources",
+            title: appStrings.RESOURCE,
             icon: <ImBooks color={color.PRIMARY} size={24}/>,
             children: [{
                 segment: "add",
-                title: "Add Book",
+                title: appStrings.book.ADD_BOOK,
                 icon: <HiOutlineViewGridAdd color={color.PRIMARY} size={24}/>,
             }, {
-                segment: "manage",
-                title: "Manage Book",
-                icon: <ImBooks color={color.PRIMARY} size={24}/>,
+                segment: "../library-room",
+                title: appStrings.LIBRARY_ROOM,
+                icon: <CiMap color={color.PRIMARY} size={24}/>,
             }]
 
         }
