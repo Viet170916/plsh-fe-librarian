@@ -29,7 +29,7 @@ build_plsh-fe-librarian:
   script:
     - echo "Installing dependencies..."
     - cd ./plsh-fe-librarian
-    - yarn install --frozen-lockfile
+    - yarn install
     - echo "Removing Next.js cache..."
     - rm -rf .next/cache
     - echo "Building Next.js..."
