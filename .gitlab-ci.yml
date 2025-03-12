@@ -52,8 +52,8 @@ deploy_plsh-fe-librarian:
   stage: deploy
   script:
     - echo "Deploying to server..."
-    - scp ./plsh-fe-librarian/next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
-    - ssh vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && pm2 restart next-app'
+    - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
+    - ssh -o StrictHostKeyChecking=no vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && pm2 restart next-app'
   only:
     - merge_requests
     - client/librarian/develop
