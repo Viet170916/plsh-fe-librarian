@@ -31,15 +31,17 @@ build_plsh-fe-librarian:
     - echo "Installing dependencies..."
     - cd ./plsh-fe-librarian
     - yarn install
-    - echo "Removing Next.js cache..."
-    - rm -rf .next/cache
     - echo "Building Next.js..."
     - yarn build
+    - echo "Removing Next.js cache..."
+    - rm -rf .next/cache
     - echo "Creating deployment package..."
     - zip -r next-app.zip .next package.json yarn.lock public
+    - ls -lah
+
   artifacts:
     paths:
-      - next-app.zip
+      - ./plsh-fe-librarian/next-app.zip
     expire_in: 1 hour
   only:
     - merge_requests
@@ -49,7 +51,7 @@ deploy_plsh-fe-librarian:
   stage: deploy
   script:
     - echo "Deploying to server..."
-    - scp next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
+    - scp ./plsh-fe-librarian/next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
     - ssh vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && pm2 restart next-app'
   only:
     - merge_requests
