@@ -53,7 +53,7 @@ deploy_plsh-fe-librarian:
   script:
     - echo "Deploying to server..."
     - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
-    - ssh -o StrictHostKeyChecking=no vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && pm2 restart next-app'
+    - ssh -o StrictHostKeyChecking=no vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
   only:
     - merge_requests
     - client/librarian/develop
