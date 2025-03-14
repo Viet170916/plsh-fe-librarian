@@ -17,47 +17,30 @@ import {MdOutlinePostAdd} from "react-icons/md";
 import {color} from "@/helpers/resources";
 import appStrings from "@/helpers/appStrings";
 import {useForm} from "react-hook-form";
+import {generateNewShelf} from "@/app/(private)/(in-dash-board)/resources/library-room/utils";
+import {useModifyLibraryRoomMutation} from "@/stores/slices/api/library-room.api.slice";
 
 interface IProps {
     children?: React.ReactNode,
     libraryRoom?: LibraryRoomState
 }
 
-const generateUniqueId = (existingIds: Set<string>): string => {
-    let newId;
-    do {
-        newId = Math.random().toString(36).substring(2, 9);
-    } while (existingIds.has(newId));
-    return newId;
-};
-
-const generateNewShelf = (existingShelves: Shelf[], maxX: number, maxY: number): Shelf | null => {
-    const existingIds = new Set(existingShelves.map((shelf) => shelf.id));
-    const occupiedPositions = new Set(existingShelves.map((shelf) => `${shelf.x},${shelf.y}`));
-
-    for (let attempt = 0; attempt < 100; attempt++) {
-        const x = Math.floor(Math.random() * (maxX + 1));
-        const y = Math.floor(Math.random() * (maxY + 1));
-        if (!occupiedPositions.has(`${x},${y}`)) {
-            return {
-                id: generateUniqueId(existingIds),
-                name: `${appStrings.shelf.NEW_SHELF} ${existingShelves.length + 1}`,
-                label: appStrings.shelf.UN_LABEL,
-                column: String.fromCharCode(65 + (x % 26)),
-                row: y + 1,
-                x,
-                y,
-            };
-        }
-    }
-
-    return null; // Không tìm được vị trí hợp lệ sau 100 lần thử
-};
-
 
 function RoomDashboard({libraryRoom}: IProps) {
     const dispatch = useDispatch();
     const store = useAppStore();
+    const [modifyLibraryRoom, {isLoading, isError, data}] = useModifyLibraryRoomMutation({});
+    useEffect(() => {
+        if (isError) {
+            toast.error(appStrings.error.EDIT_FAIL);
+        }
+    }, [isError]);
+    useEffect(() => {
+        if (data) {
+            dispatch(setLibraryRoomState(data))
+            toast.info(appStrings.success.EDIT_SUCCESS);
+        }
+    }, [data]);
 
     function getState() {
         return store.getState();
@@ -96,6 +79,15 @@ function RoomDashboard({libraryRoom}: IProps) {
         console.log(store.getState().libraryRoomState);
         adjustGridSize(store.getState().libraryRoomState.shelves, data.columSize, data.rowSize);
     }, [adjustGridSize, store]);
+
+    async function handleSaveChange() {
+        try {
+            const response = await modifyLibraryRoom(store.getState().libraryRoomState).unwrap();
+        } catch (error) {
+
+        }
+    }
+
     return (
         <Grid container spacing={2} height={"100%"}>
             <Grid size={12}>
@@ -127,13 +119,21 @@ function RoomDashboard({libraryRoom}: IProps) {
                         <Button variant={"outlined"}
                                 type="submit"
                         >
-                            {appStrings.SAVE}
+                            {appStrings.APPLY}
                         </Button>
+
                     </Grid>
                 </form>
             </Grid>
-
-
+            <Grid size={12}>
+                <Button variant={"contained"}
+                        type="submit"
+                        onClick={handleSaveChange}
+                        sx={{color: color.LIGHT_TEXT}}
+                >
+                    {appStrings.SAVE}
+                </Button>
+            </Grid>
         </Grid>);
 }
 

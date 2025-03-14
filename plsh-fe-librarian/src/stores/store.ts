@@ -12,6 +12,11 @@ import addEditBorrowDataReducer from "@/stores/slices/borrow-state/borrow.add-ed
 import libraryRoomStateSliceReducer from "@/stores/slices/lib-room-state/lib-room.slice";
 import {useStore} from "react-redux";
 import shelfStateSliceReducer from "@/stores/slices/lib-room-state/shelf.slice";
+import {
+    libraryApiMiddleware,
+    libraryApiReducer,
+    libraryApiReducerPath
+} from "@/stores/slices/api/library-room.api.slice";
 
 export const store = configureStore({
     reducer: {
@@ -28,6 +33,8 @@ export const store = configureStore({
         [bookApiReducerPath]: bookApiReducer,
         _authorApi: authorApiReducer,
         [authorApiReducerPath]: authorApiReducer,
+        _libraryRoomAPi: libraryApiReducer,
+        [libraryApiReducerPath]: libraryApiReducer,
 
 
     },
@@ -37,6 +44,7 @@ export const store = configureStore({
                 .concat(analyticsApiMiddleware)
                 .concat(bookApiMiddleware)
                 .concat(authorApiMiddleware)
+                .concat(libraryApiMiddleware)
         );
     },
 });

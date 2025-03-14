@@ -17,6 +17,7 @@ import {file_FilesToUrl} from "@/helpers/convert";
 import {color} from "@/helpers/resources";
 import {BiImageAdd} from "react-icons/bi";
 import {truncateTextStyle} from "@/style/text.style";
+import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
 
 interface IProps {
     children?: React.ReactNode;
@@ -62,8 +63,9 @@ const Add_EditBookImage = (props: BookImageProps) => {
                     component="label"
                     tabIndex={-1}
                 >
-                    <ImageSrc
-                        style={{backgroundImage: `url(${addEditBookResource?.coverImage?.localUrl ?? ""})`}}/>
+                    <ImageWithBgCover src={addEditBookResource?.coverImage?.localUrl} />
+                    {/*<ImageSrc*/}
+                    {/*    style={{backgroundImage: `url(${addEditBookResource?.coverImage?.localUrl ?? ""})`}}/>*/}
                     <ImageBackdrop className="MuiImageBackdrop-root"/>
                     <Image alt={""}>
                         <Typography

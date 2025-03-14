@@ -1,18 +1,33 @@
 import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
-    webpack: (config, { isServer }) => {
-        if (isServer) {
-            config.externals = [...config.externals, "canvas"];
-        }
-        return config;
-    },
+    productionBrowserSourceMaps: false,
+    // webpack: (config, {isServer}) => {
+    //     if (isServer) {
+    //         config.externals = [...config.externals, "canvas"];
+    //     }
+    //     return config;
+    // },
+    // swcMinify: true,
     trailingSlash: false,
     reactStrictMode: true,
     typescript: {
         ignoreBuildErrors: false
     },
+    modularizeImports: {
+        "@mui/material": {
+            transform: "@mui/material/{{member}}",
+        },
+        "lodash": {
+            transform: "lodash/{{member}}",
+        },
+    },
     experimental: {
+        turbo: {
+            rules:{
+
+            }
+        },
         middlewarePrefetch: "strict",
     },
     images: {

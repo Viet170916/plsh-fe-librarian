@@ -15,6 +15,10 @@ import {truncateTextStyle} from "@/style/text.style";
 import Link from "next/link";
 import {modifyShelf, removeShelf} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {useAppStore} from "@/stores/store";
+import {redirect} from "next/navigation";
+import axios from "axios";
+import {apiIsShelfExisted} from "@/request/library-room.api";
+import {toast} from "sonner";
 
 interface DraggableShelfProps {
     shelf: Shelf;
@@ -102,6 +106,22 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: string }) {
         setOpenEdit(false);
     }
 
+    async function handleRedirectToShelf() {
+        handleClose();
+        try {
+            const response = await apiIsShelfExisted({shelfId: shelfId});
+            if (response.data) {
+                redirect(`/resources/library-room/shelf/${response.data.id}`);
+            } else {
+                toast.warning(appStrings.warning.YOU_NEED_TO_SAVE_FIRST);
+            }
+        } catch {
+            toast.warning(appStrings.warning.YOU_NEED_TO_SAVE_FIRST);
+        }
+
+
+    }
+
     return (
         <Grid width={"100%"} container justifyContent={"center"} alignItems={"center"}
               onPointerDown={(e) => {
@@ -130,10 +150,10 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: string }) {
                         'aria-labelledby': 'basic-button',
                     }
                 }}>
-                <MenuItem onPointerUp={handleClose}><Link
-                    href={`/resources/books?shelfId=${shelfId}`}>{appStrings.book.SEE_BOOK}</Link></MenuItem>
+                <MenuItem onPointerUp={handleRedirectToShelf}>
+                    {appStrings.book.SEE_BOOK}
+                </MenuItem>
                 <MenuItem onPointerUp={handleOpenEdit}>{appStrings.EDIT}</MenuItem>
-
                 <MenuItem onPointerUp={handleRemove}>{appStrings.REMOVE}</MenuItem>
 
             </Menu>

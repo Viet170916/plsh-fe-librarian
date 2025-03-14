@@ -109,7 +109,9 @@ const appStrings =
         error: {
             REQUEST_ERROR: "Có lỗi xảy ra",
             AUTHOR_REQUEST_ERROR: "Không thể lấy thông tin tác giả",
-            AUTHOR_EMPTY_ERROR: "Danh sách tác giả đang trống"
+            AUTHOR_EMPTY_ERROR: "Danh sách tác giả đang trống",
+
+            EDIT_FAIL: "Chỉnh sửa thất bại"
         },
         AUTHOR_NAME: "Tên tác giả",
         EDIT_AUTHOR: "Chỉnh sửa thông tin tác giả",
@@ -177,11 +179,20 @@ const appStrings =
             NEW_SHELF: "Kệ mới",
             UN_LABEL: "Không có nhãn",
             SHELF_NAME: "Tên kệ",
-            SHELF_LABEL:"Nhãn"
+            SHELF_LABEL: "Nhãn"
         },
         ACTION: "Hành động",
         EDIT: "Chỉnh sửa",
-        CLOSE: "Đóng"
+        CLOSE: "Đóng",
+        warning: {
+            YOU_NEED_TO_SAVE_FIRST: "Bạn cần lưu lại trước",
+        },
+        APPLY: "Áp dụng",
+        success: {
+
+            EDIT_SUCCESS: "Chỉnh sửa thành công"
+        }
+
 
     };
 export default appStrings;
