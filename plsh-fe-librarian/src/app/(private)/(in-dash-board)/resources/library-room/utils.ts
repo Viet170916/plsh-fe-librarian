@@ -1,13 +1,14 @@
 import {Shelf} from "@/app/(private)/(in-dash-board)/resources/library-room/RoomMap";
 import appStrings from "@/helpers/appStrings";
 
-export const generateUniqueId = (existingIds: Set<string>): string => {
+export const generateUniqueId = (existingIds: Set<number>): number => {
     let newId;
     do {
-        newId = Math.random().toString(36).substring(2, 9);
+        newId = Math.floor(100000 + Math.random() * 900000); // Tạo số ngẫu nhiên 6 chữ số
     } while (existingIds.has(newId));
     return newId;
 };
+
 
 export const generateNewShelf = (existingShelves: Shelf[], maxX: number, maxY: number): Shelf | null => {
     const existingIds = new Set(existingShelves.map((shelf) => shelf.id));
@@ -22,7 +23,7 @@ export const generateNewShelf = (existingShelves: Shelf[], maxX: number, maxY: n
                 name: `${appStrings.shelf.NEW_SHELF} ${existingShelves.length + 1}`,
                 label: appStrings.shelf.UN_LABEL,
                 column: String.fromCharCode(65 + (x % 26)),
-                row: y + 1,
+                row: `${y + 1}`,
                 x,
                 y,
             };

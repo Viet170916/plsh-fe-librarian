@@ -19,7 +19,7 @@ function ShelfContext({data}: IProps) {
     return (
         <Grid container spacing={2} width={"100%"} size={12}>
             {
-                shelf.rows.map(row => (
+                shelf.rowShelves?.map(row => (
                     <RowShelf rowId={row.id} key={row.id}/>
                 ))
             }

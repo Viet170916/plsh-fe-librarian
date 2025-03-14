@@ -55,7 +55,7 @@ function RoomDashboard({libraryRoom}: IProps) {
 
     const handleAddShelf = () => {
         if (store.getState().libraryRoomState.shelves) {
-            const newShelf = generateNewShelf(store.getState().libraryRoomState.shelves, store.getState().libraryRoomState.columSize - 1, store.getState().libraryRoomState.rowSize - 1);
+            const newShelf = generateNewShelf(store.getState().libraryRoomState.shelves, store.getState().libraryRoomState.columnSize - 1, store.getState().libraryRoomState.rowSize - 1);
             if (newShelf) {
                 dispatch(addShelf(newShelf));
             } else {
@@ -74,10 +74,9 @@ function RoomDashboard({libraryRoom}: IProps) {
             toast.warning("Không thể thu nhỏ layout vì sẽ có kệ sách đang nằm ngoài");
         }
     }, [dispatch]);
-    const {register, handleSubmit} = useForm<{ columSize: number; rowSize: number; }>();
-    const handleAdjustLayout = useCallback(function handleAdjustLayout(data: { columSize: number; rowSize: number; }) {
-        console.log(store.getState().libraryRoomState);
-        adjustGridSize(store.getState().libraryRoomState.shelves, data.columSize, data.rowSize);
+    const {register, handleSubmit} = useForm<{ columnSize: number; rowSize: number; }>();
+    const handleAdjustLayout = useCallback(function handleAdjustLayout(data: { columnSize: number; rowSize: number; }) {
+        adjustGridSize(store.getState().libraryRoomState.shelves, data.columnSize, data.rowSize);
     }, [adjustGridSize, store]);
 
     async function handleSaveChange() {
@@ -106,8 +105,8 @@ function RoomDashboard({libraryRoom}: IProps) {
                     <Grid container spacing={2} justifyContent={"end"}>
                         <Grid size={4}>
 
-                            <TextField {...register("columSize")} fullWidth
-                                       defaultValue={store.getState().libraryRoomState.columSize}
+                            <TextField {...register("columnSize")} fullWidth
+                                       defaultValue={store.getState().libraryRoomState.columnSize}
                                        label={appStrings.shelf.COL_SIZE}/>
                         </Grid>
                         <Grid size={4}>

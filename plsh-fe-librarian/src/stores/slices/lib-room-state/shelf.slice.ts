@@ -27,7 +27,7 @@ export const initRowShelf: RowShelf = {
 }
 export type ShelfState = {
     shelfBaseInfo?: Shelf
-    rows: RowShelf[];
+    rowShelves: RowShelf[];
 }
 
 type ShelfStateSlice = Slice<ShelfState, {
@@ -68,11 +68,11 @@ type ShelfStateSlice = Slice<ShelfState, {
 //data
 export const initShelfState: ShelfState = {
     shelfBaseInfo: {
-        id: "undefined",
+        id: NaN,
         x: 0,
         y: 0,
     },
-    rows: [{
+    rowShelves: [{
         id: 1234567898765,
         name: "A",
         maxCol: 10,
@@ -88,24 +88,24 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
             setShelfState: (shelfState: WritableDraft<ShelfState>, action: PayloadAction<ShelfState | undefined>) => {
                 if (action.payload) {
                     shelfState.shelfBaseInfo = action.payload.shelfBaseInfo;
-                    shelfState.rows = action.payload.rows;
+                    shelfState.rowShelves = action.payload.rowShelves;
                 }
 
             },
             clearData: (shelfState: WritableDraft<ShelfState>) => {
                 shelfState.shelfBaseInfo = initShelfState.shelfBaseInfo;
-                shelfState.rows = initShelfState.rows;
+                shelfState.rowShelves = initShelfState.rowShelves;
                 // set all being null
             },
             setRows: (shelfState: WritableDraft<ShelfState>, action: PayloadAction<RowShelf[]>) => {
-                shelfState.rows = action.payload;
+                shelfState.rowShelves = action.payload;
             },
             setBookPosition: (shelfState: WritableDraft<ShelfState>, action: PayloadAction<{
                 rowId: number,
                 bookOnShelfId: number,
                 newPosition: number
             }>) => {
-                const row = shelfState.rows?.find(r => r.id === action.payload.rowId);
+                const row = shelfState.rowShelves?.find(r => r.id === action.payload.rowId);
                 const book = row?.booksOnRowShelf.find(b => b.id === action.payload.bookOnShelfId);
                 if (book) {
                     book.position = action.payload.newPosition;
@@ -118,7 +118,7 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
                 rowId: number,
                 bookOnShelf: BookOnRowShelf
             }>) => {
-                const row = shelfState.rows?.find(r => r.id === action.payload.rowId);
+                const row = shelfState.rowShelves?.find(r => r.id === action.payload.rowId);
                 if (row) {
                     row.booksOnRowShelf.push(action.payload.bookOnShelf);
                 }
@@ -131,7 +131,7 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
                     rowId: number,
                     bookOnShelf: BookOnRowShelf
                 }>) => {
-                const row = shelfState.rows?.find(r => r.id === action.payload.rowId);
+                const row = shelfState.rowShelves?.find(r => r.id === action.payload.rowId);
                 if (row) {
                     const book = row.booksOnRowShelf.find(b => b.id === action.payload.bookOnShelf.id);
                     if (book) {
@@ -143,13 +143,13 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
                 }
             },
             removeRow: (shelfState: WritableDraft<ShelfState>, action: PayloadAction<number>) => {
-                shelfState.rows = shelfState.rows?.filter(r => r.id !== action.payload)
+                shelfState.rowShelves = shelfState.rowShelves?.filter(r => r.id !== action.payload)
             },
             removeBookOnRow: (shelfState: WritableDraft<ShelfState>, action: PayloadAction<{
                 rowId: number,
                 bookOnShelfId: number,
             }>) => {
-                const row = shelfState.rows?.find(r => r.id === action.payload.rowId);
+                const row = shelfState.rowShelves?.find(r => r.id === action.payload.rowId);
                 if (row) {
                     const books = row.booksOnRowShelf.filter(r => r.id !== action.payload.bookOnShelfId)
                     if (books && books.length !== row.booksOnRowShelf.length) {
@@ -163,10 +163,10 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
                 newMaxCol: number
             }>) => {
                 console.log(action.payload)
-                const row = shelfState.rows?.find(r => r.id === action.payload.rowId);
+                const row = shelfState.rowShelves?.find(r => r.id === action.payload.rowId);
                 // console.log(row)
                 if (row) {
-                    // shelfState.rows = shelfState.rows.map((r) => {
+                    // shelfState.rowShelves = shelfState.rowShelves.map((r) => {
                     //     if (r.id === action.payload.rowId) {
                     //         return ({...r, maxCol: action.payload.newMaxCol,})
                     //     } else return r;
@@ -178,7 +178,7 @@ const shelfStateSlice: ShelfStateSlice = createSlice({
                 rowId: number,
                 booksOnRow: BookOnRowShelf[]
             }>) => {
-                const row = shelfState.rows?.find(r => r.id !== action.payload.rowId)
+                const row = shelfState.rowShelves?.find(r => r.id !== action.payload.rowId)
                 if (row) {
                     row.booksOnRowShelf = action.payload.booksOnRow;
                 }
@@ -202,7 +202,7 @@ export const {
     removeRow,
 } = shelfStateSlice.actions;
 export const selectRowById = createSelector(
-    (state: RootState) => state.shelfState.rows,
+    (state: RootState) => state.shelfState.rowShelves,
     (_, rowId: number) => rowId,
     (rows: RowShelf[], rowId: number) => rows.find((r) => r.id === rowId));
 const shelfStateSliceReducer = shelfStateSlice.reducer;

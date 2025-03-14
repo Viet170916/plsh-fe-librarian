@@ -182,10 +182,9 @@ const RowShelf = ({rowId}: { rowId: number }) => {
 
 
 const RowShelfContext = memo(function RSC({rowId}: { rowId: number }) {
-    // const rowShelf = useSelector((state: RootState) => state.shelfState.rows.find(r=>r.id === rowId), shallowEqual);
+    // const rowShelf = useSelector((state: RootState) => state.shelfState.rowShelves.find(r=>r.id === rowId), shallowEqual);
     const rowShelf = useSelector((state: RootState) => selectRowById(state, rowId));
-    // const rowShelfw = useSelector((state: RootState) => state.shelfState.rows);
-    console.log(1412, rowShelf);
+    // const rowShelfw = useSelector((state: RootState) => state.shelfState.rowShelves);
     const dispatch = useDispatch();
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const {active, over} = event;

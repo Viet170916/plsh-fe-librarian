@@ -24,20 +24,9 @@ export type AuthorAddEditResponse = {
 }
 const httpMethods = constants.http.method
 
-const baseQ = fetchBaseQuery({
-    baseUrl: "/api/v1",
-    prepareHeaders: (headers, api) => {
-        const token = (api.getState() as RootState).session.accessToken;
-        if (token) {
-            headers.set("Authorization", `Bearer ${token}`);
-        }
-        return headers;
-    },
-});
-
 const API = createApi({
     reducerPath: "authorApi",
-    baseQuery: baseQ,
+    baseQuery: baseQuery,
     endpoints: (builder) => ({
         getAuthor: builder.query<AuthorResponse, AnyObject>({
             query: (params) => {

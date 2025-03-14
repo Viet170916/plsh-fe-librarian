@@ -11,11 +11,11 @@ import {setShelves} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {RootState} from "@/stores/store";
 
 export interface Shelf {
-    id: string;
+    id: number;
     name?: string;
     label?: string;
     column?: string;
-    row?: number;
+    row?: string;
     x: number;
     y: number;
 }
@@ -34,7 +34,7 @@ const RoomLayout = memo(function RoomLayout({gridSize}: { gridSize: number }) {
         if (!movedShelf) return;
         const newX = Math.max(0, movedShelf?.x + Math.round(delta.x / gridSize));
         const newY = Math.max(0, movedShelf?.y + Math.round(delta.y / gridSize));
-        if (newX > (room.columSize - 1) || newY > (room.rowSize - 1) || (newX === movedShelf.x && newY === movedShelf.y)) {
+        if (newX > (room.columnSize - 1) || newY > (room.rowSize - 1) || (newX === movedShelf.x && newY === movedShelf.y)) {
             return;
         }
         const targetShelf = prev.find((shelf) => shelf.x === newX && shelf.y === newY);
@@ -64,13 +64,13 @@ const RoomLayout = memo(function RoomLayout({gridSize}: { gridSize: number }) {
                     display: "grid",
 
                     gridTemplateRows: `repeat(${room.rowSize}, minmax(0, 1fr))`,
-                    gridTemplateColumns: `repeat(${room.columSize}, minmax(0, 1fr))`,
-                    width: `${(room.columSize ?? room.columSize) * (gridSize)}px!important`,
+                    gridTemplateColumns: `repeat(${room.columnSize}, minmax(0, 1fr))`,
+                    width: `${(room.columnSize ?? room.columnSize) * (gridSize)}px!important`,
                     height: `${(room.rowSize ?? room.rowSize) * (gridSize)}px!important`,
                 }}
             >
                 {Array.from({length: room.rowSize ?? room.rowSize}).map((_, rowIdx) =>
-                    Array.from({length: room.columSize ?? room.columSize}).map((_, colIdx) => (
+                    Array.from({length: room.columnSize ?? room.columnSize}).map((_, colIdx) => (
                         <DroppableGridCell key={`${rowIdx}-${colIdx}`} row={rowIdx} col={colIdx}/>
                     ))
                 )}
@@ -101,37 +101,6 @@ const RoomMap = ({gridSize}: LibraryRoomProps) => {
             setIsPanning(false);
         };
 
-// const handleWheel = (e: WheelEvent<HTMLDivElement>) => {
-//     const gridContainer = e.currentTarget;
-//     const rect = gridContainer.getBoundingClientRect();
-//
-//     if (
-//         e.clientX >= rect.left &&
-//         e.clientX <= rect.right &&
-//         e.clientY >= rect.top &&
-//         e.clientY <= rect.bottom
-//     ) {
-//         e.preventDefault();
-//         setZoom((prev) => Math.min(2, Math.max(0.5, prev - e.deltaY * 0.001)));
-//
-//     }
-//
-// };
-
-// useEffect(() => {
-//     const handleWheel = (e: WheelEvent) => {
-//         if (e.target instanceof HTMLElement && e.target.closest(".grid-container")) {
-//             e.preventDefault();
-//             setZoom((prev) => Math.min(2, Math.max(0.5, prev - e.deltaY * 0.001)));
-//         }
-//     };
-//
-//     document.addEventListener("wheel", handleWheel, { passive: false });
-//
-//     return () => {
-//         document.removeEventListener("wheel", handleWheel);
-//     };
-// }, []);
 
         return (
             <Box

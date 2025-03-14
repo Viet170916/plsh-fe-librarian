@@ -4,8 +4,7 @@ import {Shelf} from "@/app/(private)/(in-dash-board)/resources/library-room/Room
 // type
 export type LibraryRoomState = {
     shelves: Shelf[];
-    gridSize: number;
-    columSize: number;
+    columnSize: number;
     rowSize: number;
 }
 
@@ -14,7 +13,7 @@ type ShelfStateSlice = Slice<LibraryRoomState, {
     setShelves: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<Shelf[]>) => void
     addShelf: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<Shelf>) => void
     modifyShelf: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<Shelf>) => void
-    removeShelf: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<string>) => void
+    removeShelf: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => void
     setGridSize: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => void
     setColumSize: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => void
     setRowSize: (state: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => void
@@ -24,8 +23,7 @@ type ShelfStateSlice = Slice<LibraryRoomState, {
 //data
 export const initShelfState: LibraryRoomState = {
     shelves: [],
-    gridSize: 100,
-    columSize: 6,
+    columnSize: 6,
     rowSize: 3,
 };
 //slice
@@ -38,14 +36,13 @@ const libraryRoomStateSlice: ShelfStateSlice = createSlice({
                 if (action.payload) {
                     shelfState.shelves = action.payload.shelves;
                     // shelfState.gridSize = action.payload.gridSize;
-                    shelfState.columSize = action.payload.columSize;
+                    shelfState.columnSize = action.payload.columnSize;
                     shelfState.rowSize = action.payload.rowSize;
                 }
             },
             clearData: (shelfState: WritableDraft<LibraryRoomState>) => {
                 shelfState.shelves = initShelfState.shelves;
-                shelfState.gridSize = initShelfState.gridSize;
-                shelfState.columSize = initShelfState.columSize;
+                shelfState.columnSize = initShelfState.columnSize;
                 shelfState.rowSize = initShelfState.rowSize;
                 // set all being null
             },
@@ -63,17 +60,16 @@ const libraryRoomStateSlice: ShelfStateSlice = createSlice({
 
                 }
             },
-            removeShelf: (shelfState: WritableDraft<LibraryRoomState>, action: PayloadAction<string>) => {
+            removeShelf: (shelfState: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => {
                 shelfState.shelves = shelfState.shelves.filter((sh) => sh.id !== action.payload);
             },
             setColumSize: (shelfState: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => {
-                shelfState.columSize = action.payload;
+                shelfState.columnSize = action.payload;
             },
             setRowSize: (shelfState: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => {
                 shelfState.rowSize = action.payload;
             },
             setGridSize: (shelfState: WritableDraft<LibraryRoomState>, action: PayloadAction<number>) => {
-                shelfState.gridSize = action.payload;
             },
 
 

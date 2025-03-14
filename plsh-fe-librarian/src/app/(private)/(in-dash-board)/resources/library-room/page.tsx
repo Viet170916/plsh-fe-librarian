@@ -3,13 +3,16 @@ import Grid from "@mui/material/Grid2";
 import RoomDashboard from "@/app/(private)/(in-dash-board)/resources/library-room/RoomDashboard";
 import axios, {AxiosResponse} from "axios";
 import {LibraryRoomState} from "@/stores/slices/lib-room-state/lib-room.slice";
+import {apiGetLibraryRoom} from "@/request/library-room.api";
 
 
 async function LibraryRoomPage() {
     let libraryRoom: LibraryRoomState | undefined = undefined;
     try {
-        const libraryRoomRes: AxiosResponse<LibraryRoomState> = await axios.get(`/library-room`, {});
+        const libraryRoomRes: AxiosResponse<LibraryRoomState> = await apiGetLibraryRoom();
+        // console.log(libraryRoomRes?.data.)
         libraryRoom = libraryRoomRes.data;
+        console.log(1,libraryRoom);
     } catch {
     }
     return (

@@ -15,7 +15,7 @@ import {truncateTextStyle} from "@/style/text.style";
 import Link from "next/link";
 import {modifyShelf, removeShelf} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {useAppStore} from "@/stores/store";
-import {redirect} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import axios from "axios";
 import {apiIsShelfExisted} from "@/request/library-room.api";
 import {toast} from "sonner";
@@ -25,7 +25,8 @@ interface DraggableShelfProps {
     gridSize: number;
 }
 
-const DraggableShelf = ({shelf, gridSize}: DraggableShelfProps) => {
+const DraggableShelf = ({shelf}: DraggableShelfProps) => {
+    const gridSize = 100;
     const {attributes, listeners, setNodeRef, transform} = useDraggable({id: shelf.id});
 
     return (
@@ -78,7 +79,8 @@ const DraggableShelf = ({shelf, gridSize}: DraggableShelfProps) => {
         </motion.div>
     );
 };
-const Menu2 = memo(function Menu2({shelfId}: { shelfId: string }) {
+const Menu2 = memo(function Menu2({shelfId}: { shelfId: number }) {
+    const router = useRouter();
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -110,13 +112,15 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: string }) {
         handleClose();
         try {
             const response = await apiIsShelfExisted({shelfId: shelfId});
-            if (response.data) {
-                redirect(`/resources/library-room/shelf/${response.data.id}`);
+            console.log(response.data);
+            if (response.data.exists) {
+                router.push(`/resources/library-room/shelf/${shelfId}`);
             } else {
                 toast.warning(appStrings.warning.YOU_NEED_TO_SAVE_FIRST);
             }
-        } catch {
-            toast.warning(appStrings.warning.YOU_NEED_TO_SAVE_FIRST);
+        } catch (error) {
+            console.log(error);
+            toast.warning(appStrings.error.REQUEST_ERROR);
         }
 
 
@@ -167,7 +171,7 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: string }) {
 
 
 const AddEditShelf = memo(function AddEditShelf({shelfId, onClose}: {
-    shelfId: string,
+    shelfId: number,
     onClose: (e?: React.MouseEvent) => void
 }) {
     const dispatch = useDispatch();
