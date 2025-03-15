@@ -45,7 +45,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
             onResult?.(data[0]);
             setIsbn(undefined);
         }
-    }, [isbn, data]);
+    }, [isbn, data,onResult]);
     const [open, setOpen] = useState(false);
     useEffect(() => {
         if (isbn && isbn !== "") {
@@ -144,7 +144,7 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
         return (
             <Box width="100%">
             </Box>)
-    }, [data]);
+    }, [data, onSelected]);
     return (
         <Grid container spacing={2} size={12} justifyContent={"start"}>
             <Grid size={12}>

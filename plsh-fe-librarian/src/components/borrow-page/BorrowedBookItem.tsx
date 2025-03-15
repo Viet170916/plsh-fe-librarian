@@ -71,7 +71,7 @@ function BorrowedBookItem({borrowedBook}: IProps) {
         <Card sx={{maxWidth: 400, p: 2, borderRadius: 3, boxShadow: 3}}>
             <Grid container spacing={2}>
                 <Grid size={{xl: 5.5}} container spacing={1}>
-                    <ImageWithBgCover sx={{height: 200}} src={borrowedBook.book?.imageUrl}/>
+                    <ImageWithBgCover sx={{height: 200}} src={borrowedBook.book?.thumbnail}/>
                     <Link href={`/resources/books/${borrowedBook.book?.id}`}>
                         <Typography sx={{textDecoration: "underline", ...truncateTextStyle}} variant="h5"
                                     fontWeight="normal">

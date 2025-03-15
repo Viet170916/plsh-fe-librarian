@@ -36,8 +36,8 @@ function BookRow(props: IProps) {
                       spacing={2}
                 >
 
-                    <Title title={props.book.title} author={props.book.author} version={props.book.version}
-                           imageUrl={props.book.imageUrl}/>
+                    <Title title={props.book.title ?? ""} author={props.book.author} version={props.book.version}
+                           imageUrl={props.book.thumbnail}/>
 
                     <Grid container size={1} spacing={0} justifyContent="center" alignItems="center">
                         <Grid size={6}>
@@ -54,7 +54,7 @@ function BookRow(props: IProps) {
                     </Grid>
                     <Grid container size={1} spacing={0} justifyContent="start" alignItems="center">
                         <Typography fontSize={15} sx={{justifyContent: "start", ...truncateTextStyle}}>
-                            {props.book.category}
+                            {props.book.category.name}
                         </Typography>
                     </Grid>
                     <AvailabilityTable availabilityDataItems={props.book.availabilities}/>
@@ -170,10 +170,10 @@ export function AvailabilityItem(props: Availability) {
 }
 
 function Title(props: {
-    imageUrl: string,
-    title: string,
-    author: { fullName: string, birthYear?: string, deathYear?: string },
-    version: string
+    imageUrl?: string,
+    title?: string,
+    author: { fullName?: string, birthYear?: string, deathYear?: string },
+    version?: string
 }) {
     return (
         <Grid columnSpacing={2} container size={4} height={100}
@@ -192,7 +192,7 @@ function Title(props: {
                 </Grid>
                 <Grid size={12}>
                     <Typography sx={{justifySelf: "start", ...truncateTextStyle}} fontSize={15}>
-                        {`${props.author.fullName}, ${props.author.birthYear ?? ""}${props.author.deathYear ? `-${props.author.deathYear}` : ""}`}
+                        {`${props.author?.fullName}, ${props.author?.birthYear ?? ""}${props.author?.deathYear ? `-${props.author?.deathYear}` : ""}`}
                     </Typography>
                 </Grid>
                 <Grid size={12}>
