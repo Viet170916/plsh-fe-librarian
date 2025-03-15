@@ -10,63 +10,7 @@ interface IProps {
     children?: React.ReactNode;
 }
 
-const mock: BookData[] = [{
-    category: "History",
-    version: "1.0",
-    imageUrl: "https://image.com/upload/v1/",
-    title: "The title",
-    author: {name: "My name", birthYear: "1890", deathYear: "1978"},
-    rating: 3.5,
-    id: 1,
-    availabilities: [
-        {kind: "e-book", isChecked: false, title: "E-book"},
-        {kind: "physical", isChecked: true, title: "Physical book"},
-        {kind: "audio", isChecked: true, title: "Audio book"}],
-    bookStatus: {
-        bookId: 0,
-        position: "A R2-C4",
-        bookName: "unknown",
-        bookAvailabilityStatuses: [{status: "In-Shelf", count: 13}, {status: "Checked Out", count: 2}],
-    }
-},
-    {
-        category: "History",
-        version: "1.0",
-        imageUrl: "https://image.com/upload/v1/",
-        title: "The title",
-        author: {name: "My name", birthYear: "1890", deathYear: "1978"},
-        rating: 3.5,
-        id: 2,
-        availabilities: [
-            {kind: "e-book", isChecked: false, title: "E-book"},
-            {kind: "physical", isChecked: false, title: "Physical book"},
-            {kind: "audio", isChecked: true, title: "Audio book"}],
-        bookStatus: {
-            bookId: 0,
-            position: "A R2-C4",
-            bookName: "unknown",
-            bookAvailabilityStatuses: [{status: "In-Shelf", count: 13}, {status: "Checked Out", count: 2}],
-        }
-    },
-    {
-        category: "History",
-        version: "1.0",
-        imageUrl: "https://image.com/upload/v1/",
-        title: "The title",
-        author: {name: "My name", birthYear: "1890", deathYear: "1978"},
-        rating: 3.5,
-        id: 3,
-        availabilities: [
-            {kind: "e-book", isChecked: false, title: "E-book"},
-            {kind: "physical", isChecked: true, title: "Physical book"},
-            {kind: "audio", isChecked: false, title: "Audio book"}],
-        bookStatus: {
-            bookId: 0,
-            position: "A R2-C4",
-            bookName: "unknown",
-            bookAvailabilityStatuses: [{status: "In-Shelf", count: 13}, {status: "Checked Out", count: 2}],
-        }
-    }];
+const mock: BookData[] = [];
 
 
 function

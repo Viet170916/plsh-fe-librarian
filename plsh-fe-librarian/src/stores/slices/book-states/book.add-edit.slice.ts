@@ -1,23 +1,36 @@
 import {createSlice, PayloadAction, Slice, SliceSelectors} from "@reduxjs/toolkit";
 import {WritableDraft} from "immer";
 import {FileType} from "next/dist/lib/file-exists";
-import {Author, Availability, Language, Resource, ShortBookInfo} from "@/helpers/appType";
+import {Author, Availability, BookData, Language, Resource, ShortBookInfo} from "@/helpers/appType";
+import {formatImageUrl} from "@/helpers/text";
 // type
 export type BookResources = {
-    coverImage?: Resource;
-    previewPdf?: Resource;
+    coverImage: Resource;
+    previewPdf: Resource;
 }
 export type BookBaseInfo = {
-    title?: "Clean Code",
+    title?: string,
     position?: string,
-    description?: string,
     version?: string,
     summaryDescription?: string,
     availability: Availability[],
+    "quantity"?: number,
+    "category": Category
+}
+export type Category = {
+    id?: number,
+    name?: string,
 }
 export type BookOverview = {
-    language?: Language,
+    language?: string,
     pageCount?: number,
+    description?: string,
+    isbNumber13?: string,
+    isbNumber10?: string,
+    otherIdentifier?: string,
+    "publisher"?: string,
+    "publishDate"?: string,
+
 }
 export type AddEditBookData = {
     id?: number;
@@ -27,6 +40,7 @@ export type AddEditBookData = {
     overview: BookOverview,
 }
 type AddEditBookDataSlice = Slice<AddEditBookData, {
+    setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => void,
     setAddEditBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<AddEditBookData>) => void
     setResource: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookResources>) => void;
     setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
@@ -42,9 +56,9 @@ type AddEditBookDataSlice = Slice<AddEditBookData, {
     "addEditBookData", "addEditBookData", SliceSelectors<AddEditBookData>>
 //data
 export const initAddEditBookData: AddEditBookData = {
-    resource: {},
+    resource: {coverImage: {type: "image"}, previewPdf: {type: "pdf"}},
     baseInfo: {
-        availability: []
+        availability: [], category: {}
     },
     author: {},
     overview: {}
@@ -54,6 +68,23 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
     name: "addEditBookData",
     initialState: initAddEditBookData,
     reducers: {
+        setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => {
+            state.id = action.payload.id;
+            state.resource.coverImage.localUrl = action.payload.thumbnail;
+            state.author = action.payload.author;
+            state.baseInfo.title = action.payload.title;
+            state.baseInfo.version = action.payload.version;
+            state.baseInfo.category = action.payload.category;
+            state.baseInfo.quantity = action.payload.quantity;
+            state.overview.description = action.payload.description;
+            state.overview.language = action.payload.language;
+            state.overview.pageCount = action.payload.pageCount;
+            state.overview.isbNumber10 = action.payload.isbNumber10;
+            state.overview.isbNumber13 = action.payload.isbNumber13;
+            state.overview.otherIdentifier = action.payload.otherIdentifier;
+            state.overview.publishDate = action.payload.publishDate;
+            state.overview.publisher = action.payload.publisher;
+        },
         setAddEditBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<AddEditBookData>) => {
             state.id = action.payload.id;
             state.resource = action.payload.resource;
@@ -62,8 +93,8 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
         },
         clearData: (state: WritableDraft<AddEditBookData>) => {
             state.id = undefined;
-            state.resource = {};
-            state.author = {};
+            state.resource = initAddEditBookData.resource;
+            state.author = initAddEditBookData.author;
             // set all being null
         },
         setResource: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookResources | undefined>): void => {
@@ -114,7 +145,6 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
                 }
             }
         },
-
         modifyBookAvailability: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability | undefined>): void => {
             console.log(action.payload);
             if (action.payload) {
@@ -144,6 +174,7 @@ export const {
     setAuthor,
     setBookBaseInfo,
     setBookAvailabilities,
+    setAddEditBookWithBookData,
     addBookAvailability,
     removeBookAvailability,
     modifyBookAvailability,

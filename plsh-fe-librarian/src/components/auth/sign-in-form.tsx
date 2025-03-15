@@ -31,7 +31,7 @@ const theme = createTheme( {
 function SignInForm( props: IProps ): React.JSX.Element{
   useEffect( function(){
     // getServerSession( authOptions ).then( ( session: Session | null ) => {
-    //   console.log( session?.user?.name );
+    //   console.log( session?.user?.fullName );
     // } );
   }, [] );
   const { register, handleSubmit, watch, formState: { errors } } = useForm<ISignInInformation>();

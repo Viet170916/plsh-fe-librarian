@@ -148,7 +148,16 @@ const appStrings =
             NAME: "Tên sách",
             CODE: "Mã sách",
             ADD_BOOK: "Thêm sách",
-            SEE_BOOK: "Quản lý kệ sách"
+            SEE_BOOK: "Quản lý kệ sách",
+            OVERVIEW: "Tổng quan",
+            EDITION: "Bản chỉnh sửa",
+            DETAIL: "Chi tiết",
+            REVIEW: "Đánh giá",
+            LIST: "Bộ sách",
+            RELATED: "Sách liên quan",
+            SCAN_ISBN: "Quét mã ISBN",
+            SCAN_COVER_IMAGE: "Quét bìa sách",
+            NOT_BOOK_FOUND: "Không tìm thấy sách"
         },
         REMOVE: "Xoá",
         PDF_PREVIEW: "Đọc sách PDF",
@@ -191,7 +200,8 @@ const appStrings =
         success: {
 
             EDIT_SUCCESS: "Chỉnh sửa thành công"
-        }
+        },
+        SCAN_BAR_CODE: "Quét mã vạch"
 
 
     };

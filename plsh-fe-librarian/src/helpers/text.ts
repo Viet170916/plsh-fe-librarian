@@ -38,3 +38,7 @@ export function formatDate(input?: Date | string) {
 
     return `${day} ${month} ${year} ${hours}:${minutes} ${ampm}`;
 }
+
+export function formatImageUrl(url?: string) {
+    return `${process.env.NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL}/file${url ?? ""}`
+}

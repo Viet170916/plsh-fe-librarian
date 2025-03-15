@@ -9,6 +9,8 @@ import appStrings from "@/helpers/appStrings";
 import {Author} from "@/helpers/appType";
 import Image from "next/image";
 import {width} from "@mui/system";
+import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
+import {formatImageUrl} from "@/helpers/text";
 
 interface IProps {
     children?: React.ReactNode;
@@ -23,7 +25,7 @@ function AuthorSelection(props: IProps) {
         useCallback((e: SyntheticEvent<Element, Event>, value: string, reason: AutocompleteInputChangeReason) => {
             debouncedSetKeyWord(value)
         }, [debouncedSetKeyWord]);
-    const {data, error, isLoading, refetch} = useGetAuthorQuery({keyWord}, {});
+    const {data, error, isLoading, refetch} = useGetAuthorQuery({keyword: keyWord}, {});
     const errorMessageComp = useMemo(() => {
         if (error) {
             return (<Typography variant="body2"
@@ -43,13 +45,14 @@ function AuthorSelection(props: IProps) {
                 }}
                 id="country-select-demo"
                 sx={{width: 300}}
-                options={data?.data ?? []}
+                options={data ?? []}
                 autoHighlight
                 loading={isLoading}
                 onInputChange={onInputChange}
-                getOptionLabel={(author) => author.name ?? ""}
-                renderOption={(props, author) => {
+                getOptionLabel={(author) => author.fullName ?? ""}
+                renderOption={(props, author: Author) => {
                     const {key, ...optionProps} = props;
+                    console.log()
                     return (
                         <Box
                             key={key}
@@ -62,27 +65,21 @@ function AuthorSelection(props: IProps) {
                                 height: 20,
                                 position: "relative"
                             }}>
-                                <Image
-                                    loading="lazy"
-                                    fill
-                                    // srcSet={`${author.avatarUrl}`}
-                                    src={`${author.avatarUrl}`}
-                                    alt={author.name ?? ""}
-                                />
+                                <ImageWithBgCover src={formatImageUrl(author.avatarUrl)}/>
                             </div>
-                            {author.name},
-                            ({`${author.lifeSpan?.birthYear}${author.lifeSpan?.deadYear ? `-${author.lifeSpan?.deadYear}` : ""}`})
+                            {author.fullName}
+                            {`${author.birthYear ? `,${author.birthYear}` : ""}${author.deathYear ? `-${author.deathYear}` : ""}`}
                         </Box>
                     );
                 }}
                 renderInput={(params) => (
                     <TextField
                         {...params}
+                        autoComplete={"off"}
                         label="Choose an Author"
                         slotProps={{
                             htmlInput: {
                                 ...params.inputProps,
-                                autoComplete: 'new-password', // disable autocomplete and autofill
                             },
                         }}
                     />

@@ -70,7 +70,7 @@ const BookAuthor = (props: IProps): JSX.Element => {
                                 color: "#4c4c4c",
                             }}
                         >
-                            {props.author?.name ?? `${appStrings.AUTHOR_NAME}...`}
+                            {props.author?.fullName ?? `${appStrings.AUTHOR_NAME}...`}
                         </Typography>
                     </Grid>
                     <Grid

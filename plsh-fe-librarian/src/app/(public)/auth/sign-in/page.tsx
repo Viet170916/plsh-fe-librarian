@@ -9,7 +9,7 @@ import React from "react";
 
 export default async function Element(): Promise<React.JSX.Element>{
   // const session: Session | null = await getServerSession( authOptions );
-  // console.log( session?.user?.name );
+  // console.log( session?.user?.fullName );
   // console.log( props );
   return ( <div>
     <Container sx={ signInContainerStyle } maxWidth="sm">

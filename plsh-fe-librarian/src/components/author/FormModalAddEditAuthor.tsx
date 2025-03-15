@@ -8,7 +8,7 @@ import {color} from "@/helpers/resources";
 import appStrings from "@/helpers/appStrings";
 import {FaUserPen} from "react-icons/fa6";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {Author} from "@/helpers/appType";
+import {Author, Resource} from "@/helpers/appType";
 import {DatePicker} from "@mui/x-date-pickers";
 import UploadImageButton from "@/components/primary/Input/UploadImageButton";
 import {useAddAuthorMutation} from "@/stores/slices/api/author.api.slice";
@@ -67,6 +67,11 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
     };
     const formRef = useRef<HTMLFormElement>(null);
 
+    function onImageChange(resource: Resource) {
+        setValue("authorImageResource", resource.file)
+        setValue("resource", resource)
+    }
+
     return (
         <Box width={"100%"}>
             <IconButton onClick={handleOpen} sx={{
@@ -100,7 +105,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                             <Grid size={12} container spacing={1} width={"100%"}>
                                 <Grid width={"100%"}>
                                     <TextField
-                                        {...register("name")}
+                                        {...register("fullName")}
                                         variant="outlined"
                                         color="primary"
                                         fullWidth
@@ -129,7 +134,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                                         defaultValue={undefined}
                                         yearsOrder="desc"
                                         maxDate={currentYear}
-                                        onChange={(value) => setValue("lifeSpan.birthYear", value?.year().toString())}
+                                        onChange={(value) => setValue("birthYear", value?.year().toString())}
                                         label={appStrings.author.properties.BIRTH_YEAR}
                                         views={['year']}/>
                                 </Grid>
@@ -139,7 +144,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                                         maxDate={currentYear}
                                         yearsOrder="desc"
                                         defaultValue={undefined}
-                                        onChange={(value) => setValue("lifeSpan.deadYear", value?.year().toString())}
+                                        onChange={(value) => setValue("deathYear", value?.year().toString())}
                                         label={appStrings.author.properties.DEAD_YEAR}
                                         views={['year']}/>
                                 </Grid>
@@ -162,8 +167,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                             </Grid>
                             <Grid height={150} size={6} container spacing={1}>
                                 <UploadImageButton
-
-                                    onImageChange={(resource) => setValue("resource", resource)}/>
+                                    onImageChange={onImageChange}/>
                             </Grid>
                         </Grid>
                     </form>

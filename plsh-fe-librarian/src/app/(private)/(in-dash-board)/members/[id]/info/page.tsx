@@ -46,7 +46,7 @@ const ProfileSettings = () => {
                 </Grid>
                 <Grid container spacing={2} sx={{mt: 2}}>
                     <Grid size={6}>
-                        <TextField fullWidth label="Full name" defaultValue="Reinhard Kenson" disabled/>
+                        <TextField fullWidth label="Full fullName" defaultValue="Reinhard Kenson" disabled/>
                     </Grid>
                     <Grid size={6}>
                         <TextField fullWidth label="College Email ID" defaultValue="Kensoncs.official@college.com"

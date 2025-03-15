@@ -3,6 +3,7 @@ import React from "react";
 import type {OnLoadingComplete, PlaceholderValue} from "next/dist/shared/lib/get-img-props";
 import {FileType} from "next/dist/lib/file-exists";
 import appStrings from "@/helpers/appStrings";
+import {Category} from "@/stores/slices/book-states/book.add-edit.slice";
 
 export type VoidFunc = () => void;
 export type VoidFuncAsync = () => Promise<void>;
@@ -61,18 +62,39 @@ export type LoanSortByCategoryAnalyticsData = {
 
 //book
 export type BookData = {
-    category: string;
-    version: string;
-    imageUrl: string;
-    title: string;
-    author: {
-        id?: number;
-        name: string;
-        birthYear?: string;
-        deathYear?: string;
-    };
-    rating: number;
     id: number;
+    title?: string;
+    description?: string;
+    authorId: number;
+    kind: number | string;
+    coverImageResourceId?: number;
+    previewPdfResourceId?: number;
+    audioResourceId?: number;
+    version?: string;
+    publisher?: string;
+    publishDate?: string;
+    language?: string;
+    pageCount: number;
+    categoryId: number;
+    isbNumber13?: string;
+    isbNumber10?: string;
+    rating?: number;
+    totalCopies: number;
+    availableCopies: number;
+    price?: number;
+    otherIdentifier?: string;
+    thumbnail?: string;
+    fine?: number;
+    createDate: string;
+    updateDate?: string;
+    deletedAt?: string;
+    isChecked: boolean;
+    bookReviewId: number;
+    quantity: number;
+    resource?: Resource;
+    // Các thuộc tính N
+    category: Category;
+    author: Author;
     availabilities: Availability[];
     bookStatus: BookAvailability;
 
@@ -146,15 +168,15 @@ export type ShortBookInfo = {
 
 }
 export type Author = {
+    deathYear?: string;
+    birthYear?: string;
     id?: number,
-    name?: string,
+    fullName?: string,
     avatarUrl?: string,
     resource?: Resource,
+    authorImageResource?: File,
     description?: string,
     summaryDescription?: string,
-    lifeSpan?: {
-        birthYear?: string, deadYear?: string
-    },
     publications?: ShortBookInfo[]
 }
 export type Language =

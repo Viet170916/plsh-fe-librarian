@@ -5,7 +5,7 @@ import {Typography, Box, Card, CardContent, CardMedia} from "@mui/material";
 import AddEditBorrowForm from "@/app/(private)/(in-dash-board)/borrow/add/AddEditBorrowForm";
 import SelectedBooks from "@/app/(private)/(in-dash-board)/borrow/add/SelectedBooks";
 import appStrings from "@/helpers/appStrings";
-import SearchWithScanner from "@/app/(private)/(in-dash-board)/borrow/add/BookSearching";
+import SearchWithScanner from "@/components/BookSearching";
 
 
 interface IProps {

@@ -1,16 +1,10 @@
 "use client"
 import React, {JSX, memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import {
     Box,
     Button,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
     Typography,
 } from "@mui/material";
-import {FaHeadphones} from "react-icons/fa6";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import {Availability} from "@/helpers/appType";
@@ -40,22 +34,11 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
         watch,
         formState: {errors},
     } = useForm<BookBaseInfo>()
-    const onSubmit: SubmitHandler<BookBaseInfo> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<BookBaseInfo> = (data) => {
+        console.log(data)
+    }
 
 
-    const availability = useMemo<Availability[]>(() => [{
-        kind: "physical",
-        title: "Sách vật lý",
-        isChecked: true,
-    }, {
-        kind: "e-book",
-        title: "Sách điện tử",
-        isChecked: true,
-    }, {
-        kind: "audio",
-        title: "Sách nói",
-        isChecked: false,
-    },], [])
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container sx={{width: "100%", minHeight: 381}}>
@@ -63,6 +46,7 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                     <Grid sx={{}} size={12}>
                         <TextFieldNoBorder placeholder={appStrings.TITLE}
                                            {...register("title")}
+                                           defaultValue={bookBaseInfoData.title ?? ""}
                                            fullWidth
                                            fontSize={35}
                                            padding={0}
@@ -70,13 +54,15 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                         />
                         <Box display={"flex"} sx={{color: color.DARK_TEXT, gap: 1}}>
                             {`${appStrings.WRITE_BY} `}
-                            {bookAuthor ? bookAuthor.name : <></>}
+                            {bookAuthor ? bookAuthor.fullName : <></>}
                             <AddAuthor>
                                 <span style={{textDecoration: "underline"}}>{appStrings.ADD_AN_AUTHOR}</span>
                             </AddAuthor>
                         </Box>
                     </Grid>
                     <TextFieldNoBorder placeholder={appStrings.VERSION}
+                                       defaultValue={bookBaseInfoData.version ?? ""}
+
                                        padding={0}
                                        {...register("version")}
                                        textColor={color.DARK_LIGHTER_TEXT}/>
@@ -84,7 +70,7 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                 <Grid sx={{}} size={6}>
                     <Typography
                         variant="body2"
-                        sx={{fontWeight: "bold", color: "#4c4c4c"}}>
+                        sx={{fontWeight: "bold", color: color.DARK_TEXT}}>
                         {appStrings.book.AVAILABILITY}
                     </Typography>
                     <Grid container>
@@ -104,7 +90,7 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                     justifySelf={"end"}
                     alignSelf={"end"}
                 >
-                    <Grid size={6}>
+                    <Grid size={12}>
                         <Button
                             fullWidth
                             variant="contained"
@@ -120,26 +106,6 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                             </Typography>
                         </Button>
                     </Grid>
-                    {/*<Grid size={6}>*/}
-                    {/*    <Button*/}
-                    {/*        fullWidth*/}
-                    {/*        color={"secondary"}*/}
-                    {/*        variant="contained"*/}
-                    {/*        sx={{*/}
-                    {/*            background: color.SECONDARY + "!important",*/}
-                    {/*            height: 61,*/}
-                    {/*            borderRadius: 1,*/}
-                    {/*        }}*/}
-                    {/*    >*/}
-                    {/*        <Grid container justifyContent={"center"} alignItems={"center"} spacing={1}>*/}
-                    {/*            <Typography variant="h6" sx={{color: "white"}}>*/}
-                    {/*                Read Now*/}
-                    {/*            </Typography>*/}
-                    {/*            <FaHeadphones color={color.WHITE}/>*/}
-                    {/*        </Grid>*/}
-
-                    {/*    </Button>*/}
-                    {/*</Grid>*/}
                 </Grid>
             </Grid>
         </form>

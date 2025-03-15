@@ -171,14 +171,8 @@ export function AvailabilityItem(props: Availability) {
 
 function Title(props: {
     imageUrl: string,
-    title
-        :
-        string,
-    author
-        :
-        {
-            name: string, birthYear?: string, deathYear?: string
-        },
+    title: string,
+    author: { fullName: string, birthYear?: string, deathYear?: string },
     version: string
 }) {
     return (
@@ -198,7 +192,7 @@ function Title(props: {
                 </Grid>
                 <Grid size={12}>
                     <Typography sx={{justifySelf: "start", ...truncateTextStyle}} fontSize={15}>
-                        {`${props.author.name}, ${props.author.birthYear ?? ""}${props.author.deathYear ? `-${props.author.deathYear}` : ""}`}
+                        {`${props.author.fullName}, ${props.author.birthYear ?? ""}${props.author.deathYear ? `-${props.author.deathYear}` : ""}`}
                     </Typography>
                 </Grid>
                 <Grid size={12}>

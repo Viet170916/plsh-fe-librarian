@@ -40,7 +40,7 @@ function RoomDashboard({libraryRoom}: IProps) {
             dispatch(setLibraryRoomState(data))
             toast.info(appStrings.success.EDIT_SUCCESS);
         }
-    }, [data]);
+    }, [data, dispatch]);
 
     function getState() {
         return store.getState();

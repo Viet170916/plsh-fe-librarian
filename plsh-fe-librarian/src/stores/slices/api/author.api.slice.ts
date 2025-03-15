@@ -28,14 +28,14 @@ const API = createApi({
     reducerPath: "authorApi",
     baseQuery: baseQuery,
     endpoints: (builder) => ({
-        getAuthor: builder.query<AuthorResponse, AnyObject>({
+        getAuthor: builder.query<AuthorData[], { keyword?: string }>({
             query: (params) => {
                 return `/author${objectToQueryParams(params)}`;
             },
         }),
         addAuthor: builder.mutation<AuthorAddEditResponse, FormData>({
             query: (payload) => ({
-                url: `/author`,
+                url: `/author/add`,
                 method: httpMethods.POST,
                 body: payload,
             }),
