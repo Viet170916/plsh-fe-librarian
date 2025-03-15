@@ -26,6 +26,7 @@ interface IProps {
 }
 
 function Add_EditBookDetails(props: IProps): JSX.Element {
+    console.log(process.env.NEXT_PUBLIC_SERVER_API_URL);
     const bookBaseInfoData = useSelector((state: RootState) => state.addEditBookData.baseInfo);
     const bookAuthor = useSelector((state: RootState) => state.addEditBookData.author);
     const {
