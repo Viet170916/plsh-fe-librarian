@@ -24,9 +24,7 @@ const nextConfig: NextConfig = {
     },
     experimental: {
         turbo: {
-            rules:{
-
-            }
+            rules: {}
         },
         middlewarePrefetch: "strict",
     },
@@ -48,5 +46,14 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    env: {
+        NEXT_PUBLIC_SERVER_API_URL: process.env.NEXT_PUBLIC_SERVER_API_URL,
+        NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL: process.env.NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+        NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+        NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+        NEXT_PUBLIC_IMAGE_HOST_NAME: process.env.NEXT_PUBLIC_IMAGE_HOST_NAME,
+    }
 };
 export default nextConfig;
