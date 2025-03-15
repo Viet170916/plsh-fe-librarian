@@ -20,7 +20,7 @@ export default async function RootLayout({
     let sessionData: AppSession = initAppSession;
     try {
         const checkedResponse = await axios.get("auth/check-token", {
-            baseURL: process.env.NEXT_PUBLIC_SERVER_API_URL,
+            baseURL: process.env.NEXT_PUBLIC_SERVER_API_URL??"http://104.197.134.164/api/v1",
             headers: {Authorization: `Bearer ${session?.accessToken}`},
         }).catch((error: AxiosError) => {
             console.log(error.message);

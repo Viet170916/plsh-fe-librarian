@@ -32,11 +32,11 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname: process.env.NEXT_PUBLIC_IMAGE_HOST_NAME ?? "i.redd.it",
+                hostname: process.env.NEXT_PUBLIC_IMAGE_HOST_NAME ?? "http://104.197.134.164/static/v1",
             },
             {
                 protocol: "https",
-                hostname: "i.redd.it",
+                hostname: "http://104.197.134.164/static/v1",
             }, {
                 protocol: "https",
                 hostname: "via.placeholder.com",

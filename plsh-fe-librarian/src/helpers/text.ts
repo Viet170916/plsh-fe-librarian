@@ -40,5 +40,5 @@ export function formatDate(input?: Date | string) {
 }
 
 export function formatImageUrl(url?: string) {
-    return `${process.env.NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL}/file${url ?? ""}`
+    return `${process.env.NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL??"http://104.197.134.164/static/v1"}/file${url ?? ""}`
 }

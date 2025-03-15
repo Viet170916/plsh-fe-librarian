@@ -22,7 +22,7 @@ const authOptions: NextAuthOptions = {
           await axios.post( "auth/sign-in",
             { googleToken: jwt },
             {
-              baseURL: process.env.NEXT_PUBLIC_SERVER_API_URL,
+              baseURL: process.env.NEXT_PUBLIC_SERVER_API_URL??"http://104.197.134.164/api/v1",
               headers: {
                 "Content-Type": "application/json",
               },

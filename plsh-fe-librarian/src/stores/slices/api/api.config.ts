@@ -3,7 +3,7 @@ import { BaseQueryFn, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@re
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   fetchBaseQuery( {
-    baseUrl: process.env.NEXT_PUBLIC_SERVER_API_URL,
+    baseUrl: process.env.NEXT_PUBLIC_SERVER_API_URL??"http://104.197.134.164/api/v1",
     prepareHeaders: ( headers, api ) => {
       const token = ( api.getState() as RootState ).session.accessToken;
       if( token ){

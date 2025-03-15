@@ -3,7 +3,7 @@ import {LibraryRoomState} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {ShelfState} from "@/stores/slices/lib-room-state/shelf.slice";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${1}`;
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_API_URL;
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_API_URL??"http://104.197.134.164/api/v1";
 
 export async function apiIsShelfExisted({shelfId}: { shelfId: number }): Promise<AxiosResponse<{ exists: boolean }>> {
     return await axios.get(`/library-room/shelf/check`, {
