@@ -31,6 +31,12 @@ build_plsh-fe-librarian:
   script:
     - echo "Installing dependencies..."
     - cd ./plsh-fe-librarian
+    - echo "NEXT_PUBLIC_SERVER_API_URL=$NEXT_PUBLIC_SERVER_API_URL" >> .env
+    - echo "NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL=$NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL" >> .env
+    - echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
+    - echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
+    - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+    - cat .env
     - yarn install
     - echo "Building Next.js..."
     - yarn build
@@ -54,6 +60,7 @@ deploy_plsh-fe-librarian:
     - echo "Deploying to server..."
     - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip vietvqhe170916@35.209.60.140:/home/user/next-app/
     - ssh -o StrictHostKeyChecking=no vietvqhe170916@35.209.60.140 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
+    - ssh -o StrictHostKeyChecking=no vietvqhe170916@35.209.60.140 'rm -f next-app.zip'
   only:
     - merge_requests
     - client/librarian/develop
