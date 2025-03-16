@@ -28,7 +28,7 @@ interface IProps {
 function Add_EditBookDetails(props: IProps): JSX.Element {
     console.log(process.env.NEXT_PUBLIC_SERVER_API_URL);
     const bookBaseInfoData = useSelector((state: RootState) => state.addEditBookData.baseInfo);
-    const bookAuthor = useSelector((state: RootState) => state.addEditBookData.author);
+    const bookAuthors = useSelector((state: RootState) => state.addEditBookData.authors);
     const {
         register,
         handleSubmit,
@@ -55,7 +55,9 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                         />
                         <Box display={"flex"} sx={{color: color.DARK_TEXT, gap: 1}}>
                             {`${appStrings.WRITE_BY} `}
-                            {bookAuthor ? bookAuthor.fullName : <></>}
+                            {bookAuthors ? bookAuthors.map(author => (
+                                <Typography variant={"h6"} key={author.id}>{author.fullName}</Typography>
+                            )) : <></>}
                             <AddAuthor>
                                 <span style={{textDecoration: "underline"}}>{appStrings.ADD_AN_AUTHOR}</span>
                             </AddAuthor>

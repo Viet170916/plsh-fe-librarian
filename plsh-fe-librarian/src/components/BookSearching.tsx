@@ -45,7 +45,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
             onResult?.(data[0]);
             setIsbn(undefined);
         }
-    }, [isbn, data,onResult]);
+    }, [isbn, data, onResult]);
     const [open, setOpen] = useState(false);
     useEffect(() => {
         if (isbn && isbn !== "") {
@@ -87,9 +87,9 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
             debouncedSetInputChange(e.currentTarget.value);
         }, [debouncedSetInputChange]);
 
-    function onSelected(result: BookData) {
-        onSelect?.(result);
-    }
+    const onSelected = useCallback((result: BookData) => {
+            onSelect?.(result);
+        }, [onSelect])
 
     const listBook = useMemo(() => {
         if (data && data.length > 0)

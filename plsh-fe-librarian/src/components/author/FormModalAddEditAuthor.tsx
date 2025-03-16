@@ -70,7 +70,7 @@ function FormModalAddEditAuthor({
             toast.success(appStrings.author.ADD_SUCCESS)
             setOpen(false);
         }
-    }, [data])
+    }, [data, dispatch])
     const onSubmit: SubmitHandler<Author> = async (data) => {
         console.log(data);
         const preSend: Author = data;

@@ -78,7 +78,7 @@ function BorrowedBookItem({borrowedBook}: IProps) {
                             {borrowedBook.book?.title}
                         </Typography>
                         <Typography variant="h6" fontWeight={"lighter"} color="text.secondary">
-                            {`${borrowedBook.book?.authors.fullName}${borrowedBook.book?.authors.birthYear && borrowedBook.book?.authors.deathYear ? `,${borrowedBook.book?.authors.birthYear}-${borrowedBook.book?.authors.deathYear}` : (borrowedBook.book?.authors.birthYear ? `,${borrowedBook.book?.authors.birthYear}` : "")}`}
+                            {`${borrowedBook.book?.authors?.[0]?.fullName}${borrowedBook.book?.authors?.[0]?.birthYear && borrowedBook.book?.authors[0]?.deathYear ? `,${borrowedBook.book?.authors[0]?.birthYear}-${borrowedBook.book?.authors[0]?.deathYear}` : (borrowedBook.book?.authors[0]?.birthYear ? `,${borrowedBook.book?.authors[0]?.birthYear}` : "")}`}
                         </Typography>
                     </Link>
 

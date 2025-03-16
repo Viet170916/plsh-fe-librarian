@@ -60,17 +60,14 @@ function AuthorSelection(props: IProps) {
     );
 }
 
-const SelectList = memo(({}: {}) => {
+const SelectList = memo(() => {
     const store = useAppStore();
     const dispatch = useDispatch();
 
-    function getAuthors() {
-        return store.getState().addEditBookData.authors;
-    }
 
-    function handleToggle(value: Author) {
+    const handleToggle = useCallback((value: Author) => {
         dispatch(toggleAuthor(value));
-    }
+    }, [dispatch])
 
     const [keyWord, setKeyWord] = useState<string>("");
     const debouncedSetKeyWord = useMemo(
@@ -81,6 +78,10 @@ const SelectList = memo(({}: {}) => {
         }, [debouncedSetKeyWord]);
     const {data, error, isLoading} = useGetAuthorQuery({keyword: keyWord}, {});
     const listAuthor = useMemo(() => {
+        function getAuthors() {
+            return store.getState().addEditBookData.authors;
+        }
+
         return data?.map((author) => (
             <Box width={"100%"} key={author.id}>
                 <ListItem alignItems="flex-start" sx={{width: "100%"}}
@@ -111,7 +112,7 @@ const SelectList = memo(({}: {}) => {
                 <Divider variant="inset" component="li"/>
             </Box>
         ));
-    }, [data]);
+    }, [data, store, handleToggle]);
     return (
         <Box width={"100%"}>
             <TextField fullWidth onChange={onInputChange}/>
