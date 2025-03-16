@@ -33,7 +33,7 @@ const API = createApi({
                 return `/author${objectToQueryParams(params)}`;
             },
         }),
-        addAuthor: builder.mutation<AuthorAddEditResponse, FormData>({
+        addAuthor: builder.mutation<Author, FormData>({
             query: (payload) => ({
                 url: `/author/add`,
                 method: httpMethods.POST,

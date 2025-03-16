@@ -4,7 +4,7 @@ import React, {JSX, memo} from "react";
 interface IProps {
     displayAuthorPublication?: boolean;
     children?: React.ReactNode;
-    author?: Author;
+    authors?: Author[];
 }
 
 import {Box, Typography} from "@mui/material";
@@ -37,7 +37,6 @@ const BookAuthor = (props: IProps): JSX.Element => {
                     width: "100%",
                 }}
             >
-
                 {/*<ImageWithSkltWhileLoading width={75} height={99} alt="Rectangle" src={rectangle16}/>*/}
                 <Grid container width={"100%"} spacing={1}>
                     <Grid size={6}>
@@ -70,7 +69,7 @@ const BookAuthor = (props: IProps): JSX.Element => {
                                 color: "#4c4c4c",
                             }}
                         >
-                            {props.author?.fullName ?? `${appStrings.AUTHOR_NAME}...`}
+                            {props.authors?.[0]?.fullName ?? `${appStrings.AUTHOR_NAME}...`}
                         </Typography>
                     </Grid>
                     <Grid
@@ -82,15 +81,11 @@ const BookAuthor = (props: IProps): JSX.Element => {
                             <ImageWithSkltWhileLoading
                                 fill
                                 alt="Rectangle"
-                                src={props.author?.avatarUrl??null}/>
+                                src={props.authors?.[0]?.avatarUrl??null}/>
 
                         </div>
-
                     </Grid>
-
-
                 </Grid>
-
                 <Typography
                     variant="body2"
                     component="p"
@@ -102,11 +97,11 @@ const BookAuthor = (props: IProps): JSX.Element => {
                         color: color.DARK_TEXT,
                     }}
                 >
-                    {props.author?.summaryDescription}
+                    {props.authors?.[0]?.summaryDescription}
                 </Typography>
 
             </Box>
-            {(props.author?.publications && props.displayAuthorPublication)
+            {(props.authors?.[0]?.publications && props.displayAuthorPublication)
                 ? <>
                     <Typography
                         variant="subtitle2"

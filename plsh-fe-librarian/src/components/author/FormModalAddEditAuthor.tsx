@@ -1,5 +1,5 @@
-import React, {JSX, memo, useRef} from "react";
-import {Box, Button, IconButton, Modal, TextField, Typography} from "@mui/material";
+import React, {JSX, memo, useEffect, useRef} from "react";
+import {Box, Button, IconButton, Modal, TextField, Tooltip, Typography} from "@mui/material";
 import {TiUserAdd} from "react-icons/ti";
 import Container from "@/components/primary/Container";
 import Grid from "@mui/material/Grid2";
@@ -8,24 +8,25 @@ import {color} from "@/helpers/resources";
 import appStrings from "@/helpers/appStrings";
 import {FaUserPen} from "react-icons/fa6";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {Author, Resource} from "@/helpers/appType";
+import {Author, ErrorMessages, Resource} from "@/helpers/appType";
 import {DatePicker} from "@mui/x-date-pickers";
 import UploadImageButton from "@/components/primary/Input/UploadImageButton";
 import {useAddAuthorMutation} from "@/stores/slices/api/author.api.slice";
-import {setAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
 import {useDispatch} from "react-redux";
-import {objectToFormData} from "@/helpers/convert";
+import {FetchBaseQueryError} from '@reduxjs/toolkit/query';
+import {compressImage, objectToFormData} from "@/helpers/convert";
 import {toast} from "sonner";
+import {toastError} from "@/helpers/error";
+import {addAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
 
 interface IProps {
-    children?: React.ReactNode;
-    editMode?: boolean;
-    buttonColor?: string;
-    buttonBorderRadius?: string | number;
-    buttonTextColor?: string;
-    buttonWidth?: string | number;
-    buttonHeight?: string | number;
-
+    children?: React.ReactNode,
+    editMode?: boolean,
+    buttonColor?: string,
+    buttonBorderRadius?: string | number,
+    buttonTextColor?: string,
+    buttonWidth?: string | number,
+    buttonHeight?: string | number,
 }
 
 const currentYear = dayjs();
@@ -42,9 +43,17 @@ const style = {
     p: 4,
 };
 
-function FormModalAddEditAuthor(props: IProps): JSX.Element {
+function FormModalAddEditAuthor({
+                                    editMode,
+                                    buttonWidth,
+                                    buttonColor,
+                                    buttonTextColor,
+                                    buttonBorderRadius,
+                                    buttonHeight,
+                                    children,
+                                }: IProps): JSX.Element {
+    const [addAuthorApi, {isLoading, data}] = useAddAuthorMutation();
     const dispatch = useDispatch();
-    const [addAuthor, {isLoading, error}] = useAddAuthorMutation();
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -55,15 +64,28 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
         setValue,
         formState: {errors},
     } = useForm<Author>();
+    useEffect(() => {
+        if (data) {
+            dispatch(addAuthor(data))
+            toast.success(appStrings.author.ADD_SUCCESS)
+            setOpen(false);
+        }
+    }, [data])
     const onSubmit: SubmitHandler<Author> = async (data) => {
         console.log(data);
-        const response = await addAuthor(objectToFormData(data));
-        if (response?.error) {
-            toast.error(appStrings.author.error.ADD_FAILURE);
-        } else if (response?.data?.data) {
-            dispatch(setAuthor(response.data?.data));
+        const preSend: Author = data;
+        preSend.resource = undefined;
+        if (data.authorImageResource) {
+            preSend.authorImageResource = await compressImage(data.authorImageResource, "SD_480P");
         }
-        setOpen(false);
+        const response = await addAuthorApi(objectToFormData(preSend));
+        if (response?.error) {
+            const messages: ErrorMessages = {
+                FETCH_ERROR_MESSAGE: appStrings.author.error.ADD_FAILURE,
+            }
+            toastError(response.error, messages);
+            setOpen(false);
+        }
     };
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -74,18 +96,20 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
 
     return (
         <Box width={"100%"}>
-            <IconButton onClick={handleOpen} sx={{
-                width: props.buttonWidth ?? "100%",
-                height: props.buttonHeight ?? "fit-content",
-                padding: "5px",
-                backgroundColor: props.buttonColor + "!important",
-                borderRadius: props.buttonBorderRadius + "!important",
-                color: props.buttonTextColor + "!important",
-            }}>
-                {props.children}
-                {props.editMode ? <FaUserPen color={props.buttonTextColor}/> :
-                    <TiUserAdd color={props.buttonTextColor}/>}
-            </IconButton>
+            <Tooltip title={appStrings.author.ADD_AN_AUTHOR}>
+                <IconButton onClick={handleOpen} sx={{
+                    width: buttonWidth ?? "100%",
+                    height: buttonHeight ?? "fit-content",
+                    padding: "5px",
+                    backgroundColor: buttonColor + "!important",
+                    borderRadius: buttonBorderRadius + "!important",
+                    color: buttonTextColor + "!important",
+                }}>
+                    {children}
+                    {editMode ? <FaUserPen color={buttonTextColor}/> :
+                        <TiUserAdd color={buttonTextColor}/>}
+                </IconButton>
+            </Tooltip>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -99,7 +123,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                             <Grid size={12}>
                                 <Typography id="modal-modal-title"
                                             sx={{color: color.DARK_TEXT, fontSize: 30}}>
-                                    {props.editMode ? appStrings.EDIT_AUTHOR : appStrings.ADD_AN_AUTHOR}
+                                    {editMode ? appStrings.EDIT_AUTHOR : appStrings.ADD_AN_AUTHOR}
                                 </Typography>
                             </Grid>
                             <Grid size={12} container spacing={1} width={"100%"}>
@@ -158,7 +182,7 @@ function FormModalAddEditAuthor(props: IProps): JSX.Element {
                                         background: color.PRIMARY + "!important",
                                         color: color.LIGHT_TEXT
                                     }}
-                                    form={"modal-add-edit-author-form"}
+                                    form={"modal-add-edit-authors-form"}
                                     onClick={() => {
                                         handleSubmit(onSubmit)();
                                     }}>

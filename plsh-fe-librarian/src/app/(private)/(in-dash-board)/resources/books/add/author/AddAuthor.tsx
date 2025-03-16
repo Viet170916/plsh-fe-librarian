@@ -24,21 +24,20 @@ import {BasicButton} from "@/components/primary/Input/BasicButton";
 const AddAuthor =
     memo(function AddAuthor(props: { children?: React.ReactNode }) {
         const dispatch = useDispatch();
-        // const author = useSelector((state: RootState) => state.addEditBookData.author);
         const style = {
             position: 'absolute',
             backgroundColor: color.WHITE,
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: 600,
             borderRadius: 10,
             boxShadow: 24,
             p: 4,
         };
-        const [authorState, setAuthorState] = useState<Author | null>(null);
+        const [authorState, setAuthorState] = useState<Author[] | null>(null);
 
-        const handleSelected = useCallback((author: Author | null | undefined) => {
+        const handleSelected = useCallback((author: Author[] | null | undefined) => {
             if (author) {
                 setAuthorState(author);
             }
@@ -51,6 +50,11 @@ const AddAuthor =
         const [open, setOpen] = React.useState(false);
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
+
+        const onAddSuccess = useCallback((author: Author) => {
+            setAuthorState(prev => prev ? [...prev, author] : [author]);
+        }, []);
+
         return (
             <Box>
                 <BasicButton onClick={handleOpen}>
@@ -71,29 +75,30 @@ const AddAuthor =
                                     {appStrings.ADD_AN_AUTHOR}
                                 </Typography>
                             </Grid>
-                            <Grid size={{xl: 10}}>
+                            <Grid size={"grow"}>
                                 <AuthorSelection onSelected={handleSelected}/>
                             </Grid>
-                            <Grid size={{xl: 2}}>
+                            <Grid width={50}>
                                 <FormModalAddEditAuthor
                                     buttonHeight={25}
                                     buttonColor={color.PRIMARY}
                                     buttonTextColor={color.LIGHT_TEXT}
                                     buttonBorderRadius={"5px"}
+                                    // onAddSuccess={onAddSuccess}
                                 />
                             </Grid>
-                            <Grid size={12}>
-                                <BookAuthor
-                                    author={authorState ?? undefined}
-                                />
-                            </Grid>
-                            <Grid size={12}>
-                                <Button variant={"contained"}
-                                        sx={{color: color.WHITE}}
-                                        onClick={handleSave}>
-                                    {appStrings.SAVE}
-                                </Button>
-                            </Grid>
+                            {/*<Grid size={12}>*/}
+                            {/*    <BookAuthor*/}
+                            {/*        authors={authorState ?? undefined}*/}
+                            {/*    />*/}
+                            {/*</Grid>*/}
+                            {/*<Grid size={12}>*/}
+                            {/*    <Button variant={"contained"}*/}
+                            {/*            sx={{color: color.WHITE}}*/}
+                            {/*            onClick={handleSave}>*/}
+                            {/*        {appStrings.SAVE}*/}
+                            {/*    </Button>*/}
+                            {/*</Grid>*/}
                         </Grid>
                     </Container>
                 </Modal>

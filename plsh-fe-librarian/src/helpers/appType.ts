@@ -94,7 +94,7 @@ export type BookData = {
     resource?: Resource;
     // Các thuộc tính N
     category: Category;
-    author: Author;
+    authors: Author[];
     availabilities: Availability[];
     bookStatus: BookAvailability;
 

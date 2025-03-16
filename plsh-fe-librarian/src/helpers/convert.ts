@@ -34,6 +34,7 @@ function deepClean<T>(obj: T): T {
             return acc;
         }, {} as T);
 }
+
 export async function fetchUrlAsFile(url: string, fileName: string = 'downloaded-file'): Promise<File> {
     const response = await fetch(url);
     if (!response.ok) {
@@ -69,6 +70,71 @@ export const objectToFormData = (obj: object, formData = new FormData(), parentK
             formData.append(fieldName, String(value));
         }
     });
-
     return formData;
 };
+
+const ImageQuality = {
+    UHD_4K: {width: 3840, height: 2160, quality: 1.0}, // Chất lượng cao nhất
+    QHD_1440P: {width: 2560, height: 1440, quality: 0.9},
+    FULL_HD_1080P: {width: 1920, height: 1080, quality: 0.85},
+    HD_720P: {width: 1280, height: 720, quality: 0.7},
+    SD_480P: {width: 854, height: 480, quality: 0.6},
+    LOW_360P: {width: 640, height: 360, quality: 0.5},
+    LOWEST_240P: {width: 426, height: 240, quality: 0.4}, // Chất lượng thấp nhất
+} as const;
+export type ImageQualityPreset =
+    "UHD_4K"
+    | "QHD_1440P"
+    | "FULL_HD_1080P"
+    | "HD_720P"
+    | "SD_480P"
+    | "LOW_360P"
+    | "LOWEST_240P";
+
+export async function compressImage(
+    file: File,
+    qualityPreset: ImageQualityPreset
+): Promise<File> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target?.result as string;
+
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                let {width, height} = img;
+
+                // Điều chỉnh kích thước theo preset
+                const ratio = Math.min(ImageQuality[qualityPreset].width / width, ImageQuality[qualityPreset].height / height);
+                width = Math.round(width * ratio);
+                height = Math.round(height * ratio);
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext("2d");
+
+                if (!ctx) {
+                    return reject(new Error("Không thể tạo canvas"));
+                }
+
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        return reject(new Error("Không thể nén ảnh"));
+                    }
+
+                    const compressedFile = new File([blob], file.name, {type: blob.type});
+                    resolve(compressedFile);
+                }, "image/jpeg", ImageQuality[qualityPreset].quality);
+            };
+
+            img.onerror = () => reject(new Error("Lỗi khi tải ảnh"));
+        };
+
+        reader.onerror = () => reject(new Error("Lỗi khi đọc file"));
+        reader.readAsDataURL(file);
+    });
+}

@@ -1,6 +1,5 @@
 import React, {memo} from "react";
 import Grid from "@mui/material/Grid2";
-import {PiBarcodeBold} from "react-icons/pi";
 import {color} from "@/helpers/resources";
 import appStrings from "@/helpers/appStrings";
 import {Button} from "@mui/material";

@@ -1,8 +1,6 @@
 import {createSlice, PayloadAction, Slice, SliceSelectors} from "@reduxjs/toolkit";
 import {WritableDraft} from "immer";
-import {FileType} from "next/dist/lib/file-exists";
-import {Author, Availability, BookData, Language, Resource, ShortBookInfo} from "@/helpers/appType";
-import {formatImageUrl} from "@/helpers/text";
+import {Author, Availability, BookData, Resource} from "@/helpers/appType";
 // type
 export type BookResources = {
     coverImage: Resource;
@@ -36,14 +34,17 @@ export type AddEditBookData = {
     id?: number;
     resource: BookResources,
     baseInfo: BookBaseInfo,
-    author: Author,
+    authors: Author[],
     overview: BookOverview,
 }
 type AddEditBookDataSlice = Slice<AddEditBookData, {
     setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => void,
     setAddEditBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<AddEditBookData>) => void
     setResource: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookResources>) => void;
-    setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
+    setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author[]>) => void;
+    addAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
+    deleteAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
+    toggleAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
     setBookBaseInfo: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookBaseInfo>) => void;
     setBookAvailabilities: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability[]>) => void;
     addBookAvailability: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability>) => void;
@@ -60,7 +61,7 @@ export const initAddEditBookData: AddEditBookData = {
     baseInfo: {
         availability: [], category: {}
     },
-    author: {},
+    authors: [],
     overview: {}
 };
 //slice
@@ -71,7 +72,7 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
         setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => {
             state.id = action.payload.id;
             state.resource.coverImage.localUrl = action.payload.thumbnail;
-            state.author = action.payload.author;
+            state.authors = action.payload.authors;
             state.baseInfo.title = action.payload.title;
             state.baseInfo.version = action.payload.version;
             state.baseInfo.category = action.payload.category;
@@ -88,24 +89,45 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
         setAddEditBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<AddEditBookData>) => {
             state.id = action.payload.id;
             state.resource = action.payload.resource;
-            state.author = action.payload.author;
+            state.authors = action.payload.authors;
 
         },
         clearData: (state: WritableDraft<AddEditBookData>) => {
             state.id = undefined;
             state.resource = initAddEditBookData.resource;
-            state.author = initAddEditBookData.author;
+            state.authors = initAddEditBookData.authors;
             // set all being null
         },
         setResource: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookResources | undefined>): void => {
             if (action.payload)
                 state.resource = action.payload;
         },
-        setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined>): void => {
+        setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author[] | undefined>): void => {
             console.log(action.payload);
             if (action.payload) {
-                state.author = action.payload;
-
+                state.authors = action.payload;
+            }
+        },
+        addAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined>): void => {
+            console.log(action.payload);
+            if (action.payload) {
+                state.authors.push(action.payload);
+            }
+        },
+        deleteAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined>): void => {
+            console.log(action.payload);
+            if (action.payload) {
+                state.authors = state.authors.filter(a => a.id !== action.payload?.id)
+            }
+        },
+        toggleAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined>): void => {
+            console.log(action.payload);
+            if (action.payload) {
+                if (state.authors.map(a => a.id).includes(action.payload.id)) {
+                    state.authors = state.authors.filter(a => a.id !== action.payload?.id);
+                } else {
+                    state.authors.push(action.payload);
+                }
             }
         },
         setBookBaseInfo: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookBaseInfo | undefined>): void => {
@@ -173,7 +195,10 @@ export const {
     setResource,
     setAuthor,
     setBookBaseInfo,
+    deleteAuthor,
     setBookAvailabilities,
+    toggleAuthor,
+    addAuthor,
     setAddEditBookWithBookData,
     addBookAvailability,
     removeBookAvailability,

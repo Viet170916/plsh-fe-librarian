@@ -36,7 +36,7 @@ function BookRow(props: IProps) {
                       spacing={2}
                 >
 
-                    <Title title={props.book.title ?? ""} author={props.book.author} version={props.book.version}
+                    <Title title={props.book.title ?? ""} author={props.book.authors[0]??{}} version={props.book.version}
                            imageUrl={props.book.thumbnail}/>
 
                     <Grid container size={1} spacing={0} justifyContent="center" alignItems="center">

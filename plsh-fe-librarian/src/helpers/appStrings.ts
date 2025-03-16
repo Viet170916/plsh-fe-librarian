@@ -135,7 +135,9 @@ const appStrings =
             error: {
                 ADD_FAILURE: "Thêm tác giả không thành công"
 
-            }
+            },
+            CHOOSE_AUTHORS: "Chọn tác giả", ADD_SUCCESS: "Thêm tác giả thành công"
+
 
         },
         book: {
