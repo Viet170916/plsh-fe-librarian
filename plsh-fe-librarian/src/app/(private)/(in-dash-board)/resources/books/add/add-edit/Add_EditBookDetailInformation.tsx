@@ -8,11 +8,11 @@ import {
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import {Availability} from "@/helpers/appType";
-import {useSelector} from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/stores/store";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {
-    BookBaseInfo,
+    BookBaseInfo, setValueInBookBaseInfo,
 } from "@/stores/slices/book-states/book.add-edit.slice";
 import appStrings from "@/helpers/appStrings";
 import {TextFieldNoBorder} from "@/components/primary/Input/TextFieldNoBorder";
@@ -25,10 +25,42 @@ interface IProps {
     children?: React.ReactNode;
 }
 
+const TitleEdit = memo(() => {
+    const dispatch = useDispatch();
+    const title = useSelector((state: RootState) => state.addEditBookData.baseInfo.title, shallowEqual);
+    return (
+        <TextFieldNoBorder placeholder={appStrings.TITLE}
+                           value={title ?? ""}
+                           onChange={(e) => {
+                               dispatch(setValueInBookBaseInfo({key: "title", value: e.target.value}))
+                           }}
+                           multiline
+                           maxRows={2}
+                           fullWidth
+                           fontSize={35}
+                           padding={0}
+                           textColor={color.DARK_TEXT}
+        />
+    )
+});
+const VersionEdit = memo(() => {
+    const dispatch = useDispatch();
+    const version = useSelector((state: RootState) => state.addEditBookData.baseInfo.version, shallowEqual);
+    return (
+        <TextFieldNoBorder placeholder={appStrings.VERSION}
+                           value={version ?? ""}
+                           onChange={(e) => {
+                               dispatch(setValueInBookBaseInfo({key: "version", value: e.target.value}))
+                           }}
+                           padding={0}
+                           textColor={color.DARK_LIGHTER_TEXT}/>
+
+    )
+});
+
 function Add_EditBookDetails(props: IProps): JSX.Element {
-    console.log(process.env.NEXT_PUBLIC_SERVER_API_URL);
-    const bookBaseInfoData = useSelector((state: RootState) => state.addEditBookData.baseInfo);
     const bookAuthors = useSelector((state: RootState) => state.addEditBookData.authors);
+
     const {
         register,
         handleSubmit,
@@ -36,10 +68,11 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
         formState: {errors},
     } = useForm<BookBaseInfo>()
     const onSubmit: SubmitHandler<BookBaseInfo> = (data) => {
-        console.log(data)
+
+        console.log(data);
     }
 
-    function onAddBook(){
+    function onAddBook() {
 
     }
 
@@ -49,20 +82,8 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
             <Grid container sx={{width: "100%", minHeight: 381}}>
                 <Grid size={12} sx={{}}>
                     <Grid sx={{}} container size={12}>
-                        <TextFieldNoBorder placeholder={appStrings.TITLE}
-                                           {...register("title")}
-                                           defaultValue={bookBaseInfoData.title ?? ""}
-                                           fullWidth
-                                           fontSize={35}
-                                           padding={0}
-                                           textColor={color.DARK_TEXT}
-                        />
-                        <TextFieldNoBorder placeholder={appStrings.VERSION}
-                                           defaultValue={bookBaseInfoData.version ?? ""}
-
-                                           padding={0}
-                                           {...register("version")}
-                                           textColor={color.DARK_LIGHTER_TEXT}/>
+                        <TitleEdit/>
+                        <VersionEdit/>
                         <Grid size={12} container sx={{color: color.DARK_TEXT, gap: 1}}>
                             {`${appStrings.WRITE_BY}: `}
                             <Grid size={"grow"} maxHeight={70} sx={{overflowX: "hidden", overflowY: "auto"}}>
@@ -103,10 +124,11 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                         {appStrings.book.OVERVIEW}
                     </Typography>
                     <Grid container spacing={1}>
-                        <TextField fullWidth sx={{mt: 1}} size={"small"} {...register("category.name")}
+                        <TextField fullWidth sx={{mt: 1}}
+                                   size={"small"}
+                                   {...register("category.name")}
                                    label={appStrings.book.CATEGORY}/>
-                        <TextField fullWidth sx={{mt: 1}} size={"small"} {...register("category.name")}
-                                   label={appStrings.book.CATEGORY}/>
+
                     </Grid>
                 </Grid>
 

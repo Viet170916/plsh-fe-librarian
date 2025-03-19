@@ -47,6 +47,10 @@ export type AddEditBookData = {
 type AddEditBookDataSlice = Slice<AddEditBookData, {
     setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => void,
     setAddEditBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<AddEditBookData>) => void
+    setValueInBookBaseInfo: (state: WritableDraft<AddEditBookData>, action: PayloadAction<{
+        key: keyof BookBaseInfo,
+        value: FieldPathValue<BookBaseInfo, keyof BookBaseInfo>,
+    }>) => void
     setResource: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookResources>) => void;
     setAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author[]>) => void;
     addAuthor: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Author>) => void;
@@ -81,6 +85,12 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
     name: "addEditBookData",
     initialState: initAddEditBookData,
     reducers: {
+        setValueInBookBaseInfo: (state: WritableDraft<AddEditBookData>, action: PayloadAction<{
+            key: keyof BookBaseInfo,
+            value: FieldPathValue<BookBaseInfo, keyof BookBaseInfo>,
+        }>) => {
+            state.baseInfo[action.payload.key] = action.payload.value as never;
+        },
         setValueInOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<{
             key: keyof BookOverview,
             value: FieldPathValue<BookOverview, keyof BookOverview>
@@ -89,20 +99,7 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
 
         },
         setBookOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookOverview>) => {
-            // if(typeof action.payload ==="function"){
-            //     state.overview = action.payload(state.overview);
-            // }
-            // else {
             state.overview = action.payload;
-            // }
-            // state.overview.publisher = action.payload.publisher ?? state.overview.publisher;
-            // state.overview.publishDate = action.payload.publishDate ?? state.overview.publishDate;
-            // state.overview.pageCount = action.payload.pageCount ?? state.overview.pageCount;
-            // state.overview.isbNumber10 = action.payload.isbNumber10 ?? state.overview.isbNumber10;
-            // state.overview.isbNumber13 = action.payload.isbNumber13 ?? state.overview.isbNumber13;
-            // state.overview.otherIdentifier = action.payload.otherIdentifier ?? state.overview.otherIdentifier;
-            // state.overview.description = action.payload.description ?? state.overview.description;
-            // state.overview.language = action.payload.language ?? state.overview.language;
         },
         setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => {
             console.log(action.payload)
@@ -236,6 +233,7 @@ export const {
     toggleAuthor,
     setValueInOverview,
     setBookOverview,
+    setValueInBookBaseInfo,
     addAuthor,
     setAddEditBookWithBookData,
     addBookAvailability,
