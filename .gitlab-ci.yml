@@ -21,7 +21,7 @@ before_script:
   - chmod 600 ~/.ssh/google_compute_engine
   - ssh-add ~/.ssh/google_compute_engine
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
-  - ssh-keyscan -H 35.209.60.140 >> ~/.ssh/known_hosts
+  - ssh-keyscan -H 34.67.95.8 >> ~/.ssh/known_hosts
   - apt-get update && apt-get install -y zip
 
 
