@@ -23,6 +23,7 @@ before_script:
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
   - ssh-keyscan -H 34.67.95.8 >> ~/.ssh/known_hosts
   - apt-get update && apt-get install -y zip
+  - npm install -g yarn
 
 
 build_plsh-fe-librarian:
@@ -37,6 +38,7 @@ build_plsh-fe-librarian:
     - echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
     - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
     - cat .env
+    - corepack enable
     - yarn install
     - echo "Building Next.js..."
     - yarn build
@@ -45,6 +47,7 @@ build_plsh-fe-librarian:
     - echo "Creating deployment package..."
     - zip -r next-app.zip .next package.json yarn.lock public
     - ls -lah
+    
 
   artifacts:
     paths:
