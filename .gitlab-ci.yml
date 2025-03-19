@@ -10,7 +10,7 @@ stages:
   - deploy
 
 variables:
-  VM_USER: "vietvqhe170916"
+  VM_USER: "namson023"
   VM_HOST: "book-hive.space"
   DEPLOY_PATH: "/var/www/plsh-fe-librarian"
 
@@ -59,8 +59,8 @@ deploy_plsh-fe-librarian:
   script:
     - echo "Deploying to server..."
     - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip vietvqhe170916@34.67.95.8:/home/user/next-app/
-    - ssh -o StrictHostKeyChecking=no vietvqhe170916@34.67.95.8 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
-    - ssh -o StrictHostKeyChecking=no vietvqhe170916@34.67.95.8 'rm -f next-app.zip'
+    - ssh -o StrictHostKeyChecking=no namson023@34.67.95.8 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
+    - ssh -o StrictHostKeyChecking=no namson023@34.67.95.8 'rm -f next-app.zip'
   only:
     - merge_requests
     - client/librarian/develop
