@@ -8,6 +8,7 @@ import WithClientOnly from "@/components/primary/WithClientOnly";
 import TabBar from "@/components/primary/TabBar";
 import {TabItem} from "@/helpers/appType";
 import Overview from "@/components/book-page/view-only/overviewTabs/overview";
+import DetailTab from "@/app/(private)/(in-dash-board)/resources/books/[id]/Detail";
 
 interface IProps {
     children?: React.ReactNode;
@@ -39,7 +40,7 @@ const BookOverviewTabs = (props: IProps) => {
 
         title: "Details",
         content:
-            <Typography variant="body2">Details content goes here.</Typography>
+            <DetailTab/>
         ,
     }, {
         kind: "normal",

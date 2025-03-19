@@ -32,11 +32,6 @@ const BookOverviewTabs = (props: IProps) => {
             title: appStrings.book.OVERVIEW,
             content: <Overview/>,
         },
-        // {
-        //     kind: "normal",
-        //     title: appStrings.book.EDITION,
-        //     content: <Typography variant="body2">View 166 Editions content goes here.</Typography>,
-        // },
         {
             kind: "normal",
             title: appStrings.book.DETAIL,
@@ -44,27 +39,6 @@ const BookOverviewTabs = (props: IProps) => {
                 <Typography variant="body2">Details content goes here.</Typography>
             ,
         },
-        // {
-        //     kind: "normal",
-        //     title: appStrings.book.REVIEW,
-        //     content:
-        //         <Typography variant="body2">4.1k Reviews content goes here.</Typography>
-        //     ,
-        // },
-        // {
-        //     kind: "normal",
-        //     title: appStrings.book.LIST,
-        //     content:
-        //         <Typography variant="body2">Lists content goes here.</Typography>
-        //     ,
-        // },
-        // {
-        //     kind: "normal",
-        //     title: appStrings.book.RELATED,
-        //     content:
-        //         <Typography variant="body2">Related Books content goes here.</Typography>
-        //     ,
-        // },
     ];
     return (
         <Box sx={{width: "100%", height: 381, position: "relative"}}>

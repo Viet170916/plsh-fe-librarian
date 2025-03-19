@@ -16,12 +16,13 @@ export const generateUniquePosition = (existingPositions: Set<number>, maxPositi
     return position;
 };
 
-export const createBookOnRowShelf = (books: BookOnRowShelf[], colName: string, maxPosition: number): BookOnRowShelf => {
+export const createBookOnRowShelf = (books: BookOnRowShelf[], colName: string, maxPosition: number, rowShelfId: number): BookOnRowShelf => {
     const existingIds = new Set(books.map(book => book.id));
     const existingPositions = new Set(books.map(book => book.position));
 
     return {
         id: generateUniqueId(existingIds),
+        rowShelfId,
         colName,
         position: generateUniquePosition(existingPositions, maxPosition),
         book: undefined,

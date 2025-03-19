@@ -19,7 +19,7 @@ export const DASHBOARD = "Bảng điều khiển";
 export const BORROW = "Mượn sách";
 export const MEMBER = "Thành viên";
 export const RESOURCE = "Tài nguyên";
-export const SETTING = "Cài đặt";
+export const SETTING = "Thiết lập";
 export const LOGOUT = "Đăng xuất";
 const appStrings =
     {
@@ -159,7 +159,23 @@ const appStrings =
             RELATED: "Sách liên quan",
             SCAN_ISBN: "Quét mã ISBN",
             SCAN_COVER_IMAGE: "Quét bìa sách",
-            NOT_BOOK_FOUND: "Không tìm thấy sách"
+            NOT_BOOK_FOUND: "Không tìm thấy sách",
+            CATEGORY: "Thể loại",
+            PUBLISH_AT: "Xuất bản",
+            PUBLISHER: "Nhà xuất bản",
+            PAGE: "Trang",
+            PAGE_COUNT: "Số trang",
+            SERIES: "Bộ",
+            HEIGHT: "Chiều dài",
+            WIDTH: "Chiều rộng",
+            THICKNESS: "Độ dày",
+            WEIGHT: "Cân nặng",
+            PRICE: "Giá",
+            ISBN13: "Mã ISBN-13",
+            ISBN10: "Mã ISBN-10",
+            OTHER_IDENTIFIER: "Mã loại khác",
+            LIBRARY_CODE: "Mã sách của thư viện",
+            PHYSIC_DESCRIPTION: "Mô tả vật lý"
         },
         REMOVE: "Xoá",
         PDF_PREVIEW: "Đọc sách PDF",
@@ -201,9 +217,20 @@ const appStrings =
         APPLY: "Áp dụng",
         success: {
 
-            EDIT_SUCCESS: "Chỉnh sửa thành công"
+            EDIT_SUCCESS: "Chỉnh sửa thành công",
+            SAVE_SUCCESS: "Lưu thành công"
         },
-        SCAN_BAR_CODE: "Quét mã vạch"
+        SCAN_BAR_CODE: "Quét mã vạch",
+        QUANTITY: "Số lượng",
+        guide: {
+            ADD_PHYSIC_BOOK_AVAILABILITY: "Với số lượng sách sẽ được tự động tạo và đánh dấu một mã định danh có cuốn" +
+                " sách đó. Để hệ thống tự tạo mã bạn cần phải lưu thông tin đầu sách này vào hệ thống trước, sau khi" +
+                " lưu thông tin, hệ thống ngay lập tức tạo cho bạn số lượng mã tương ứng với số lượng sách bạn nhập" +
+                " và bạn cần phải dán mã sách này lên từng cuốn sách cứng mà trong kho có sẵn",
+        },
+        GUIDE: "Hướng dẫn",
+        NOTICE: "Chú ý",
+        LANGUAGE: "Ngôn ngữ"
 
 
     };

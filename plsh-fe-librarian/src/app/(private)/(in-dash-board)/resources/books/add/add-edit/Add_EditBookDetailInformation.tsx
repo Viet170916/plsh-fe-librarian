@@ -2,7 +2,7 @@
 import React, {JSX, memo, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {
     Box,
-    Button,
+    Button, Stack, TextField,
     Typography,
 } from "@mui/material";
 import {color} from "@/helpers/resources";
@@ -39,12 +39,16 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
         console.log(data)
     }
 
+    function onAddBook(){
+
+    }
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container sx={{width: "100%", minHeight: 381}}>
                 <Grid size={12} sx={{}}>
-                    <Grid sx={{}} size={12}>
+                    <Grid sx={{}} container size={12}>
                         <TextFieldNoBorder placeholder={appStrings.TITLE}
                                            {...register("title")}
                                            defaultValue={bookBaseInfoData.title ?? ""}
@@ -53,22 +57,30 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                                            padding={0}
                                            textColor={color.DARK_TEXT}
                         />
-                        <Box display={"flex"} sx={{color: color.DARK_TEXT, gap: 1}}>
-                            {`${appStrings.WRITE_BY} `}
-                            {bookAuthors ? bookAuthors.map(author => (
-                                <Typography variant={"h6"} key={author.id}>{author.fullName}</Typography>
-                            )) : <></>}
+                        <TextFieldNoBorder placeholder={appStrings.VERSION}
+                                           defaultValue={bookBaseInfoData.version ?? ""}
+
+                                           padding={0}
+                                           {...register("version")}
+                                           textColor={color.DARK_LIGHTER_TEXT}/>
+                        <Grid size={12} container sx={{color: color.DARK_TEXT, gap: 1}}>
+                            {`${appStrings.WRITE_BY}: `}
+                            <Grid size={"grow"} maxHeight={70} sx={{overflowX: "hidden", overflowY: "auto"}}>
+                                <Box display={"flex"} flexWrap={"wrap"} width={"100%"} height={"fit-content"}
+                                     sx={{mt: .5}}>
+                                    {bookAuthors ? bookAuthors.map(author => (
+                                        <Typography width={"max-content"} variant={"h5"}
+                                                    key={`${author.id}-${author.fullName}`}>{`${author.fullName}, `} </Typography>
+                                    )) : <></>}
+                                </Box>
+                            </Grid>
+
                             <AddAuthor>
                                 <span style={{textDecoration: "underline"}}>{appStrings.ADD_AN_AUTHOR}</span>
                             </AddAuthor>
-                        </Box>
+                        </Grid>
                     </Grid>
-                    <TextFieldNoBorder placeholder={appStrings.VERSION}
-                                       defaultValue={bookBaseInfoData.version ?? ""}
 
-                                       padding={0}
-                                       {...register("version")}
-                                       textColor={color.DARK_LIGHTER_TEXT}/>
                 </Grid>
                 <Grid sx={{}} size={6}>
                     <Typography
@@ -82,7 +94,19 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                             <EBookAvailability/>
                             <AudioBookAvailability/>
                         </Grid>
-
+                    </Grid>
+                </Grid>
+                <Grid sx={{}} size={6}>
+                    <Typography
+                        variant="body2"
+                        sx={{fontWeight: "bold", color: color.DARK_TEXT}}>
+                        {appStrings.book.OVERVIEW}
+                    </Typography>
+                    <Grid container spacing={1}>
+                        <TextField fullWidth sx={{mt: 1}} size={"small"} {...register("category.name")}
+                                   label={appStrings.book.CATEGORY}/>
+                        <TextField fullWidth sx={{mt: 1}} size={"small"} {...register("category.name")}
+                                   label={appStrings.book.CATEGORY}/>
                     </Grid>
                 </Grid>
 
@@ -95,6 +119,7 @@ function Add_EditBookDetails(props: IProps): JSX.Element {
                 >
                     <Grid size={12}>
                         <Button
+                            onClick={onAddBook}
                             fullWidth
                             variant="contained"
                             color={"primary"}

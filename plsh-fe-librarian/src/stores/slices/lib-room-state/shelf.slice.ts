@@ -8,6 +8,7 @@ import {RootState} from "@/stores/store";
 export type BookOnRowShelf = {
     id: number;
     colName?: string;
+    rowShelfId: number;
     book?: BookData;
     position: number;
 
@@ -16,6 +17,7 @@ export type RowShelf = {
     id: number;
     name?: string;
     booksOnRowShelf: BookOnRowShelf[];
+    shelfId?: number;
     position?: number;
     maxCol: number;
 }

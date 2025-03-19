@@ -1,31 +1,42 @@
 import React, {memo} from "react";
-import {Box, Typography} from "@mui/material";
+import {Box, TextField, Typography} from "@mui/material";
 import Link from "next/link";
+import {color, language, languages} from "@/helpers/resources";
+import appStrings from "@/helpers/appStrings";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/stores/store";
+import {LanguageCode} from "@/helpers/appType";
+import {setBookOverview, setValueInOverview} from "@/stores/slices/book-states/book.add-edit.slice";
 
-interface IProps {
-    children?: React.ReactNode;
-}
+const Language = memo(function () {
+    const langCode: LanguageCode = useSelector((state: RootState) => state.addEditBookData.overview.language as LanguageCode, shallowEqual);
+    return (
+        <Link href="#" color="primary">
+            {language[langCode]}
+        </Link>)
+})
+const Detail = memo(function () {
+    const detail = useSelector((state: RootState) => state.addEditBookData.overview.description, shallowEqual);
+    const dispatch = useDispatch();
+    return (
+        <TextField sx={{}} multiline fullWidth variant="outlined" value={detail}
+                   onChange={(e) =>
+                       dispatch(setValueInOverview({key: "description", value: e.target.value}))
+                   }
+        />
 
-function Add_EditSummary(props: IProps) {
+    )
+})
+
+function Add_EditSummary() {
     return (
         <Box sx={{top: 134, left: 0}}>
             <Typography variant="body2" fontWeight="bold">
-                <span style={{color: "#666666"}}>Previews available in: </span>
-                <Link href="#" color="primary">
-                    English
-                </Link>
+                <span style={{color: color.DARK_TEXT}}>{appStrings.LANGUAGE}: </span>
+                <Language/>
             </Typography>
             <Box sx={{top: 156, left: 0}}>
-                <Typography variant="body2">
-                    Since Don’t Make Me Think was first published in 2000, hundreds of
-                    thousands of Web designers and developers have relied on usability
-                    guru Steve Krug’s guide to help them understand the principles of
-                    intuitive navigation and information design. Witty, commonsensical,
-                    and eminently practical, it’s one of the best-loved and most...
-                    <Link href="#" color="primary">
-                        Read more
-                    </Link>
-                </Typography>
+                <Detail/>
             </Box>
 
         </Box>

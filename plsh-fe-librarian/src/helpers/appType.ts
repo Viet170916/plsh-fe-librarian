@@ -4,6 +4,9 @@ import type {OnLoadingComplete, PlaceholderValue} from "next/dist/shared/lib/get
 import {FileType} from "next/dist/lib/file-exists";
 import appStrings from "@/helpers/appStrings";
 import {Category} from "@/stores/slices/book-states/book.add-edit.slice";
+import {BookOnRowShelf} from "@/stores/slices/lib-room-state/shelf.slice";
+import {constants} from "@/helpers/constants";
+import {language} from "@/helpers/resources";
 
 export type VoidFunc = () => void;
 export type VoidFuncAsync = () => Promise<void>;
@@ -73,7 +76,7 @@ export type BookData = {
     version?: string;
     publisher?: string;
     publishDate?: string;
-    language?: string;
+    language?: LanguageCode;
     pageCount: number;
     categoryId: number;
     isbNumber13?: string;
@@ -89,8 +92,9 @@ export type BookData = {
     updateDate?: string;
     deletedAt?: string;
     isChecked: boolean;
-    bookReviewId: number;
-    quantity: number;
+    bookReviewId?: number;
+    quantity?: number;
+    libraryCode?: string;
     resource?: Resource;
     // Các thuộc tính N
     category: Category;
@@ -98,6 +102,12 @@ export type BookData = {
     availabilities: Availability[];
     bookStatus: BookAvailability;
 
+}
+export type BookInstance = {
+    id?: number;
+    code?: string;
+    bookOnRowShelfId?: number;
+    bookOnRowShelf?: BookOnRowShelf;
 }
 export type Availability = {
     kind: "e-book" | "audio";
@@ -108,8 +118,24 @@ export type Availability = {
     kind: "physical",
     isChecked?: boolean,
     title?: string,
-    position?: string,
+    quantity?: number,
+    bookInstances?: BookInstance[]
+    // position?: string,
 }
+export type LanguageCode =
+    | "en" | "vi" | "es" | "fr" | "de" | "zh" | "ja" | "ko" | "ru" | "ar"
+    | "hi" | "pt" | "it" | "nl" | "tr" | "pl" | "uk" | "th" | "sv" | "id"
+    | "fi" | "no" | "da" | "he" | "el" | "hu" | "ro" | "cs" | "sk" | "bg"
+    | "hr" | "sr" | "sl" | "ms" | "bn" | "ta" | "te" | "kn" | "ml" | "ur"
+    | "fa" | "sw" | "am" | "yo" | "ig" | "ha" | "my" | "km" | "lo" | "mn"
+    | "si" | "uz" | "kk" | "az" | "hy" | "ka" | "tg" | "ky" | "ps" | "sd"
+    | "ne" | "bo" | "dz" | "gl" | "eu" | "cy" | "ga" | "mt" | "lb" | "is"
+    | "af" | "xh" | "zu" | "st" | "sn" | "nso" | "ts" | "ve" | "tn";
+
+export type Language = { code: LanguageCode, name: string, langInVn?: string, };
+export type LanguageCodeKey = {
+    [key in (LanguageCode)]: string;
+};
 
 export type BooksResponse = {
     pageCount: number
@@ -179,7 +205,7 @@ export type Author = {
     summaryDescription?: string,
     publications?: ShortBookInfo[]
 }
-export type Language =
+export type LanguageFullText =
     | "English"
     | "Mandarin Chinese"
     | "Spanish"

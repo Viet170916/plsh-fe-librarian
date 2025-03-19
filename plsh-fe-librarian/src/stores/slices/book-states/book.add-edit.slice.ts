@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction, Slice, SliceSelectors} from "@reduxjs/toolkit";
 import {WritableDraft} from "immer";
-import {Author, Availability, BookData, Resource} from "@/helpers/appType";
+import {Author, Availability, BookData, LanguageCode, Resource} from "@/helpers/appType";
+import {FieldPathValue} from "react-hook-form";
 // type
 export type BookResources = {
     coverImage: Resource;
@@ -20,15 +21,21 @@ export type Category = {
     name?: string,
 }
 export type BookOverview = {
-    language?: string,
+    language?: LanguageCode,
     pageCount?: number,
     description?: string,
+    price?: number,
     isbNumber13?: string,
     isbNumber10?: string,
     otherIdentifier?: string,
-    "publisher"?: string,
-    "publishDate"?: string,
-
+    publisher?: string,
+    publishDate?: string,
+    series?: string,
+    seriesId?: number,
+    height?: number,
+    width?: number,
+    thickness?: number,
+    weight?: number,
 }
 export type AddEditBookData = {
     id?: number;
@@ -50,7 +57,12 @@ type AddEditBookDataSlice = Slice<AddEditBookData, {
     addBookAvailability: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability>) => void;
     removeBookAvailability: (state: WritableDraft<AddEditBookData>, action: PayloadAction<"e-book" | "audio" | "physical">) => void;
     modifyBookAvailability: (state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability>) => void;
+    setBookOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookOverview>) => void;
     clearData: (state: WritableDraft<AddEditBookData>) => void;
+    setValueInOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<{
+        key: keyof BookOverview,
+        value: FieldPathValue<BookOverview, keyof BookOverview>,
+    }>) => void,
 
 
 },
@@ -69,7 +81,31 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
     name: "addEditBookData",
     initialState: initAddEditBookData,
     reducers: {
+        setValueInOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<{
+            key: keyof BookOverview,
+            value: FieldPathValue<BookOverview, keyof BookOverview>
+        }>) => {
+            state.overview[action.payload.key] = action.payload.value as undefined;
+
+        },
+        setBookOverview: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookOverview>) => {
+            // if(typeof action.payload ==="function"){
+            //     state.overview = action.payload(state.overview);
+            // }
+            // else {
+            state.overview = action.payload;
+            // }
+            // state.overview.publisher = action.payload.publisher ?? state.overview.publisher;
+            // state.overview.publishDate = action.payload.publishDate ?? state.overview.publishDate;
+            // state.overview.pageCount = action.payload.pageCount ?? state.overview.pageCount;
+            // state.overview.isbNumber10 = action.payload.isbNumber10 ?? state.overview.isbNumber10;
+            // state.overview.isbNumber13 = action.payload.isbNumber13 ?? state.overview.isbNumber13;
+            // state.overview.otherIdentifier = action.payload.otherIdentifier ?? state.overview.otherIdentifier;
+            // state.overview.description = action.payload.description ?? state.overview.description;
+            // state.overview.language = action.payload.language ?? state.overview.language;
+        },
         setAddEditBookWithBookData: (state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData>) => {
+            console.log(action.payload)
             state.id = action.payload.id;
             state.resource.coverImage.localUrl = action.payload.thumbnail;
             state.authors = action.payload.authors;
@@ -175,7 +211,7 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice({
                     if (av) {
                         av.isChecked = action.payload.isChecked;
                         if (av.kind === "physical" && action.payload.kind === "physical") {
-                            av.position = action.payload.position;
+                            av.quantity = action.payload.quantity;
                         } else if (av.kind === "e-book" && action.payload.kind === "e-book") {
                             av.resource = ({...action.payload.resource, file: undefined} as Resource);
                         } else if (av.kind === "audio" && action.payload.kind === "audio") {
@@ -198,6 +234,8 @@ export const {
     deleteAuthor,
     setBookAvailabilities,
     toggleAuthor,
+    setValueInOverview,
+    setBookOverview,
     addAuthor,
     setAddEditBookWithBookData,
     addBookAvailability,

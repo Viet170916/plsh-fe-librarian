@@ -1,10 +1,42 @@
 import React, {memo} from "react";
-import {Box, Typography} from "@mui/material";
+import {Box, TextField, Typography} from "@mui/material";
 import {color} from "@/helpers/resources";
+import appStrings from "@/helpers/appStrings";
+import {useDispatch} from "react-redux";
+import {useSelector} from "@/hooks/useSelector";
+import {BookOverview, setValueInOverview} from "@/stores/slices/book-states/book.add-edit.slice";
+import {FieldPathValue} from "react-hook-form";
 
 interface IProps {
     children?: React.ReactNode;
 }
+
+export const EditCom = memo(({overviewKey, editType, disabled, placeholder}: {
+    disabled?: boolean,
+    editType?: "number" | "string",
+    overviewKey: keyof BookOverview,
+    placeholder?: string
+}) => {
+    const dispatch = useDispatch();
+    const value: FieldPathValue<BookOverview, keyof BookOverview> = useSelector(state => state.addEditBookData.overview[overviewKey]);
+
+    function onChange(value: FieldPathValue<BookOverview, keyof BookOverview>) {
+        dispatch(setValueInOverview({key: overviewKey, value}));
+    }
+
+    return (
+        <TextField
+            placeholder={placeholder}
+            disabled={disabled}
+            type={editType ?? "text"}
+            sx={{}}
+            size="small"
+            onChange={(e) => onChange(e.target.value)}
+            value={value ?? ""}
+        />
+
+    )
+})
 
 function Add_EditAbout(props: IProps) {
     return (<Box
@@ -19,209 +51,70 @@ function Add_EditAbout(props: IProps) {
         }}
     >
         <Typography variant="h6" fontWeight="bold" color="textSecondary">
-            Book Details
+            {appStrings.book.DETAIL}
         </Typography>
 
-        <Box sx={{mt: 2}}>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
             <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                Published in
+                {appStrings.book.PUBLISHER}
             </Typography>
-            <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                United States
-            </Typography>
-        </Box>
-
-        <Box sx={{mt: 2}}>
-            <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                Edition Notes
-            </Typography>
-            <Box sx={{mt: 1}}>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    Series
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    Dover large print classics
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    Genre
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    Fiction.
-                </Typography>
+            <Box>
+                <EditCom overviewKey={"publisher"}/>
             </Box>
         </Box>
-
-        <Box sx={{mt: 2}}>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
             <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                Classifications
+                {appStrings.book.SERIES}
             </Typography>
-            <Box sx={{mt: 1}}>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    Dewey Decimal Class
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    823/.8
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    Library of Congress
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    PR5485 .A1 2002
-                </Typography>
+            <Box>
+                <EditCom overviewKey={"series"}/>
             </Box>
         </Box>
-
-        <Box sx={{mt: 2}}>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
             <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                The Physical Object
+                {appStrings.book.PRICE}
             </Typography>
-            <Box sx={{mt: 1}}>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    Pagination
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    ix, 112 p. (large print) ;
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    Number of pages
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    216
-                </Typography>
+            <Box>
+                <EditCom overviewKey={"price"} editType={"number"}/>
             </Box>
         </Box>
-
-        <Box sx={{mt: 2}}>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
             <Typography variant="body2" fontWeight="bold" color="textSecondary">
-                ID Numbers
+                {appStrings.book.PAGE_COUNT}
             </Typography>
-            <Box sx={{mt: 1}}>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    My Book Shelf
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    OL3570252M
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    ISBN 10
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    0486424715
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    LCCN
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    2002073560
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    Library Thing
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    12349
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                    sx={{mt: 1}}
-                >
-                    Goodreads
-                </Typography>
-                <Typography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="textSecondary"
-                >
-                    690668
-                </Typography>
+            <Box>
+                <EditCom overviewKey={"pageCount"} editType={"number"}/>
             </Box>
+        </Box>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
+            <Typography variant="body2" fontWeight="bold" color="textSecondary">
+                {appStrings.book.ISBN10}
+            </Typography>
+            <Box>
+                <EditCom overviewKey={"isbNumber10"}/>
+            </Box>
+        </Box><Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
+        <Typography variant="body2" fontWeight="bold" color="textSecondary">
+            {appStrings.book.ISBN13}
+        </Typography>
+        <Box>
+            <EditCom overviewKey={"isbNumber13"}/>
+        </Box>
+    </Box>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
+            <Typography variant="body2" fontWeight="bold" color="textSecondary">
+                {appStrings.book.OTHER_IDENTIFIER}
+            </Typography>
+            <Box>
+                <EditCom overviewKey={"otherIdentifier"}/>
+            </Box>
+        </Box>
+        <Box sx={{mt: 2, gap: 2}} display="flex" flexDirection="row" alignItems="center">
+            <Typography variant="body2" fontWeight="bold" color="textSecondary">
+                {appStrings.book.LIBRARY_CODE}
+            </Typography>
+            <EditCom overviewKey={"otherIdentifier"} disabled placeholder={"XXXX-XXXX-XXXX"}/>
+
         </Box>
     </Box>)
 }
