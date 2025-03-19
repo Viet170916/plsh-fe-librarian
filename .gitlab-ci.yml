@@ -58,8 +58,8 @@ deploy_plsh-fe-librarian:
   stage: deploy
   script:
     - echo "Deploying to server..."
-    - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip namson023@34.67.95.8:/home/user/next-app/
-    - ssh -o StrictHostKeyChecking=no namson023@34.67.95.8 'cd /home/user/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
+    - scp -o StrictHostKeyChecking=no ./plsh-fe-librarian/next-app.zip namson023@34.67.95.8:/home/namson023/next-app/
+    - ssh -o StrictHostKeyChecking=no namson023@34.67.95.8 'cd /home/namson023/next-app && unzip -o next-app.zip && yarn install --production && (pm2 restart next-app || pm2 start yarn --name next-app -- run start)'
     - ssh -o StrictHostKeyChecking=no namson023@34.67.95.8 'rm -f next-app.zip'
   only:
     - merge_requests
