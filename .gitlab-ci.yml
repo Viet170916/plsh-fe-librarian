@@ -23,7 +23,6 @@ before_script:
   - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
   - ssh-keyscan -H 34.67.95.8 >> ~/.ssh/known_hosts
   - apt-get update && apt-get install -y zip
-  - npm install -g yarn
 
 
 build_plsh-fe-librarian:
