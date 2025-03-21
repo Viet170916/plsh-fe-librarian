@@ -12,8 +12,29 @@ export function objectToQueryParams(obj: object, prefix = ''): string {
 
     return queryParams ? `?${queryParams}` : '';
 }
+export function deepCleanObject<T extends Record<string, unknown>>(obj: T): Partial<T> | undefined {
+    if (typeof obj !== "object" || obj === null) return undefined;
 
-function deepClean<T>(obj: T): T {
+    const result: object = Array.isArray(obj) ? [] : {};
+
+    for (const [key, value] of Object.entries(obj)) {
+        if (value === null || value === undefined || (typeof value === "number" && isNaN(value))) {
+            continue;
+        }
+
+        if (typeof value === "object") {
+            const cleanedValue = deepClean(value);
+            if (cleanedValue !== undefined && Object.keys(cleanedValue).length > 0) {
+                (result as Record<string, unknown>)[key] = cleanedValue;
+            }
+        } else {
+            (result as Record<string, unknown>)[key] = value;
+        }
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
+}
+export function deepClean<T>(obj: T): T {
     if (typeof obj !== "object" || obj === null) return obj;
 
     return Object.entries(obj as Record<string, unknown>)

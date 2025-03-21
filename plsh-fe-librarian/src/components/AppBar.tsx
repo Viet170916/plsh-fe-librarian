@@ -96,7 +96,7 @@ const PrimarySearchAppBar = (): JSX.Element => {
 
                                     multiple
                                     limitTags={2}
-                                    id="multiple-limit-tags"
+                                    // id="multiple-limit-tags"
                                     options={options}
                                     getOptionLabel={(option) => option.title}
                                     defaultValue={[options[0]]}

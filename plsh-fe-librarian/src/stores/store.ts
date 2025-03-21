@@ -48,6 +48,7 @@ export const store = configureStore({
         );
     },
 });
+// store.ts
 export type AppDispatch = typeof store.dispatch;
 export const useAppStore = () => useStore<RootState>();
 export type RootState = ReturnType<typeof store.getState>;

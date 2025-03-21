@@ -43,6 +43,12 @@ const nextConfig: NextConfig = {
             }, {
                 protocol: "https",
                 hostname: "randomuser.me",
+            },{
+                protocol: "https",
+                hostname: "books.google.com",
+            },{
+                protocol: "http",
+                hostname: "books.google.com",
             },
         ],
     },

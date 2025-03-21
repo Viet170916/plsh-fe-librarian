@@ -1,4 +1,5 @@
 import Container from "@/components/primary/Container";
+import { Box } from "@mui/material";
 import React, {memo} from "react";
 import PrimarySearchAppBar from "@/components/AppBar";
 import AppTabs from "@/components/AppTab";
@@ -9,11 +10,11 @@ interface IProps {
 
 function ResourceLayout(props: IProps) {
     return (
-        <Container maxWidth={"xl"} sx={{padding: "10!important"}}>
-            <PrimarySearchAppBar/>
+        <Box sx={{padding: 5, minHeight:"100%", maxWidth:"100%", display:"flex"}}>
+            {/*<PrimarySearchAppBar/>*/}
             {/*<AppTabs/>*/}
             {props.children}
-        </Container>);
+        </Box>);
 }
 
 export default ResourceLayout;
