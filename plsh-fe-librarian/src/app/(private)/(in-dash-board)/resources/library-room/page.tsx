@@ -10,9 +10,7 @@ async function LibraryRoomPage() {
     let libraryRoom: LibraryRoomState | undefined = undefined;
     try {
         const libraryRoomRes: AxiosResponse<LibraryRoomState> = await apiGetLibraryRoom();
-        // console.log(libraryRoomRes?.data.)
         libraryRoom = libraryRoomRes.data;
-        console.log(1,libraryRoom);
     } catch {
     }
     return (

@@ -52,7 +52,6 @@ function SignInForm( props: IProps ): React.JSX.Element{
           } );
         }
       } ).catch( errors => {
-      console.log( errors );
       toast.error( "Error", {
         duration: 1500,
       } );

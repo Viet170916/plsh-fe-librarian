@@ -7,28 +7,29 @@ import Grid from "@mui/material/Grid2";
 import React from "react";
 
 interface IProps{
-  params: Promise<{ id: number }>;
+				params: Promise<{ id: number }>;
 }
 async function EditBookPage( props: IProps ){
-  const { id } = await props.params;
-  const bookResponse = await getBooks( id );
-  console.log( id );
-  return (
-    <Grid direction = "row" container spacing = { 2 }>
-      <Grid>
-        <Add_EditBookImage src = { "" } />
-      </Grid>
-      <Grid size = { { sm: "grow" } }>
-        <Add_EditBookDetails />
-      </Grid>
-      {/*<Grid size = { { xs: 12, sm: 12, md: 12, lg: 3, xl: 4 } } container spacing = { 2 }>*/ }
-      {/*<ISBNScanner />*/ }
-      {/*<BookCoverImageScanner/>*/ }
-      {/*</Grid>*/ }
-      <Grid size = { 12 }>
-        <Add_EditBookOverviewTabs />
-      </Grid>
-      <SaveToStore book = { bookResponse.data } />
-    </Grid>);
+				const { id } = await props.params;
+				const bookResponse = await getBooks( id );
+				if( bookResponse.data.id )
+								return (
+												<Grid direction = "row" container spacing = { 2 }>
+																<Grid>
+																				<Add_EditBookImage src = { "" } />
+																</Grid>
+																<Grid size = { { sm: "grow" } }>
+																				<Add_EditBookDetails />
+																</Grid>
+																{/*<Grid size = { { xs: 12, sm: 12, md: 12, lg: 3, xl: 4 } } container spacing = { 2 }>*/ }
+																{/*<ISBNScanner />*/ }
+																{/*<BookCoverImageScanner/>*/ }
+																{/*</Grid>*/ }
+																<Grid size = { 12 }>
+																				<Add_EditBookOverviewTabs bookId = { bookResponse.data.id } />
+																</Grid>
+																<SaveToStore book = { bookResponse.data } />
+												</Grid>);
+				return <>Not found</>;
 }
 export default EditBookPage;

@@ -106,13 +106,11 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 												state.overview = action.payload;
 								},
 								setAddEditBookWithBookData: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData> ) => {
-												console.log( action.payload );
 												state.id = action.payload.id;
 												state.resource.coverImage.localUrl = action.payload.thumbnail;
 												state.authors = action.payload.authors;
 												state.baseInfo.title = action.payload.title;
 												state.baseInfo.version = action.payload.version;
-												console.log( 12345678, action.payload.category );
 												if( action.payload.category?.id && action.payload.category.id !== 0 ){
 																state.baseInfo.category = action.payload.category;
 												}else{
@@ -145,25 +143,21 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 																state.resource = action.payload;
 								},
 								setAuthor: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Author[] | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																state.authors = action.payload;
 												}
 								},
 								addAuthor: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																state.authors.push( action.payload );
 												}
 								},
 								deleteAuthor: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																state.authors = state.authors.filter( a => a.id !== action.payload?.id );
 												}
 								},
 								toggleAuthor: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Author | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																if( state.authors.map( a => a.id ).includes( action.payload.id ) ){
 																				state.authors = state.authors.filter( a => a.id !== action.payload?.id );
@@ -173,13 +167,11 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 												}
 								},
 								setBookBaseInfo: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<BookBaseInfo | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																state.baseInfo = action.payload;
 												}
 								},
 								setBookAvailabilities: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability[] | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																if( state.baseInfo ){
 																				state.baseInfo.availability = action.payload;
@@ -208,7 +200,6 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 												}
 								},
 								modifyBookAvailability: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<Availability | undefined> ): void => {
-												console.log( action.payload );
 												if( action.payload ){
 																if( state.baseInfo ){
 																				const av = state.baseInfo.availability?.find( a => a.kind === action.payload?.kind );

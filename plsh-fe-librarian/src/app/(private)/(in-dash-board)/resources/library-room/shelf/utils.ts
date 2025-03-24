@@ -1,5 +1,3 @@
-import {BookOnRowShelf} from "@/stores/slices/lib-room-state/shelf.slice";
-
 export const generateUniqueId = (existingIds: Set<number>) => {
     let id;
     do {
@@ -14,17 +12,4 @@ export const generateUniquePosition = (existingPositions: Set<number>, maxPositi
         position = Math.floor(Math.random() * (maxPosition + 1));
     } while (existingPositions.has(position));
     return position;
-};
-
-export const createBookOnRowShelf = (books: BookOnRowShelf[], colName: string, maxPosition: number, rowShelfId: number): BookOnRowShelf => {
-    const existingIds = new Set(books.map(book => book.id));
-    const existingPositions = new Set(books.map(book => book.position));
-
-    return {
-        id: generateUniqueId(existingIds),
-        rowShelfId,
-        colName,
-        position: generateUniquePosition(existingPositions, maxPosition),
-        book: undefined,
-    };
 };

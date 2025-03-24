@@ -5,7 +5,6 @@ import {BarcodeFormat, BrowserMultiFormatReader, DecodeHintType} from "@zxing/li
 
 const WebcamScanner = function WebcamScanner({onScanSuccess}: { onScanSuccess: (result: string) => void }) {
     const webcamRef = useRef<Webcam>(null);
-    // console.log("webcamRef", webcamRef.current?.video);
 
     useEffect(() => {
         const hints = new Map();
@@ -17,7 +16,6 @@ const WebcamScanner = function WebcamScanner({onScanSuccess}: { onScanSuccess: (
                 const result = await codeReader.decodeFromVideoElement(webcamRef.current.video);
                 onScanSuccess(result.getText()); // Lưu ISBN vào input
             } catch (err) {
-                console.log("Scan failed:", err);
             }
         };
         if (webcamRef.current?.video) {

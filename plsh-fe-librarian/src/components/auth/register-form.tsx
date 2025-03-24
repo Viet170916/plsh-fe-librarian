@@ -38,7 +38,6 @@ const theme = createTheme( {
 function ResisterForm( props: IProps ): React.JSX.Element{
   const session = useSelector( ( state: RootState ) => state.session );
   useEffect( () => {
-    console.log( "session", session );
   }, [ session ] );
   const { register, handleSubmit, watch, formState: { errors } } = useForm<IUserRegisterInfo>();
   const onSubmit: SubmitHandler<IUserRegisterInfo> = useCallback( ( data: IUserRegisterInfo ) => {
@@ -47,7 +46,6 @@ function ResisterForm( props: IProps ): React.JSX.Element{
       identityCardNumber: data.roleInSchool == "student" ? undefined : data.identityCardNumber,
       classRoom: data.roleInSchool == "teacher" ? undefined : data.classRoom,
     };
-    console.log( finalData );
   }, [] );
   if( session )
     return (

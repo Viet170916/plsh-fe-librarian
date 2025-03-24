@@ -1,4 +1,4 @@
-import { BookData, BooksResponse, PagingParams, Resource } from "@/helpers/appType";
+import { BookData, BookInstance, BooksResponse, PagingParams, Resource } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { objectToQueryParams } from "@/helpers/convert";
 import { baseQuery } from "@/stores/slices/api/api.config";
@@ -6,12 +6,25 @@ import { Category } from "@/stores/slices/book-states/book.add-edit.slice";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 const httpMethods = constants.http.method;
+export type BooksInstanceResponse = {
+				count: number,
+				data: BookInstance[]
+}
 export const bookApi = createApi( {
 				reducerPath: "bookApi",
 				baseQuery: baseQuery,
 				endpoints: ( builder ) => ({
 								getBooks: builder.query<BooksResponse, PagingParams>( {
 												query: ( param: PagingParams ): string => `/book${ objectToQueryParams( param ) }`,
+								} ),
+								getBookInstances: builder.query<BooksInstanceResponse, { bookId: number }>( {
+												query: ( param ): string => `/book/${ param.bookId }/book-instance`,
+								} ),
+								deleteBookInstances: builder.mutation<BooksInstanceResponse, { instanceId: number }>( {
+												query: ( param ) => ({
+																url: `/book/book-instance/${ param.instanceId }`,
+																method: httpMethods.DELETE,
+												}),
 								} ),
 								getBooksWithIsbn: builder.query<BookData[], { isbn?: string, keyword?: string }>( {
 												query: ( param ) => {
@@ -45,9 +58,6 @@ export const bookApi = createApi( {
 																body: payload.data,
 												}),
 								} ),
-								getChapterHtml: builder.query<string, { bookId: number, chapter: number }>( {
-												query: ( { bookId, chapter } ) => `preview/${ bookId }${ objectToQueryParams( { chapter } ) }`,
-								} ),
 				}),
 } );
 export const bookApiReducer = bookApi.reducer;
@@ -56,7 +66,8 @@ export const bookApiMiddleware = bookApi.middleware;
 export const {
 				useGetBooksQuery,
 				useAddUpdateBookMutation,
-				useGetChapterHtmlQuery,
+				useDeleteBookInstancesMutation,
+				useGetBookInstancesQuery,
 				useUploadBookResourceMutation,
 				useLazyCheckCategoryNameIsDuplicatedQuery,
 				useGetBooksWithIsbnQuery,

@@ -888,6 +888,19 @@
     "@babel/runtime" "^7.25.7"
     "@mui/utils" "^5.16.6 || ^6.0.0 || ^7.0.0 || ^7.0.0-beta"
 
+"@mui/x-tree-view@^7.28.1":
+  version "7.28.1"
+  resolved "https://registry.yarnpkg.com/@mui/x-tree-view/-/x-tree-view-7.28.1.tgz#2b61da7a4b97c5326cdc87d211d8a15f4f3026bf"
+  integrity sha512-nXrP5pDgoi6snxngIezL8PRvkWECqSApq8Rh8+TVsslBog+XmWs5PHgUXaKsCgi3SN0eNOvjz0+e4I0c+qkuvA==
+  dependencies:
+    "@babel/runtime" "^7.25.7"
+    "@mui/utils" "^5.16.6 || ^6.0.0 || ^7.0.0 || ^7.0.0-beta"
+    "@mui/x-internals" "7.28.0"
+    "@types/react-transition-group" "^4.4.11"
+    clsx "^2.1.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
 "@napi-rs/wasm-runtime@^0.2.7":
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.7.tgz#288f03812a408bc53c2c3686c65f38fe90f295eb"

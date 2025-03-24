@@ -1,5 +1,6 @@
 "use client";
 import { color } from "@/helpers/resources";
+import { useGetEpubResourceQuery } from "@/stores/slices/api/resource.static.slice";
 import { ArrowBack, ArrowForward, Favorite, Fullscreen } from "@mui/icons-material";
 import { Box, Button, IconButton, Paper, SxProps, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -13,22 +14,25 @@ const bookPaperStyle: SxProps = {
 				},
 				"p": {
 								marginBottom: "5px!important",
-								fontSize:24
+								fontSize: 24,
 				},
 };
-const BOOK_API = "https://book-hive-api.space/static/v1/preview/book/epub/smith-vortex-blaster.epub?chapter=4";
-export default function EbookView(){
+// const BOOK_API = "https://book-hive-api.space/static/v1/preview/book/epub/smith-vortex-blaster.epub?chapter=4";
+interface EbookViewProps{bookId: number;}
+export default function EbookView( { bookId }: EbookViewProps ){
+				const [ chapter, setChapter ] = useState<number>( 1 );
+				const { data } = useGetEpubResourceQuery( { bookId, chapter: chapter } );
 				const [ pages, setPages ] = useState<string[][]>( [] );
 				const [ currentPage, setCurrentPage ] = useState( 0 );
 				useEffect( () => {
-								fetch( BOOK_API )
-								.then( ( res ) => res.text() )
-								.then( ( html ) => {
+								console.log( data );
+								if( data ){
 												const container = document.createElement( "div" );
-												container.innerHTML = html;
+												container.innerHTML = data;
+												console.log( data );
 												paginateContent( container.innerHTML );
-								} );
-				}, [] );
+								}
+				}, [ data ] );
 				const paginateContent = ( html: string ) => {
 								const pageSize = 1000; // Adjust this value based on content length
 								const pages = [];
@@ -64,6 +68,12 @@ export default function EbookView(){
 												<Box display = "flex" justifyContent = "space-between" mt = { 2 }>
 																<Button
 																				variant = "contained"
+																				onClick = { () => setChapter( ( prev ) => prev - 1 ) }
+																>
+																				<ArrowBack /> Prev Chapter
+																</Button>
+																<Button
+																				variant = "contained"
 																				disabled = { currentPage === 0 }
 																				onClick = { () => setCurrentPage( ( prev ) => prev - 1 ) }
 																>
@@ -76,6 +86,12 @@ export default function EbookView(){
 																				onClick = { () => setCurrentPage( ( prev ) => prev + 1 ) }
 																>
 																				Next <ArrowForward />
+																</Button>
+																<Button
+																				variant = "contained"
+																				onClick = { () => setChapter( ( prev ) => prev + 1 ) }
+																>
+																				Next Chapter <ArrowForward />
 																</Button>
 												</Box>
 								</Grid>

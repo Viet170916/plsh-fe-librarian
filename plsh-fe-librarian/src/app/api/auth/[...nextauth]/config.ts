@@ -17,7 +17,6 @@ const authOptions: NextAuthOptions = {
     async jwt( { token, account, trigger }: IJWT ){
       const jwt = account?.access_token;
       if( jwt ){
-        console.log( "accessToken: ", account?.access_token );
         const res: AxiosResponse<ISignIn200Response> | void =
           await axios.post( "auth/sign-in",
             { googleToken: jwt },

@@ -13,7 +13,6 @@ interface IProps{
 
 async function RegisterPage( { params }: IProps ){
   const paramsTaken = await params;
-  console.log( paramsTaken.googleToken ?? 1 );
   return (
     <div>
       <Container sx={ signInContainerStyle } maxWidth="sm">

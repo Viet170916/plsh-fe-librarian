@@ -9,7 +9,7 @@ const EpubReader: React.FC = () => {
   const [ textContent, setTextContent ] = useState<string>( '' );
   const [ highlightIndex, setHighlightIndex ] = useState<number>( 0 );
   useEffect( () => {
-    const bookInstance = ePub( '/smith-vortex-blaster.epub' );
+    const bookInstance = ePub( '' );
     setBook( bookInstance );
     const renditionInstance = bookInstance.renderTo( viewerRef.current!, {
       width: '100%',

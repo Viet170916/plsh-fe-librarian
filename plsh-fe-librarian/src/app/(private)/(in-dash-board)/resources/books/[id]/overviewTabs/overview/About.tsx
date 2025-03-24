@@ -19,7 +19,6 @@ const Text = memo( ( { children }: { children: React.ReactNode } ) => {
   );
 } );
 function About( { book }: IProps ){
-  console.log( book );
   return (<Box
     sx = { {
       width: "100%",

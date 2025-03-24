@@ -16,9 +16,7 @@ function UserCom( props: IProps ){
 export default memo( UserCom );
 function DEMO( props: IProps ){
   const session = useSession();
-  useEffect( () => {
-    console.log( session );
-  }, [session] );
+
   return ( <div>
     user
   </div> );

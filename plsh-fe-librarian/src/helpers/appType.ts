@@ -1,5 +1,5 @@
 import { Category } from "@/stores/slices/book-states/book.add-edit.slice";
-import { BookOnRowShelf } from "@/stores/slices/lib-room-state/shelf.slice";
+import { RowShelf } from "@/stores/slices/lib-room-state/shelf.slice";
 import { Session } from "next-auth";
 import { FileType } from "next/dist/lib/file-exists";
 import type { OnLoadingComplete, PlaceholderValue } from "next/dist/shared/lib/get-img-props";
@@ -110,10 +110,18 @@ export type BookData = {
 				bookStatus?: BookAvailability;
 }
 export type BookInstance = {
+				bookName?: string;
 				id?: number;
 				code?: string;
-				bookOnRowShelfId?: number;
-				bookOnRowShelf?: BookOnRowShelf;
+				bookThumbnail?: string;
+				bookVersion?: string;
+				bookAuthor?: string;
+				bookCategory?: string;
+				bookId?: number;
+				position?: number;
+				// book?: BookData;
+				rowShelfId?: number;
+				rowShelf?: RowShelf;
 }
 export type Availability = {
 				kind: "e-book" | "audio";

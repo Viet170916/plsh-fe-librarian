@@ -72,7 +72,6 @@ function FormModalAddEditAuthor({
         }
     }, [data, dispatch])
     const onSubmit: SubmitHandler<Author> = async (data) => {
-        console.log(data);
         const preSend: Author = data;
         preSend.resource = undefined;
         if (data.authorImageResource) {

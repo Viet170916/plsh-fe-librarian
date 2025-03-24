@@ -112,14 +112,12 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: number }) {
         handleClose();
         try {
             const response = await apiIsShelfExisted({shelfId: shelfId});
-            console.log(response.data);
             if (response.data.exists) {
                 router.push(`/resources/library-room/shelf/${shelfId}`);
             } else {
                 toast.warning(appStrings.warning.YOU_NEED_TO_SAVE_FIRST);
             }
         } catch (error) {
-            console.log(error);
             toast.warning(appStrings.error.REQUEST_ERROR);
         }
 

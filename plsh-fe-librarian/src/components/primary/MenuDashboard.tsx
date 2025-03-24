@@ -91,7 +91,6 @@ function MenuDashBoard(props: IProps) {
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
     useEffect(() => {
-        console.log(pathname);
     }, [pathname]);
 
     const handleDrawerOpen = () => {

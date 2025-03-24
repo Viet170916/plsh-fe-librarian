@@ -21,7 +21,6 @@ async function BorrowInfoPage(props: {
     const response: AxiosResponse<BorrowItemData> = await axios.get(`http://localhost:3000/api/v1/borrowing/${params.code}`, {
         // baseURL: "http://localhost:3000/api/v1/",
     });
-    console.log(response.data.borrowedBooks);
     const statusInfo = (() => {
         switch (response.data.status.kind) {
             case "partially-returned":

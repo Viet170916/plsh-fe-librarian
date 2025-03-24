@@ -33,7 +33,6 @@ const EpubReader: React.FC<EpubReaderProps> = ( { file } ) => {
 												setRendition( renditionInstance );
 												renditionInstance.display().then( () => {
 																bookInstance.ready.then( () => {
-																				console.log( bookInstance );
 																				setTotalChapters( (bookInstance.spine as Spine & { length: number }).length || 1 );
 																} );
 												} );

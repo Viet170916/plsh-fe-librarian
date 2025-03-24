@@ -4,6 +4,7 @@ import { viVN } from '@mui/x-date-pickers/locales';
 
 export const color = {
 				PRIMARY: "#FA7C54",
+				PRIMARY_20: "rgba(250,124,84,0.2)",
 				PRIMARY_O10: "rgba(250,124,84,0.1)",
 				SECONDARY: "#41B64D",
 				COMFORT: "#41B64D",
@@ -11,6 +12,7 @@ export const color = {
 				LOVELY: "#F34040",
 				SERIOUS: "#F34040",
 				FOUR: "#926CFF",
+				FOUR_20: "rgba(146,108,255,0.2)",
 				FIFTH: "#EC6C9A",
 				SIXTH: "#F09643",
 				WARNING: "#F09643",

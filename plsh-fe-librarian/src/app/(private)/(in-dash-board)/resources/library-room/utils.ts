@@ -24,6 +24,7 @@ export const generateNewShelf = (existingShelves: Shelf[], maxX: number, maxY: n
                 label: appStrings.shelf.UN_LABEL,
                 column: String.fromCharCode(65 + (x % 26)),
                 row: `${y + 1}`,
+                rowShelves:[],
                 x,
                 y,
             };

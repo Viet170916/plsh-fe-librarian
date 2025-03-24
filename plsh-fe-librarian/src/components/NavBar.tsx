@@ -8,7 +8,6 @@ interface IProps{
 }
 
 function NavBar( props: IProps ){
-  console.log( props );
   return (
     <Container sx={ navBarContainerStyle } maxWidth="xl">
       <div>

@@ -168,7 +168,6 @@ const EditPageCount = memo( function(){
   );
 } );
 function Add_EditBaseInfo(){
-  console.log( 12345 );
   return (
     <Grid container spacing = { 2 } width = { "100%" } sx = { { overflowX: "auto" } }>
       <Stack spacing = { 2 } direction = { "row" } useFlexGap>

@@ -18,8 +18,6 @@ export async function apiGetShelf({id}: { id: number }): Promise<AxiosResponse<S
 }
 
 export async function apiGetLibraryRoom() {
-    console.log(axios.defaults.baseURL)
     const response = await axios.get<LibraryRoomState>(`/library-room`);
-    console.log(response.data);
     return response;
 }

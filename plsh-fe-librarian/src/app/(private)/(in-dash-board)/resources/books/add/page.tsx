@@ -3,12 +3,16 @@ import Add_EditBookImage from "@/app/(private)/(in-dash-board)/resources/books/a
 import Add_EditBookOverviewTabs from "@/app/(private)/(in-dash-board)/resources/books/add/add-edit/Add_EditBookOverviewTabs";
 import ClearStore from "@/app/(private)/(in-dash-board)/resources/books/add/ClearStore";
 import ISBNScanner from "@/app/(private)/(in-dash-board)/resources/books/add/scanner.isbn";
+import appStrings from "@/helpers/appStrings";
 import Grid from "@mui/material/Grid2";
 import React from "react";
 
-interface IProps{
-				children?: React.ReactNode;
-}
+export const metadata = {
+				title: appStrings.book.ADD_BOOK,
+				icons: {
+								icon: "/images/logo.svg",
+				},
+};
 function AddBookPage(){
 				return (
 								<Grid direction = "row" container spacing = { 2 }>

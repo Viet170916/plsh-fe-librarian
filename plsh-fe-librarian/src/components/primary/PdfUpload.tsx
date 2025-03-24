@@ -73,7 +73,6 @@ function PdfUploader( props: IProps ){
       setPageNumber( pageNumber - 2 );
     }
   };
-  console.log( fileURL );
   return (
     <Box sx = { { width: 400, p: 2, border: "1px solid #ccc", borderRadius: 2 } }>
       <input
