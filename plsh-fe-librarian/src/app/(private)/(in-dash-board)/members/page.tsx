@@ -1,12 +1,17 @@
-import React, { memo } from "react";
+import CreateMemberForm from "@/app/(private)/(in-dash-board)/members/add-member/CreateMemberForm";
+import ClientRender from "@/app/(private)/(in-dash-board)/members/ClientRender";
+import Grid from "@mui/material/Grid2";
+import React from "react";
 
 interface IProps{
-  children?: React.ReactNode;
+				children?: React.ReactNode;
 }
-
-function E( ){
-  return (
-    <div>
-    </div> );
+function MemberPage(){
+				return (
+								<Grid container width = { "100%" } padding = { 5 }>
+												<CreateMemberForm />
+												<ClientRender />
+								</Grid>
+				);
 }
-export default E ;
+export default MemberPage;

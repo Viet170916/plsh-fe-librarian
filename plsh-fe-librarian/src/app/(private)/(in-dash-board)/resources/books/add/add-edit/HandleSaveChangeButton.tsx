@@ -30,7 +30,7 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 
 				const onAddBook = useCallback( async( newCategory?: Category ) => {
 								const data: AddEditBookData = store.getState().addEditBookData;
-								const eBook = data.baseInfo.availability.find( ( f ) => f.kind === "e-book" );
+								const eBook = data.baseInfo.availability.find( ( f ) => f.kind === "epub" );
 								const audioBook = data.baseInfo.availability.find( ( f ) => f.kind === "audio" );
 								const physicBook = data.baseInfo.availability.find( ( f ) => f.kind === "physical" );
 								const coverImage = data.resource.coverImage;
@@ -44,8 +44,8 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												authors: data.authors,
 												id: data.id,
 												quantity: physicBook?.kind === "physical" ? physicBook.quantity : 0,
-												contentPdfName: eBook?.kind === "e-book" && eBook.resource?.localUrl ? eBook.resource?.name : undefined,
-												previewPdfResource: eBook?.kind === "e-book" && eBook.resource?.localUrl ? eBook.resource : undefined,
+												contentPdfName: eBook?.kind === "epub" && eBook.resource?.localUrl ? eBook.resource?.name : undefined,
+												previewPdfResource: eBook?.kind === "epub" && eBook.resource?.localUrl ? eBook.resource : undefined,
 												audioName: audioBook?.kind === "audio" && audioBook.resource?.localUrl ? audioBook.resource?.name : undefined,
 												audioResource: audioBook?.kind === "audio" && audioBook.resource?.localUrl ? audioBook.resource : undefined,
 												availabilities: [],
@@ -62,7 +62,7 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 								}
 								const bookResponse = await addBook( objectToFormData( deepCleanObject( payload ) as object ) );
 								if( !bookResponse.data || !bookResponse.data.id ) return;
-								if( eBook?.kind === "e-book" && eBook.resource && eBook.resource.localUrl ){
+								if( eBook?.kind === "epub" && eBook.resource && eBook.resource.localUrl ){
 												try{
 																const fileAfterConverted = await urlToFile( eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip" );
 																console.log( objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) );

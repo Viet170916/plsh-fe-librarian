@@ -1,13 +1,10 @@
-
-import TabLink from "@/app/(private)/(in-dash-board)/members/[id]/TabLink";
+"use client";
+import NavTabs from "@/components/primary/TabLink";
 import appStrings from "@/helpers/appStrings";
 import { TabItem } from "@/helpers/appType";
-import { Box, Stack } from "@mui/material";
-import React from "react";
+import { useParams } from "next/navigation";
+import React, { JSX, memo } from "react";
 
-interface IProps{
-				children?: React.ReactNode;
-}
 const tabLinks: TabItem[] = [ {
 				kind: "link",
 				segment: "info",
@@ -33,15 +30,15 @@ const tabLinks: TabItem[] = [ {
 				segment: "setting",
 				title: appStrings.member.SETTING,
 } ];
-function MemberLayout( props: IProps ){
+function TabLink(): JSX.Element{
+				const params = useParams<{ id: string }>();
+				const tabs = tabLinks.map( ( tab, index ) => {
+								return { ...tab, segment: `/members/${ [ params.id ] }${ tab.kind === "link" && tab.segment ? `/${ tab.segment }` : undefined }` };
+				} );
+				console.log( "re" );
 				return (
-								<Stack direction = { "column" } height = { "100%" }>
-												<Box flexGrow = { 0 }>
-															<TabLink/>
-												</Box>
-												<Box flexGrow = { 1 } bottom = { 0 } overflow = { "auto" } padding = { "40px" }>
-																{ props.children }
-												</Box>
-								</Stack>);
+								<NavTabs tabs = { tabs } />
+				);
 }
-export default MemberLayout;
+export default memo( TabLink );
+

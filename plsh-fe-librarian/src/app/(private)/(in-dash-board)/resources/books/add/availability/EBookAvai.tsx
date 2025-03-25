@@ -21,11 +21,11 @@ const EBookAvailability =
     const [ triggerCloseModal, setTriggerCloseModal ] = React.useState( false );
     function handleSave(){
       if( eBookAvaiRef.current ){
-        const av = availabilities.find( a => a.kind === "e-book" );
+        const av = availabilities.find( a => a.kind === "epub" );
         const newAv = { ...av } as Availability;
         if( av ){
-          if( newAv.kind === "e-book" ){
-            newAv.kind = "e-book";
+          if( newAv.kind === "epub" ){
+            newAv.kind = "epub";
             newAv.isChecked = true;
             newAv.resource = ({ ...eBookAvaiRef.current, file: undefined } as Resource);
           }
@@ -33,7 +33,7 @@ const EBookAvailability =
           // baseInfo && (baseInfo.position = value);
         }else{
           dispatch( addBookAvailability( {
-                                           kind: "e-book",
+                                           kind: "epub",
                                            resource: ({ ...eBookAvaiRef.current, file: undefined } as Resource),
                                            isChecked: true,
                                            title: appStrings.book.E_BOOK,
@@ -61,8 +61,8 @@ const EBookAvailability =
           } }
           buttonContent = {
             <AvailabilityItem
-              kind = { "e-book" } title = { appStrings.book.E_BOOK }
-              isChecked = { availabilities.find( a => a.kind === "e-book" )?.isChecked }
+              kind = { "epub" } title = { appStrings.book.E_BOOK }
+              isChecked = { availabilities.find( a => a.kind === "epub" )?.isChecked }
             />
           }
         >

@@ -42,7 +42,7 @@ function BorrowedBookItem({borrowedBook}: IProps) {
 
     const avaiButtons = useMemo(() => {
         return (borrowedBook.book?.availabilities.map(a => {
-                if (a.kind === "e-book") return (
+                if (a.kind === "epub") return (
                     <Tooltip key={a.kind} title={appStrings.book.E_BOOK}>
                         <Button variant="outlined" color="primary" fullWidth>
                             <FaBookAtlas/>

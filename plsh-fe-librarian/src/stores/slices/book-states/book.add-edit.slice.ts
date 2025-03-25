@@ -207,7 +207,7 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 																								av.isChecked = action.payload.isChecked;
 																								if( av.kind === "physical" && action.payload.kind === "physical" ){
 																												av.quantity = action.payload.quantity;
-																								}else if( av.kind === "e-book" && action.payload.kind === "e-book" ){
+																								}else if( av.kind === "epub" && action.payload.kind === "epub" ){
 																												av.resource = ({ ...action.payload.resource, file: undefined } as Resource);
 																								}else if( av.kind === "audio" && action.payload.kind === "audio" ){
 																												av.resource = ({ ...action.payload.resource, file: undefined } as Resource);

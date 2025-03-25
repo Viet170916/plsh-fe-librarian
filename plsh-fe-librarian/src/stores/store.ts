@@ -1,3 +1,5 @@
+import { memberApiMiddleware, memberApiReducer, memberApiReducerPath } from "@/app/(private)/(in-dash-board)/members/store/member.api.slice";
+import memberStateSliceReducer from "@/app/(private)/(in-dash-board)/members/store/member.slice";
 import { analyticsApiMiddleware, analyticsApiReducer, analyticsApiReducerPath } from "@/stores/slices/api/analysis.api.slice";
 import { authorApiMiddleware, authorApiReducer, authorApiReducerPath } from "@/stores/slices/api/author.api.slice";
 import { bookApiMiddleware, bookApiReducer, bookApiReducerPath } from "@/stores/slices/api/book.api.slice";
@@ -21,6 +23,7 @@ export const store = configureStore( {
 								addEditBorrowData: addEditBorrowDataReducer,
 								libraryRoomState: libraryRoomStateSliceReducer,
 								shelfState: shelfStateSliceReducer,
+								memberState: memberStateSliceReducer,
 								//apis
 								analytic: analyticsApiReducer,
 								[analyticsApiReducerPath]: analyticsApiReducer,
@@ -32,6 +35,8 @@ export const store = configureStore( {
 								[libraryApiReducerPath]: libraryApiReducer,
 								_resourceStatic: resourceStaticReducer,
 								[resourceStaticReducerPath]: resourceStaticReducer,
+								_memberApi: memberApiReducer,
+								[memberApiReducerPath]: memberApiReducer,
 				},
 				middleware: ( getDefaultMiddleware ) => {
 								return (
@@ -41,6 +46,7 @@ export const store = configureStore( {
 												.concat( authorApiMiddleware )
 												.concat( libraryApiMiddleware )
 												.concat( resourceStaticMiddleware )
+												.concat( memberApiMiddleware )
 								);
 				},
 } );

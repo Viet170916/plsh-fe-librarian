@@ -67,6 +67,7 @@ export type BookData = {
 				coverImageResourceId?: number;
 				coverImageResource?: Resource,
 				previewPdfResource?: Resource,
+				epubResource?: Resource,
 				audioResource?: Resource,
 				coverImageUrl?: string;
 				contentPdfName?: string;
@@ -124,7 +125,7 @@ export type BookInstance = {
 				rowShelf?: RowShelf;
 }
 export type Availability = {
-				kind: "e-book" | "audio";
+				kind: "audio" | "epub" | "pdf" | "image";
 				isChecked?: boolean,
 				title?: string,
 				resource?: Resource,
@@ -135,6 +136,23 @@ export type Availability = {
 				quantity?: number,
 				bookInstances?: BookInstance[]
 				// position?: string,
+}
+export interface Member{
+				isVerified?: boolean;
+				id?: number;
+				role: "student" | "teacher";
+				fullName?: string;
+				gender?: boolean;
+				birthdate?: string;
+				address?: string;
+				phoneNumber?: string;
+				email?: string;
+				avatarUrl?: string;
+				identityCardNumber?: string;
+				cardMemberNumber?: number;
+				cardMemberStatus?: number;
+				cardMemberExpiredDate?: string;
+				status: "active" | "inactive" | "forbidden";
 }
 export type LanguageCode =
 				| "en" | "vi" | "es" | "fr" | "de" | "zh" | "ja" | "ko" | "ru" | "ar"
