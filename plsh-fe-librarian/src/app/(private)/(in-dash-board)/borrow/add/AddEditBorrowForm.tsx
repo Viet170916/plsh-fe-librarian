@@ -1,109 +1,63 @@
-"use client"
-import React, {memo, useCallback, useMemo} from "react";
-import {useForm} from "react-hook-form";
-import {Button, TextField, Typography} from "@mui/material";
-import {
-    BorrowedBookData, modifyBorrowedBook, setImagesBeforeBorrow,
-} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
-import {DateTimePicker} from "@mui/x-date-pickers";
-import Grid from "@mui/material/Grid2";
+"use client";
+import { BorrowNote, BorrowStatus, DateRangeEnd, DateRangeStart, ImageSelected, ImagesPreview } from "@/app/(private)/(in-dash-board)/borrow/add/borrow.form.input.components";
 import appStrings from "@/helpers/appStrings";
-import dayjs from "dayjs";
-import {color} from "@/helpers/resources";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "@/stores/store";
-import UploadOrTakeImage from "@/components/primary/UploadOrTakeImage";
-import {Resource} from "@/helpers/appType";
-import {getDayFromNow} from "@/helpers/time";
+import { color } from "@/helpers/resources";
+import { BorrowedBookData, selectCurrentBookBorrowed } from "@/stores/slices/borrow-state/borrow.add-edit.slice";
+import { RootState } from "@/stores/store";
+import { TextField, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import React, { memo } from "react";
+import { shallowEqual, useSelector } from "react-redux";
 
-interface IProps {
-    children?: React.ReactNode;
-    onSubmit?: (values: BorrowedBookData) => void;
+interface IProps{
+				onSubmit?: ( values: BorrowedBookData ) => void;
 }
-
-
-function AddEditBorrowForm(props: IProps) {
-    const selectedBookId = useSelector((state: RootState) => state.addEditBorrowData.selectedBookId);
-    const borrowedBooks = useSelector((state: RootState) => state.addEditBorrowData.borrowedBooks)
-    const selectedBook = useMemo(() => borrowedBooks.find(selected => selected.id === selectedBookId), [selectedBookId, borrowedBooks]);
-    const dispatch = useDispatch();
-    const {handleSubmit, control, register, setValue} = useForm<BorrowedBookData>();
-    const onSubmit = (data: BorrowedBookData) => {
-        const canalizedData = {...selectedBook, ...data};
-        dispatch(modifyBorrowedBook(canalizedData));
-    };
-    const onPreBorrowImageChange =
-        useCallback((imageResource: Resource[]) => {
-            if (selectedBookId) {
-                dispatch(setImagesBeforeBorrow({selectedBookId: selectedBookId, resource: imageResource}))
-            }
-        }, [selectedBookId, dispatch]);
-    return (
-        <Grid container spacing={2}>
-            {selectedBook ? <><TextField
-                    defaultValue={selectedBook?.bookCode}
-                    fullWidth margin="dense" disabled label={appStrings.book.CODE}
-                    variant="outlined"/>
-                    <TextField
-                        defaultValue={selectedBook?.bookTitle}
-                        fullWidth margin="dense" disabled label={appStrings.book.NAME}
-                        variant="outlined"/>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Grid container spacing={2}>
-                            <DateTimePicker
-                                defaultValue={dayjs(selectedBook?.borrowDateRange?.start ?? new Date())}
-                                sx={{width: "100%"}}
-                                label={appStrings.borrow.BORROW_DATE}
-                                onChange={(datePiked) => {
-                                    setValue("borrowDateRange.start", datePiked?.toDate())
-                                }}/>
-                            <DateTimePicker
-                                defaultValue={dayjs(selectedBook?.borrowDateRange?.end ?? (getDayFromNow(1)))}
-                                sx={{width: "100%"}}
-                                label={appStrings.borrow.RETURN_DATE}
-                                onChange={(datePiked) => {
-                                    setValue("borrowDateRange.end", datePiked?.toDate())
-                                }}/>
-
-                            <Grid width={"100%"} container spacing={2}>
-                                <Typography variant={"h2"} fontWeight={"bold"}>
-                                    {appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
-                                </Typography>
-                                <TextField
-                                    {...register("beforeBorrow.note")}
-                                    defaultValue={selectedBook?.beforeBorrow.note}
-                                    multiline
-                                    rows={4}
-                                    label={appStrings.NOTE}
-                                    fullWidth
-                                    margin="dense"
-                                    variant="outlined"/>
-                                <TextField
-                                    label={appStrings.borrow.BORROW_STATUS}
-                                    defaultValue={selectedBook?.beforeBorrow.status ?? "on-loan"}
-                                    fullWidth
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                                <Typography variant={"h5"}>
-                                    {appStrings.borrow.BOOK_IMAGE_BEFORE_BORROW}
-                                </Typography>
-                                <UploadOrTakeImage maxImages={5} onImageChange={onPreBorrowImageChange}/>
-                            </Grid>
-                            <Button type="submit" fullWidth variant="contained"
-                                    sx={{mt: 2, color: color.LIGHT_TEXT}}>{appStrings.SAVE}
-                            </Button>
-                        </Grid>
-                    </form>
-                </> :
-                <Typography variant={"h4"} sx={{color: color.PRIMARY, fontWeight: "bold"}}>
-                    {appStrings.borrow.NO_BOOK_SELECTED}
-                </Typography>
-            }
-
-        </Grid>
-    );
-
+const Form = memo( ( { selectedBook }: { selectedBook?: BorrowedBookData } ) => {
+				return (
+								<Grid container spacing = { 2 }>
+												{ selectedBook?.bookInstance ? <><TextField
+																				fullWidth margin = "dense"
+																				value = { selectedBook.bookInstance.code }
+																				disabled
+																				label = { appStrings.book.CODE }
+																				variant = "outlined"
+																/>
+																				<TextField
+																								fullWidth margin = "dense"
+																								value = { selectedBook.bookInstance.bookName }
+																								disabled label = { appStrings.book.NAME }
+																								variant = "outlined"
+																				/>
+																				<Grid container spacing = { 2 } size = { 12 }>
+																								<DateRangeStart bookInstanceId = { selectedBook.bookInstance.id as number } />
+																								<DateRangeEnd bookInstanceId = { selectedBook.bookInstance.id as number } />
+																								<Grid width = { "100%" } container spacing = { 2 }>
+																												<Typography variant = { "h2" } fontWeight = { "bold" }>
+																																{ appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW }
+																												</Typography>
+																												<BorrowNote bookInstanceId = { selectedBook.bookInstance.id as number } />
+																												<BorrowStatus bookInstanceId = { selectedBook.bookInstance.id as number } />
+																												<Typography variant = { "h5" }>
+																																{ appStrings.borrow.BOOK_IMAGE_BEFORE_BORROW }
+																												</Typography>
+																												<ImageSelected selectedBookId = { selectedBook.bookInstance.id as number } />
+																												<ImagesPreview selectedBookId = { selectedBook.bookInstance.id as number } />
+																								</Grid>
+																				</Grid>
+																</> :
+																<Typography variant = { "h4" } sx = { { color: color.PRIMARY, fontWeight: "bold" } }>
+																				{ appStrings.borrow.NO_BOOK_SELECTED }
+																</Typography>
+												}
+								</Grid>
+				);
+} );
+function AddEditBorrowForm(){
+				const selectedBook = useSelector( ( state: RootState ) => selectCurrentBookBorrowed( state ), shallowEqual );
+				return (
+								<Grid>
+												<Form selectedBook = { selectedBook } />
+								</Grid>
+				);
 }
-
-export default memo(AddEditBorrowForm);
+export default memo( AddEditBorrowForm );

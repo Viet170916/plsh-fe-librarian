@@ -1,6 +1,6 @@
 import { Shelf } from "@/app/(private)/(in-dash-board)/resources/library-room/RoomMap";
 import { IUser } from "@/app/api/auth/[...nextauth]/config";
-import { BookData } from "@/helpers/appType";
+import { BookData, Resource } from "@/helpers/appType";
 import { AddEditBookData } from "@/stores/slices/book-states/book.add-edit.slice";
 import { createSlice, PayloadAction, Slice, SliceSelectors } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer";
@@ -9,6 +9,7 @@ type AppGlobal = {
 				openDialog: boolean,
 				editedBook_g: AddEditBookData,
 				libRoom_g: Shelf[];
+				images: Resource[];
 }
 export const initAppGlobal: AppGlobal = {
 				openDialog: false,
@@ -21,8 +22,10 @@ export const initAppGlobal: AppGlobal = {
 								authors: [], overview: {},
 				},
 				libRoom_g: [],
+				images: [],
 };
 type GlobalSlice = Slice<AppGlobal, {
+				setImages: ( state: WritableDraft<AppGlobal>, action: PayloadAction<Resource[]> ) => void,
 				setEditedBook_g: ( state: WritableDraft<AppGlobal>, action: PayloadAction<BookData> ) => void,
 				setLibRoom_g: ( state: WritableDraft<AppGlobal>, action: PayloadAction<Shelf[]> ) => void,
 				setOpenDialog: ( state: WritableDraft<AppGlobal>, action: PayloadAction<{ open: boolean }> ) => void,
@@ -34,6 +37,9 @@ const globalSlice: GlobalSlice = createSlice( {
 				name: "global",
 				initialState: initAppGlobal,
 				reducers: {
+								setImages: ( state, { payload } ) => {
+												state.images = payload;
+								},
 								setLibRoom_g: ( state: WritableDraft<AppGlobal>, action: PayloadAction<Shelf[]> ) => {
 												state.libRoom_g = action.payload;
 								},
@@ -74,6 +80,7 @@ const globalSlice: GlobalSlice = createSlice( {
 } );
 export const {
 				setOpenDialog,
+				setImages,
 				setLibRoom_g,
 				setEditedBook_g,
 				openDialog,

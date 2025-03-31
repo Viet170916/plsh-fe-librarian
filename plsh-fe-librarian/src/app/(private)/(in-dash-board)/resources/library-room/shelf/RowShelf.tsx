@@ -19,11 +19,13 @@ const RowShelf = ( { rowId }: { rowId: number } ) => {
 				const [ checkHasAnyBookOnRow ] = useLazyCheckRowHasAnyBookQuery();
 				const [ deleteRow ] = useDeleteRowMutation();
 				const dispatch = useDispatch();
+				const [ open, setOpen ] = useState( false );
 				const [ errorMessage, setErrorMessage ] = useState( "" );
 				async function handleDeleteRow(){
+								console.log( 24, rowId );
 								const anyBookResponse = await checkHasAnyBookOnRow( { rowId } );
 								if( anyBookResponse.data?.hasBooks ){
-												dispatch( openDialog() );
+												setOpen(true);
 								}else{
 												try{
 																const deleteResponse = await deleteRow( { rowId } );
@@ -39,6 +41,7 @@ const RowShelf = ( { rowId }: { rowId: number } ) => {
 				}
 				const handleOk = useCallback( async() => {
 								try{
+												console.log( 43, rowId );
 												const deleteResponse = await deleteRow( { rowId } );
 												if( deleteResponse.data )
 																dispatch( removeRow( rowId ) );
@@ -52,7 +55,7 @@ const RowShelf = ( { rowId }: { rowId: number } ) => {
 				}, [] );
 				return (
 								<Box sx = { { width: "100%", borderRadius: 5, border: "1px solid #ccc", padding: 2, position: "relative" } }>
-												<ConfirmationDialog onOk = { handleOk } onCancel = { handleCancel }>
+												<ConfirmationDialog open = { open } onClose = { () => setOpen( false ) } onOk = { handleOk } onCancel = { handleCancel }>
 																<Typography variant = { "h2" } fontWeight = { "bold" }>
 																				{ appStrings.warning.HAS_BOOK_ON_SHELF_ROW }
 																</Typography>

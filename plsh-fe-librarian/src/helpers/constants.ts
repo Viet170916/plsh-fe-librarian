@@ -12,4 +12,5 @@ export const constants = {
 								},
 				},
 				roles: [ "student", "teacher" ],
+				dateFormat: "HH:mm dddd [ngày] D [tháng] M, YYYY",
 };

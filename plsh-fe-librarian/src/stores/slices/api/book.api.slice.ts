@@ -1,30 +1,32 @@
-import { BookData, BookInstance, BooksResponse, PagingParams, Resource } from "@/helpers/appType";
+import { BaseResponse, BookData, BookInstance, BooksResponse, PagingParams, Resource } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { objectToQueryParams } from "@/helpers/convert";
-import { baseQuery } from "@/stores/slices/api/api.config";
+import { baseQuery, baseQueryWithReAuth } from "@/stores/slices/api/api.config";
 import { Category } from "@/stores/slices/book-states/book.add-edit.slice";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 const httpMethods = constants.http.method;
-export type BooksInstanceResponse = {
-				count: number,
-				data: BookInstance[]
-}
 export const bookApi = createApi( {
 				reducerPath: "bookApi",
-				baseQuery: baseQuery,
+				baseQuery: baseQueryWithReAuth,
+				tagTypes: [ "BookInstances", "Book", "Books" ],
 				endpoints: ( builder ) => ({
 								getBooks: builder.query<BooksResponse, PagingParams>( {
 												query: ( param: PagingParams ): string => `/book${ objectToQueryParams( param ) }`,
 								} ),
-								getBookInstances: builder.query<BooksInstanceResponse, { bookId: number }>( {
-												query: ( param ): string => `/book/${ param.bookId }/book-instance`,
+								getBookInstances: builder.query<BaseResponse<BookInstance[]>, { bookId?: number, isbnOrBookCode?: string, keyword?: string }>( {
+												query: ( param ) => ({
+																url: `/book/book-instances`,
+																params: param,
+												}),
+												providesTags: () => [ { type: "BookInstances" } ],
 								} ),
-								deleteBookInstances: builder.mutation<BooksInstanceResponse, { instanceId: number }>( {
+								deleteBookInstances: builder.mutation<BaseResponse<BookInstance[]>, { instanceId: number }>( {
 												query: ( param ) => ({
 																url: `/book/book-instance/${ param.instanceId }`,
 																method: httpMethods.DELETE,
 												}),
+												invalidatesTags: () => [ { type: "BookInstances" } ],
 								} ),
 								getBooksWithIsbn: builder.query<BookData[], { isbn?: string, keyword?: string }>( {
 												query: ( param ) => {
@@ -60,16 +62,19 @@ export const bookApi = createApi( {
 								} ),
 				}),
 } );
+export const bookApiInvalidatesTags = bookApi.util.invalidateTags;
 export const bookApiReducer = bookApi.reducer;
 export const bookApiReducerPath = bookApi.reducerPath;
 export const bookApiMiddleware = bookApi.middleware;
 export const {
 				useGetBooksQuery,
 				useAddUpdateBookMutation,
+				useLazyGetBookInstancesQuery,
 				useDeleteBookInstancesMutation,
 				useGetBookInstancesQuery,
 				useUploadBookResourceMutation,
 				useLazyCheckCategoryNameIsDuplicatedQuery,
 				useGetBooksWithIsbnQuery,
 				useGetCategoriesQuery,
+				usePrefetch,
 } = bookApi;

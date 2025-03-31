@@ -1,12 +1,11 @@
-import React, { memo } from "react";
+import BorrowRequest from "@/app/(private)/(in-dash-board)/borrow/component/BorrowRequest";
+import Grid from "@mui/material/Grid2";
+import React from "react";
 
-interface IProps{
-  children?: React.ReactNode;
+function BorrowListPage(){
+				return (
+								<Grid>
+												<BorrowRequest />
+								</Grid>);
 }
-
-function E( ){
-  return (
-    <div>
-    </div> );
-}
-export default E;
+export default BorrowListPage;

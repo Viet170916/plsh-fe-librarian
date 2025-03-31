@@ -1,5 +1,5 @@
 "use client";
-import { setStateToMemberState } from "@/app/(private)/(in-dash-board)/members/store/member.slice";
+import { setStateToMemberState } from "@/stores/slices/member-states/member.slice";
 import { Member } from "@/helpers/appType";
 import { useAppDispatch } from "@/hooks/useDispatch";
 import React, { JSX, memo, useEffect } from "react";

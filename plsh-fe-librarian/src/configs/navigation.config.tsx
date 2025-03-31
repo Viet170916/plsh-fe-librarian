@@ -8,7 +8,7 @@ import { FaBookBookmark } from "react-icons/fa6";
 import { HiOutlineViewGridAdd } from "react-icons/hi";
 import { ImBooks } from "react-icons/im";
 import { IoLogOut, IoSettings } from "react-icons/io5";
-import { TbLayoutDashboardFilled } from "react-icons/tb";
+import { TbClipboardList, TbLayoutDashboardFilled } from "react-icons/tb";
 
 export const NAVIGATION: Navigation = [
 								{
@@ -25,6 +25,10 @@ export const NAVIGATION: Navigation = [
 												title: appStrings.BORROW,
 												icon: <FaBookBookmark color = { color.PRIMARY } size = { 24 } />,
 												children: [ {
+																segment: "",
+																title: appStrings.borrow.LIST,
+																icon: <TbClipboardList color = { color.PRIMARY } size = { 24 } />,
+												}, {
 																segment: "add",
 																title: appStrings.borrow.CREATE_BORROWING,
 																icon: <HiOutlineViewGridAdd color = { color.PRIMARY } size = { 24 } />,

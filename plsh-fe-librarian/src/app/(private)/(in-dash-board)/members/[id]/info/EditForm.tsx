@@ -1,11 +1,10 @@
 "use client";
-import { BaseResponse } from "@/app/(private)/(in-dash-board)/members/ClientRender";
-import { useUpdateMemberMutation } from "@/app/(private)/(in-dash-board)/members/store/member.api.slice";
 import appStrings from "@/helpers/appStrings";
-import { AnyObject, Member } from "@/helpers/appType";
+import { AnyObject, BaseResponse, Member } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { color } from "@/helpers/resources";
 import { useSelector } from "@/hooks/useSelector";
+import { useUpdateMemberMutation } from "@/stores/slices/api/member.api.slice";
 import { Autocomplete, Avatar, Box, Button, LinearProgress, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -14,11 +13,14 @@ import React, { memo, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-const AfterLoad = memo( ( { member }: { member: Member } ) => {
+export const AfterLoad_Member = memo( ( { member }: { member: Member } ) => {
 				const [ updateMemberPut, { error } ] = useUpdateMemberMutation();
-				const { register, handleSubmit, control, setValue, getValues } = useForm<Member>( {
+				const { handleSubmit, control, reset } = useForm<Member>( {
 								defaultValues: member,
 				} );
+				useEffect( () => {
+								reset( member );
+				}, [ member, reset ] );
 				const onSubmit = async( data: Member ) => {
 								const updateResponse = await updateMemberPut( data );
 								if( updateResponse.data ){
@@ -36,6 +38,7 @@ const AfterLoad = memo( ( { member }: { member: Member } ) => {
 												sx = { {
 																maxWidth: 800,
 																mx: "auto",
+																minHeight: "100%",
 																p: 3,
 																border: "1px solid #ddd",
 																borderRadius: 2,
@@ -49,31 +52,69 @@ const AfterLoad = memo( ( { member }: { member: Member } ) => {
 																												<Avatar sx = { { width: 80, height: 80 } } src = "/profile.jpg" />
 																								</Grid>
 																								<Grid>
-																												<Button disabled variant = "text" sx = { { textTransform: "none" } }>{ appStrings.UPLOAD_IMAGE }</Button>
+																												<Button disabled variant = "text" sx = { { textTransform: "none" } }>
+																																{ appStrings.UPLOAD_IMAGE }
+																												</Button>
 																								</Grid>
 																				</Grid>
 																				<Grid container spacing = { 2 } sx = { { mt: 2 } }>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.FULLNAME } { ...register( "fullName" ) } />
+																												<Controller
+																																name = "fullName"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth label = { appStrings.member.FULLNAME } { ...field }
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.EMAIL } { ...register( "email" ) } disabled />
+																												<Controller
+																																name = "email"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth label = { appStrings.member.EMAIL } { ...field } disabled
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.PHONE } { ...register( "phoneNumber" ) } />
+																												<Controller
+																																name = "phoneNumber"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth label = { appStrings.member.PHONE } { ...field }
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<DatePicker
-																																sx = { { width: "100%" } }
-																																label = { appStrings.member.BIRTH }
-																																defaultValue = { dayjs( getValues( "birthdate" ) ) }
-																																onChange = { ( value ) => {
-																																				setValue( "birthdate", value?.toDate().toISOString() );
-																																} }
+																												<Controller
+																																name = "birthdate"
+																																control = { control }
+																																render = { ( { field } ) => (
+																																				<DatePicker
+																																								sx = { { width: "100%" } }
+																																								label = { appStrings.member.BIRTH }
+																																								value = { dayjs( field.value ) }
+																																								onChange = { ( value ) => field.onChange( value?.toDate().toISOString() ) }
+																																				/>
+																																) }
 																												/>
 																								</Grid>
 																								<Grid size = { 8 }>
-																												<TextField fullWidth label = { appStrings.member.ADDRESS } { ...register( "address" ) } />
+																												<Controller
+																																name = "address"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth label = { appStrings.member.ADDRESS } { ...field }
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 8 }>
 																												<Controller
@@ -84,29 +125,65 @@ const AfterLoad = memo( ( { member }: { member: Member } ) => {
 																																				<Autocomplete
 																																								{ ...field }
 																																								options = { constants.roles }
-																																								renderInput = { ( params ) => <TextField { ...params } label = { appStrings.member.ROLE } fullWidth margin = "normal" required /> }
+																																								renderInput = { ( params ) => <TextField { ...params }
+																																								                                         label = { appStrings.member.ROLE } fullWidth margin = "normal" required
+																																								/> }
 																																								onChange = { ( _, value ) => field.onChange( value ) }
 																																				/>
 																																) }
 																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.IDENTITY_CARD_NUMBER } { ...register( "identityCardNumber" ) } />
+																												<Controller
+																																name = "identityCardNumber"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth
+																																				label = { appStrings.member.IDENTITY_CARD_NUMBER }
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.CARD_NUMBER } type = "number" { ...register( "cardMemberNumber" ) } />
+																												<Controller
+																																name = "cardMemberNumber"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth label = { appStrings.member.CARD_NUMBER }
+																																				type = "number"
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
 																								<Grid size = { 6 }>
-																												<TextField fullWidth label = { appStrings.member.CARD_STATUS } type = "number" { ...register( "cardMemberStatus" ) } />
+																												<Controller
+																																name = "cardMemberStatus"
+																																control = { control }
+																																render = { ( { field } ) => <TextField
+																																				fullWidth
+																																				label = { appStrings.member.CARD_STATUS }
+																																				type = "number"
+																																				value = { field.value ?? "" }
+																																				onChange = { ( e ) => field.onChange( e.target.value ) }
+																																/> }
+																												/>
 																								</Grid>
-																								<Grid size = { 6 }>
-																												<DatePicker
-																																sx = { { width: "100%" } }
-																																label = { appStrings.member.CARD_EXPIRED_DATE }
-																																defaultValue = { dayjs( getValues( "cardMemberExpiredDate" ) ) }
-																																onChange = { ( value ) => {
-																																				setValue( "cardMemberExpiredDate", value?.toDate().toISOString() );
-																																} }
+																								<Grid
+																												size = { 6 }
+																								>
+																												<Controller
+																																name = "cardMemberExpiredDate"
+																																control = { control }
+																																render = { ( { field } ) => (
+																																				<DatePicker
+																																								sx = { { width: "100%" } }
+																																								label = { appStrings.member.CARD_EXPIRED_DATE }
+																																								value = { dayjs( field.value ) }
+																																								onChange = { ( value ) => field.onChange( value?.toDate().toISOString() ) }
+																																				/>
+																																) }
 																												/>
 																								</Grid>
 																				</Grid>
@@ -114,9 +191,6 @@ const AfterLoad = memo( ( { member }: { member: Member } ) => {
 																								<Button type = "submit" variant = "contained" color = "primary" sx = { { color: color.LIGHT_TEXT } }>
 																												{ appStrings.SAVE }
 																								</Button>
-																								{/*<Button type = "button" variant = "text" onClick = { () => reset() }>*/ }
-																								{/*				Reset*/ }
-																								{/*</Button>*/ }
 																				</Box>
 																</Box>
 												</form>
@@ -124,11 +198,7 @@ const AfterLoad = memo( ( { member }: { member: Member } ) => {
 				);
 } );
 const ProfileSettingsForm = () => {
-				const member = useSelector( state => state.memberState.currentMember );
-				if( member ){
-								return (<AfterLoad member = { member } />);
-				}else{
-								return (<LinearProgress />);
-				}
+				const member = useSelector( ( state ) => state.memberState.currentMember );
+				return member ? <AfterLoad_Member member = { member } /> : <LinearProgress />;
 };
 export default memo( ProfileSettingsForm );

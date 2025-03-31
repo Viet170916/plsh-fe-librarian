@@ -2,15 +2,15 @@
 import appStrings from "@/helpers/appStrings";
 import { BookData } from "@/helpers/appType";
 import { deepEqual } from "@/helpers/comparation";
-import { deepCleanObject, objectToFormData, urlToFile } from "@/helpers/convert";
+import { compressImage, deepCleanObject, objectToFormData, urlToFile } from "@/helpers/convert";
 import { color } from "@/helpers/resources";
 import { isInternalUrl } from "@/helpers/text";
 import { bookApi, useAddUpdateBookMutation, useLazyCheckCategoryNameIsDuplicatedQuery, useUploadBookResourceMutation } from "@/stores/slices/api/book.api.slice";
-import { usePutBooksOntoShelfMutation } from "@/stores/slices/api/library-room.api.slice";
-import { AddEditBookData, Category, setValueInBookBaseInfo } from "@/stores/slices/book-states/book.add-edit.slice";
+import { AddEditBookData, Category, clearData, setValueInBookBaseInfo } from "@/stores/slices/book-states/book.add-edit.slice";
 import { RootState, useAppStore } from "@/stores/store";
 import { Button, Checkbox, Dialog, List, ListItem, ListItemText, ListSubheader, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useRouter } from "next/navigation";
 import React, { JSX, memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -21,13 +21,13 @@ type HandleSaveChangeButtonProps = {
 function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Element{
 				const store = useAppStore();
 				const dispatch = useDispatch();
+				const router = useRouter();
 				const [ addBook, { data: bookData, isLoading: isBookLoading, error: bookError } ] = useAddUpdateBookMutation( {} );
 				const [ uploadResource ] = useUploadBookResourceMutation( {} );
 				const [ checkCategory, {
 								data: dataCategory,
 								error: errorCategory,
 				} ] = useLazyCheckCategoryNameIsDuplicatedQuery();
-
 				const onAddBook = useCallback( async( newCategory?: Category ) => {
 								const data: AddEditBookData = store.getState().addEditBookData;
 								const eBook = data.baseInfo.availability.find( ( f ) => f.kind === "epub" );
@@ -40,7 +40,7 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												...data.overview,
 												pageCount: data.overview.pageCount ?? 0,
 												categoryId: undefined,
-												category: data.baseInfo.newCategory.chosen ? data.baseInfo.newCategory : data.baseInfo.category,
+												category: data.baseInfo.newCategory?.chosen ? data.baseInfo.newCategory : data.baseInfo.category,
 												authors: data.authors,
 												id: data.id,
 												quantity: physicBook?.kind === "physical" ? physicBook.quantity : 0,
@@ -52,12 +52,13 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												coverImageResource: coverImage ?? undefined,
 												thumbnail: isInternalUrl( coverImageUrl ) === "unknown" ? coverImageUrl : undefined,
 								};
-								if( newCategory && newCategory.chosen ){
+								if( newCategory && newCategory?.chosen ){
 												payload.categoryId = undefined;
 												payload.category = newCategory;
-								}else if( data.baseInfo.newCategory && data.baseInfo.newCategory.chosen ){
+								}else if( data.baseInfo.newCategory && data.baseInfo.newCategory?.chosen ){
 												payload.category = data.baseInfo.newCategory;
-								}else if( data.baseInfo.category && data.baseInfo.category.id && !data.baseInfo.newCategory.chosen ){
+								}else if( data.baseInfo.category && data.baseInfo.category.id && !data.baseInfo.newCategory?.chosen ){
+												payload.categoryId = data.baseInfo.category.id;
 												payload.category = data.baseInfo.category;
 								}
 								const bookResponse = await addBook( objectToFormData( deepCleanObject( payload ) as object ) );
@@ -66,15 +67,23 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												try{
 																const fileAfterConverted = await urlToFile( eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip" );
 																console.log( objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) );
-																await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) } );
+																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) } );
+																if( resourceUpload.data ){
+																				dispatch( clearData() );
+																				router.push( `/resources/books/add` );
+																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_EBOOK );
 												}
 								}
 								if( audioBook?.kind === "audio" && audioBook.resource && audioBook.resource.localUrl ){
 												try{
-																const fileAfterConverted = await urlToFile( audioBook.resource.localUrl, audioBook.resource.name ?? "unknown", audioBook.resource.fileType ?? "audio/mpeg" );
-																await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( deepCleanObject( { ...audioBook.resource, fileAfferConverted: fileAfterConverted } ) as object ) } );
+																const fileAfterConverted = await compressImage( await urlToFile( audioBook.resource.localUrl, audioBook.resource.name ?? "unknown", audioBook.resource.fileType ?? "audio/mpeg" ), "LOWEST_240P" );
+																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...audioBook.resource, fileAfferConverted: fileAfterConverted } ) } );
+																if( resourceUpload.data ){
+																				dispatch( clearData() );
+																				router.push( `/resources/books/add` );
+																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_AUDIO_BOOK );
 												}
@@ -82,19 +91,23 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 								if( coverImage && coverImage.localUrl && isInternalUrl( coverImage.localUrl ) === "blob" ){
 												try{
 																const fileAfterConverted = await urlToFile( coverImage.localUrl, coverImage.name ?? "unknown", coverImage.fileType ?? "image/png" );
-																await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( deepCleanObject( { ...coverImage, file: fileAfterConverted } ) as object ) } );
+																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...coverImage, file: fileAfterConverted } ) } );
+																if( resourceUpload.data ){
+																				dispatch( clearData() );
+																				router.push( `/resources/books/add` );
+																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_COVER );
 												}
 								}
 								dispatch( bookApi.util.resetApiState() );
-				}, [ store, addBook, dispatch, uploadResource ] );
+				}, [ store, addBook, dispatch, uploadResource, router ] );
 				const
 								onSubmit = async() => {
 												if( !deepEqual( store.getState().global.editedBook_g, store.getState().addEditBookData ) ){
-																const newCategory: Category = store.getState().addEditBookData.baseInfo.newCategory;
-																if( newCategory && newCategory.chosen ){
-																				const dataCheck = await checkCategory( { name: store.getState().addEditBookData.baseInfo.newCategory.name } );
+																const newCategory: Category | undefined = store.getState().addEditBookData.baseInfo.newCategory;
+																if( newCategory && newCategory?.chosen ){
+																				const dataCheck = await checkCategory( { name: store.getState().addEditBookData.baseInfo.newCategory?.name } );
 																				if( dataCheck.data && dataCheck.data.status === "duplicated" ){
 																								setSuggestions( dataCheck.data?.suggestions );
 																								return;

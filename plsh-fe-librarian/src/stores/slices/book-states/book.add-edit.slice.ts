@@ -15,7 +15,7 @@ export type BookBaseInfo = {
 				availability: Availability[],
 				"quantity"?: number,
 				"category": Category,
-				"newCategory": Category
+				"newCategory"?: Category
 }
 export type Category = {
 				chosen?: boolean,

@@ -10,7 +10,7 @@ const ProfileSettings = async( props: IProps ) => {
 				// const [tabIndex, setTabIndex] = useState(0);
 				const params = await props.params;
 				return (
-								<Box>
+								<Box minHeight = { "100%" }>
 												<SaveToStore memberId = { params.id } />
 												<ProfileSettingsForm />
 								</Box>

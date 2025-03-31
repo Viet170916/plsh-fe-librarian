@@ -138,14 +138,14 @@ const CategoryEdit = memo( () => {
 								dispatch( setValueInBookBaseInfo( { key: "category", value: category } ) );
 				};
 				const store = useAppStore();
-				// const category = useSelector((state: RootState) => state.addEditBookData.baseInfo.category, shallowEqual);
-				const defaultCategory = useMemo( () => store.getState().addEditBookData.baseInfo.category, [ store ] );
+				const category = useSelector((state: RootState) => state.addEditBookData.baseInfo.category, shallowEqual);
+				// const defaultCategory = useMemo( () => store.getState().addEditBookData.baseInfo.category, [ store ] );
 				const newCategoryIsChosen = useSelector( ( state: RootState ) => state.addEditBookData.baseInfo.newCategory?.chosen, shallowEqual );
 				return (
 								<Autocomplete
 												disabled = { newCategoryIsChosen }
 												disablePortal
-												value = { defaultCategory }
+												value = { category }
 												fullWidth
 												size = { "small" }
 												loading = { isLoading }

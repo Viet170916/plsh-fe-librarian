@@ -20,11 +20,11 @@ const BootstrapDialog = styled( Dialog )( ( { theme } ) => ({
 								padding: theme.spacing( 1 ),
 				},
 }) );
-type ConfirmationDialogProps = { onOk?: () => void, onCancel?: () => void, children: React.ReactNode }
-function ConfirmationDialog( { onOk, onCancel, children }: ConfirmationDialogProps ){
-				const dispatch = useAppDispatch();
+type ConfirmationDialogProps = { onOk?: () => void, onCancel?: () => void, children: React.ReactNode, open:boolean, onClose:()=>void }
+function ConfirmationDialog( { onOk, onCancel, children, onClose, open }: ConfirmationDialogProps ){
+				// const dispatch = useAppDispatch();
 				function handleClose(){
-								dispatch( closeDialog() );
+								onClose?.();
 				}
 				function handleOk(){
 								onOk?.();
@@ -34,7 +34,7 @@ function ConfirmationDialog( { onOk, onCancel, children }: ConfirmationDialogPro
 								onCancel?.();
 								handleClose();
 				}
-				const open = useSelector( state => state.global.openDialog );
+				// const open = useSelector( state => state.global.openDialog );
 				return (
 								<React.Fragment>
 												<BootstrapDialog

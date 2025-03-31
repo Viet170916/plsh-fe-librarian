@@ -1,160 +1,122 @@
 "use client";
+import { useLazyCheckAccountExistQuery, useLoginUsingEmailPasswordMutation, useLoginUsingGoogleMutation } from "@/app/(public)/auth/store/account.api.slice";
+import { Account, setStateToAccountState } from "@/app/(public)/auth/store/account.slice";
 import PrimaryTypography from "@/components/primary/typography";
-import {
-  ALREADY_HAVE_ACCOUNT,
-  LOGIN, NEXT,
-  PASS,
-  RE_PASS,
-  SIGN_IN_SUCCESSFULLY,
-  REGISTER,
-  SIGN_IN_WITH_GOOGLE,
-  USE_AS_GUEST, HAVE_NO_ACCOUNT_FOUND
-} from "@/helpers/appStrings";
-import { VoidFunc } from "@/helpers/appType";
+import appStrings, { ALREADY_HAVE_ACCOUNT, LOGIN, NEXT, PASS, USE_AS_GUEST } from "@/helpers/appStrings";
 import { color } from "@/helpers/resources";
-import { Button, Container, Link, TextField, createTheme } from "@mui/material";
+import { useAppDispatch } from "@/hooks/useDispatch";
+import { Button, Container, Link, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { ThemeProvider } from "@mui/system";
-import { signIn, SignInResponse } from "next-auth/react";
-import React, { memo, useCallback, useEffect } from "react";
+import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import { useRouter } from "next/navigation";
+import React, { memo, useCallback } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { TbBrandGoogleFilled } from "react-icons/tb";
 import { toast } from "sonner";
 
-const theme = createTheme( {
-  palette: {
-    primary: {
-      main: color.PRIMARY
-    },
-  },
-} );
 function SignInForm( props: IProps ): React.JSX.Element{
-  useEffect( function(){
-    // getServerSession( authOptions ).then( ( session: Session | null ) => {
-    //   console.log( session?.user?.fullName );
-    // } );
-  }, [] );
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<ISignInInformation>();
-  const onSubmit: SubmitHandler<ISignInInformation> = useCallback( ( data: ISignInInformation ) => console.log( data ), [] );
-  const GoogleSignInButtonClick: VoidFunc = useCallback( function(): void{
-    signIn( "google", { redirect: false } )
-      .then( ( response: SignInResponse | undefined ): void => {
-        // console.log(response);
-        if( response?.error ){
-          toast.success( SIGN_IN_SUCCESSFULLY, {
-            position: "top-center",
-            duration: 5000,
-          } );
-        }else{
-          toast.success( HAVE_NO_ACCOUNT_FOUND, {
-            position: "top-center",
-            duration: 5000,
-          } );
-        }
-      } ).catch( errors => {
-      toast.error( "Error", {
-        duration: 1500,
-      } );
-    } );
-  }, [] );
-  return (
-    <Container sx={ signInFormContainerStyle }>
-      <ThemeProvider theme={ theme }>
-
-        <form onSubmit={ handleSubmit( onSubmit ) }>
-          <Grid container spacing={ 2 }>
-            <Grid size={ 12 }>
-              <TextField
-                fullWidth={ true }
-                type={ "email" }
-                id="email-field-sign-in-form"
-                label="Email"
-                variant="outlined" { ...register( "email" ) }
-                required={ true }/>
-            </Grid>
-            <Grid size={ 12 }>
-              <TextField
-                fullWidth={ true }
-                type={ "password" }
-                id="password-field-sign-in-form"
-                label={ PASS }
-                variant="outlined" { ...register( "password" ) }
-                required={ true }/>
-            </Grid>
-            <Grid size={ 12 }>
-              <TextField
-                fullWidth={ true }
-                type={ "password" }
-                id="re-enter-password-field-sign-in-form"
-                label={ RE_PASS }
-                variant="outlined" { ...register( "reEnterPassword" ) }
-                required={ true }/>
-            </Grid>
-
-            <Grid size={ 12 } justifyContent="center" alignItems="center" container>
-              <Button fullWidth={ true } autoCapitalize={ "none" } sx={ signInButtonStyle }
-                      type="submit">{ NEXT }</Button>
-            </Grid>
-          </Grid>
-        </form>
-        <Grid container spacing={ 2 } marginTop={ 1 }>
-          <Button
-            fullWidth={ true }
-            variant={ "outlined" }
-            color="primary"
-            sx={ { textTransform: "none" } }
-            onClick={ GoogleSignInButtonClick }>
-            <Grid container spacing={ 1 } justifyContent="center" alignItems="center">
-              <PrimaryTypography textColor={ color.PRIMARY }>
-                { SIGN_IN_WITH_GOOGLE }
-              </PrimaryTypography>
-              <TbBrandGoogleFilled
-                color={ color.PRIMARY }/>
-            </Grid>
-          </Button>
-          <Grid size={ 12 } container spacing={ 2 }>
-            <Grid container spacing={ 1 } size={ 6 }>
-              <PrimaryTypography>
-                { ALREADY_HAVE_ACCOUNT }
-              </PrimaryTypography>
-              <Link href={ "/" } sx={ { color: color.DARK_TEXT } }>
-                <PrimaryTypography>
-                  { LOGIN }
-                </PrimaryTypography>
-              </Link>
-            </Grid>
-            <Grid size={ 6 }>
-              <Link href={ "/" } sx={ { color: color.DARK_TEXT } } underline={ "hover" }>
-                <PrimaryTypography>
-                  { USE_AS_GUEST }
-                </PrimaryTypography>
-              </Link>
-            </Grid>
-          </Grid>
-
-        </Grid>
-      </ThemeProvider>
-    </Container>
-  );
+				const router = useRouter();
+				const dispatch = useAppDispatch();
+				const { register, handleSubmit } = useForm<Account>();
+				const [ loginPost, { error, isLoading } ] = useLoginUsingEmailPasswordMutation();
+				const [ loginGgPost, { error: ggError, isLoading: ggLoading } ] = useLoginUsingGoogleMutation();
+				const [ checkAccount, { error: checkError } ] = useLazyCheckAccountExistQuery();
+				const onSubmit: SubmitHandler<Account> = useCallback( async( value ) => {
+								if( value.email && value.password ){
+												dispatch( setStateToAccountState( { key: "registerForm", value: { email: value.email, password: value.password } } ) );
+												const { data } = await checkAccount( { email: value.email } );
+												console.log( data );
+												if( data?.data.emailExisted ){
+																console.log( data?.data.emailExisted );
+																const response = await loginPost( value );
+																if( response.data?.data ){
+																				localStorage.setItem( "token", response.data.data );
+																				router.push( `/` );
+																}else{
+																				toast.error( appStrings.error.LOGIN_FAIL, { duration: 1500 } );
+																}
+												}else{
+																router.push( `/auth/register` );
+												}
+								}else{
+												toast.error( appStrings.error.MISSING_EMAIL );
+								}
+				}, [ checkAccount, dispatch, loginPost, router ] );
+				const handleGoogleLoginSuccess = async( credentialResponse: CredentialResponse ) => {
+								if( credentialResponse.credential ){
+												const { data } = await checkAccount( { ggToken: credentialResponse.credential } );
+												dispatch( setStateToAccountState( {
+																key: "registerForm", value: {
+																				email: data?.data.email,
+																				fullName: data?.data.fullName,
+																				googleToken: credentialResponse.credential,
+																},
+												} ) );
+												if( data?.data.emailExisted ){
+																const response = await loginGgPost( { googleToken: credentialResponse.credential } );
+																if( response.data?.data ){
+																				localStorage.setItem( "token", response.data.data );
+																				console.log( "register form" );
+																				router.push( `/` );
+																}else{
+																				toast.error( appStrings.error.LOGIN_FAIL, { duration: 1500 } );
+																}
+												}else{
+																router.push( `/auth/register/google` );
+												}
+								}else{
+												toast.error( appStrings.error.UNAUTHORIZED );
+								}
+				};
+				return (
+								<Container sx = { signInFormContainerStyle }>
+												<form onSubmit = { handleSubmit( onSubmit ) }>
+																<Grid container spacing = { 2 }>
+																				<Grid size = { 12 }>
+																								<TextField fullWidth type = "email" label = "Email" variant = "outlined" { ...register( "email" ) } required />
+																				</Grid>
+																				<Grid size = { 12 }>
+																								<TextField fullWidth type = "password" label = { PASS } variant = "outlined" { ...register( "password" ) } required />
+																				</Grid>
+																				<Grid size = { 12 } justifyContent = "center" alignItems = "center" container>
+																								<Button loading = { isLoading || ggLoading } fullWidth sx = { signInButtonStyle } type = "submit">{ NEXT }</Button>
+																				</Grid>
+																</Grid>
+												</form>
+												<Grid container spacing = { 2 } marginTop = { 1 }>
+																<GoogleOAuthProvider clientId = "597774498082-72b6uc8gh7foe6rn6rav880djmq3b0ua.apps.googleusercontent.com">
+																				<GoogleLogin
+																								onSuccess = { handleGoogleLoginSuccess }
+																								onError = { () => {
+																												toast.error( "Đăng nhập bằng Google thất bại!", { duration: 1500 } );
+																								} }
+																				/>
+																</GoogleOAuthProvider>
+																<Grid size = { 12 } container spacing = { 2 }>
+																				<Grid container spacing = { 1 } size = { 6 }>
+																								<PrimaryTypography>{ ALREADY_HAVE_ACCOUNT }</PrimaryTypography>
+																								<Link href = "/" sx = { { color: color.DARK_TEXT } }>
+																												<PrimaryTypography>{ LOGIN }</PrimaryTypography>
+																								</Link>
+																				</Grid>
+																				<Grid size = { 6 }>
+																								<Link href = "/" sx = { { color: color.DARK_TEXT } } underline = "hover">
+																												<PrimaryTypography>{ USE_AS_GUEST }</PrimaryTypography>
+																								</Link>
+																				</Grid>
+																</Grid>
+												</Grid>
+								</Container>
+				);
 }
 export default memo( SignInForm );
-
 interface IProps{
-  children?: React.ReactNode;
+				children?: React.ReactNode;
 }
-
-interface ISignInInformation extends React.Component
-  <IProps>{
-  email: string;
-  password: string;
-  reEnterPassword: string;
-}
-
 const signInFormContainerStyle = {
-  padding: "0 !important",
+				padding: "0 !important",
 };
 const signInButtonStyle = {
-  backgroundColor: color.PRIMARY,
-  color: color.BRIGHT_TEXT,
-  textTransform: "none",
+				backgroundColor: color.PRIMARY,
+				color: color.BRIGHT_TEXT,
+				textTransform: "none",
 };

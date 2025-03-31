@@ -2,7 +2,8 @@ import { Shelf } from "@/app/(private)/(in-dash-board)/resources/library-room/Ro
 import { BookInstance } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { deepCleanObject, objectToQueryParams } from "@/helpers/convert";
-import { baseQuery } from "@/stores/slices/api/api.config";
+import { baseQuery , baseQueryWithReAuth} from "@/stores/slices/api/api.config";
+import { bookApiInvalidatesTags } from "@/stores/slices/api/book.api.slice";
 import { LibraryRoomState } from "@/stores/slices/lib-room-state/lib-room.slice";
 import { RowShelf } from "@/stores/slices/lib-room-state/shelf.slice";
 import { createApi } from "@reduxjs/toolkit/query/react";
@@ -14,7 +15,8 @@ export type CheckShelfResponse = {
 const httpMethods = constants.http.method;
 const API = createApi( {
 				reducerPath: "libraryRoomApi",
-				baseQuery: baseQuery,
+				baseQuery: baseQueryWithReAuth,
+				tagTypes: [ "BookInstances" ],
 				endpoints: ( builder ) => ({
 								checkShelfExisted: builder.query<Shelf, { shelfId: string }>( {
 												query: ( params ) => {
@@ -67,6 +69,14 @@ const API = createApi( {
 																method: httpMethods.PUT,
 																body: (instances),
 												}),
+												async onQueryStarted( _, { dispatch, queryFulfilled } ){
+																try{
+																				await queryFulfilled;
+																				dispatch( bookApiInvalidatesTags( [ { type: "BookInstances" } ] ) );
+																}catch{
+																				console.log( "update Fail" );
+																}
+												},
 								} ),
 								removeBooksOutOffShelf: builder.mutation<{ message: string }, int[]>( {
 												query: ( instances ) => ({
@@ -74,6 +84,15 @@ const API = createApi( {
 																method: httpMethods.PUT,
 																body: (instances),
 												}),
+												invalidatesTags: () => [ { type: "BookInstances" } ],
+												async onQueryStarted( _, { dispatch, queryFulfilled } ){
+																try{
+																				await queryFulfilled;
+																				dispatch( bookApiInvalidatesTags( [ { type: "BookInstances" } ] ) );
+																}catch{
+																				console.log( "update Fail" );
+																}
+												},
 								} ),
 								getBooksOnShelf: builder.query<{
 												"message": string,
@@ -84,6 +103,7 @@ const API = createApi( {
 																url: `/library-room/book-instances/on-shelf`,
 																params: (instances),
 												}),
+												providesTags: (  ) => [ { type: "BookInstances" } ],
 								} ),
 				}),
 } );

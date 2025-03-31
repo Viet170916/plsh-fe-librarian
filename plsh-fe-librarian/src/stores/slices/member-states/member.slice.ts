@@ -14,6 +14,7 @@ type MemberStateSlice = Slice<MemberState, {
 				setStateToMemberState: <K extends keyof MemberState>( state: WritableDraft<MemberState>, action: PayloadAction<{ key: K, value: MemberState[K] }> ) => void,
 				setMemberState: ( state: WritableDraft<MemberState>, action: PayloadAction<MemberState> ) => void
 				clearData: ( state: WritableDraft<MemberState> ) => void;
+				clearPropToMemberState: <K extends keyof MemberState>( state: WritableDraft<MemberState>, action: PayloadAction<K> ) => void
 },
 				"memberState", "memberState", SliceSelectors<MemberState>>
 //data
@@ -45,6 +46,9 @@ const memberStateSlice: MemberStateSlice = createSlice( {
 												memberState.members = initMemberState.members;
 												memberState.addEditMember = initMemberState.addEditMember;
 								},
+								clearPropToMemberState: ( memberState, { payload } ) => {
+												memberState[payload] = initMemberState[payload];
+								},
 				},
 } );
 //export
@@ -52,6 +56,7 @@ export const {
 				setPropToEditedMember,
 				setStateToMemberState,
 				setMemberState,
+				clearPropToMemberState,
 				clearData,
 } = memberStateSlice.actions;
 export const selectMemberById = createSelector(

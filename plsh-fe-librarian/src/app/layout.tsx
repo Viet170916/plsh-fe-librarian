@@ -7,7 +7,6 @@ import { AppSession, initAppSession } from "@/stores/slices/session.slice";
 import { getServerSession } from "next-auth";
 import React from "react";
 import { Toaster } from "sonner";
-import "dayjs/locale/vi";
 
 export const metadata = {
 				title: appStrings.APP_NAME,

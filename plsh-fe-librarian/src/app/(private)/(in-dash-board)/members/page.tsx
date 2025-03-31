@@ -8,9 +8,11 @@ interface IProps{
 }
 function MemberPage(){
 				return (
-								<Grid container width = { "100%" } padding = { 5 }>
+								<Grid container direction = { "column" } width = { "100%" } minHeight = { "100%" } padding = { 5 } spacing = { 2 }>
 												<CreateMemberForm />
-												<ClientRender />
+												<Grid size = { "grow" }>
+																<ClientRender />
+												</Grid>
 								</Grid>
 				);
 }

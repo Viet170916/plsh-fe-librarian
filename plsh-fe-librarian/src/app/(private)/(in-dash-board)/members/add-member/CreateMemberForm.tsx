@@ -1,8 +1,7 @@
 "use client";
-import { BaseResponse } from "@/app/(private)/(in-dash-board)/members/ClientRender";
-import { AccountEdited, useCreateMemberMutation } from "@/app/(private)/(in-dash-board)/members/store/member.api.slice";
+import { AccountEdited, useCreateMemberMutation } from "@/stores/slices/api/member.api.slice";
 import appStrings from "@/helpers/appStrings";
-import { AnyObject } from "@/helpers/appType";
+import { AnyObject, BaseResponse } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { color } from "@/helpers/resources";
 import { Autocomplete, Button, Drawer, TextField } from "@mui/material";
@@ -37,7 +36,7 @@ function CreateMemberForm( { children }: CreateMemberFormProps ): JSX.Element{
 								setOpen( false );
 				};
 				return (
-								<Grid container width = { "100%" }>
+								<Grid direction = { "column" } container width = { "100%" }>
 												<Button variant = { "contained" } startIcon = { <IoPersonAdd /> } sx = { { color: color.LIGHT_TEXT } } onClick = { () => setOpen( true ) } color = "primary">
 																{ appStrings.member.ADD }
 												</Button>
@@ -90,6 +89,6 @@ function CreateMemberForm( { children }: CreateMemberFormProps ): JSX.Element{
 												</Drawer>
 								</Grid>
 				);
-};
+}
 export default memo( CreateMemberForm );
 

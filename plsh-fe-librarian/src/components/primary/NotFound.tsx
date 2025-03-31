@@ -6,8 +6,11 @@ import { useRouter } from "next/navigation";
 import React, { memo, useEffect, useState } from "react";
 import "@/style/not-found.css";
 
-interface NotFoundProps{reset?: () => void;}
-function NotFound( { reset }: NotFoundProps ){
+interface NotFoundProps{
+				reset?: () => void,
+				message?: string
+}
+function NotFound( { reset, message }: NotFoundProps ){
 				const [ pageX, setPageX ] = useState( 0 );
 				const [ pageY, setPageY ] = useState( 0 );
 				const [ xAxis, setXAxis ] = useState( 0 );
@@ -52,9 +55,9 @@ function NotFound( { reset }: NotFoundProps ){
 												<div className = "box__description">
 																<div className = "box__description-container">
 																				<div className = "box__description-title">Whoops!</div>
-																				<div className = "box__description-text">Có vẻ như chúng tôi không thể tìm thấy trang bạn đang tìm kiếm.</div>
+																				<div className = "box__description-text">{ message ?? "Có vẻ như chúng tôi không thể tìm thấy trang bạn đang tìm kiếm." }</div>
 																</div>
-																<Button fullWidth variant = { "contained" } sx = { { bgcolor: color.FOUR, color:color.LIGHT_TEXT } } onClick = { () => router.back() }>{appStrings.GO_BACK}</Button>
+																<Button fullWidth variant = { "contained" } sx = { { bgcolor: color.FOUR, color: color.LIGHT_TEXT } } onClick = { () => router.back() }>{ appStrings.GO_BACK }</Button>
 												</div>
 								</div>
 				);

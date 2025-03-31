@@ -1,7 +1,8 @@
-import { BaseResponse } from "@/app/(private)/(in-dash-board)/members/ClientRender";
-import { Member, PagingParams } from "@/helpers/appType";
+import { FilterParams } from "@/app/(private)/(in-dash-board)/members/ClientRender";
+import { BaseResponse, Member } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
-import { baseQuery } from "@/stores/slices/api/api.config";
+import { capitalizeWords } from "@/helpers/text";
+import { baseQuery, baseQueryWithReAuth } from "@/stores/slices/api/api.config";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export type AccountEdited = {
@@ -14,7 +15,7 @@ export type AccountEdited = {
 const httpMethods = constants.http.method;
 const API = createApi( {
 								reducerPath: "memberApi",
-								baseQuery: baseQuery,
+								baseQuery: baseQueryWithReAuth,
 								tagTypes: [ "GetMembers", "GetMember" ],
 								endpoints: ( builder ) => ({
 												createMember: builder.mutation<BaseResponse<Member>, AccountEdited>( {
@@ -27,11 +28,12 @@ const API = createApi( {
 																},
 																invalidatesTags: ( _, error ) => error ? [] : [ { type: "GetMembers" } ],
 												} ),
-												getMembers: builder.query<BaseResponse<Member[]>, PagingParams>( {
+												getMembers: builder.query<BaseResponse<Member[]>, FilterParams<Member>>( {
 																query: ( param ) => {
+																				console.log( param );
 																				return ({
 																								url: `account/member`,
-																								param,
+																								params: param.orderBy ? { ...param, orderBy: capitalizeWords( param.orderBy ) } : param,
 																				});
 																},
 																providesTags: () => [ { type: "GetMembers" } ],

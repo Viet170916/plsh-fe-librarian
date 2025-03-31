@@ -46,3 +46,6 @@ export function isInternalUrl( url?: string ): "blob" | "know host" | "unknown"{
 export function formatImageUrl( url?: string ){
 				return `${ process.env.NEXT_PUBLIC_STATIC_FILE_SERVER_API_URL ?? "http://104.197.134.164/static/v1" }/file${ url ?? "" }`;
 }
+export function capitalizeWords( str: string ): string{
+				return str.replace( /\b\w/g, char => char.toUpperCase() );
+}

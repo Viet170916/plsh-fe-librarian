@@ -1,10 +1,20 @@
+import appStrings from "@/helpers/appStrings";
 import { Category } from "@/stores/slices/book-states/book.add-edit.slice";
-import { RowShelf } from "@/stores/slices/lib-room-state/shelf.slice";
 import { Session } from "next-auth";
 import { FileType } from "next/dist/lib/file-exists";
 import type { OnLoadingComplete, PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import React from "react";
 
+export type BaseResponse<DataType, StatusType = string> = {
+				message: string;
+				pageCount?: number;
+				data: DataType;
+				status?: StatusType;
+				count?: number,
+				page?: number,
+				limit?: number,
+				currenPage?: number;
+}
 export type VoidFunc = () => void;
 export type VoidFuncAsync = () => Promise<void>;
 export type SessionType = (Session & { accessToken: string | null; isAuthenticated: boolean }) | null
@@ -111,6 +121,7 @@ export type BookData = {
 				bookStatus?: BookAvailability;
 }
 export type BookInstance = {
+				isInBorrowing?: boolean;
 				bookName?: string;
 				id?: number;
 				code?: string;
@@ -122,7 +133,7 @@ export type BookInstance = {
 				position?: number;
 				// book?: BookData;
 				rowShelfId?: number;
-				rowShelf?: RowShelf;
+				// rowShelf?: RowShelf;
 }
 export type Availability = {
 				kind: "audio" | "epub" | "pdf" | "image";
@@ -138,9 +149,14 @@ export type Availability = {
 				// position?: string,
 }
 export interface Member{
+				analytics?: {
+								bookReading?: BaseResponse<BookInstance>;
+								contribution?: BaseResponse<BookInstance>;
+				};
+				classRoom?: string;
 				isVerified?: boolean;
 				id?: number;
-				role: "student" | "teacher";
+				role: Role;
 				fullName?: string;
 				gender?: boolean;
 				birthdate?: string;
@@ -153,6 +169,17 @@ export interface Member{
 				cardMemberStatus?: number;
 				cardMemberExpiredDate?: string;
 				status: "active" | "inactive" | "forbidden";
+}
+export type Role = "student" | "teacher" | "undefined";
+export function getRoleTitle( role: Role ): string{
+				switch( role ){
+								case "student":
+												return appStrings.member.STUDENT;
+								case "teacher":
+												return appStrings.member.TEACHER;
+								default:
+												return appStrings.member.UNKNOWN;
+				}
 }
 export type LanguageCode =
 				| "en" | "vi" | "es" | "fr" | "de" | "zh" | "ja" | "ko" | "ru" | "ar"
@@ -206,6 +233,7 @@ export type TabItem = {
 				title: string;
 }
 export type Resource = {
+				referenceId?: number;
 				id?: number,
 				type: "image" | "pdf" | "audio" | "epub",
 				name?: string,
