@@ -1,7 +1,7 @@
 import { BaseResponse, BookData, BookInstance, BooksResponse, PagingParams, Resource } from "@/helpers/appType";
 import { constants } from "@/helpers/constants";
 import { objectToQueryParams } from "@/helpers/convert";
-import { baseQuery, baseQueryWithReAuth } from "@/stores/slices/api/api.config";
+import { baseQueryWithReAuth } from "@/stores/slices/api/api.config";
 import { Category } from "@/stores/slices/book-states/book.add-edit.slice";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
@@ -46,7 +46,7 @@ export const bookApi = createApi( {
 																return `category/check-duplicate${ objectToQueryParams( param ) }`;
 												},
 								} ),
-								addUpdateBook: builder.mutation<BookData, FormData>( {
+								addUpdateBook: builder.mutation<BookData, BookData>( {
 												query: ( payload ) => ({
 																url: `/book/add`,
 																method: httpMethods.POST,

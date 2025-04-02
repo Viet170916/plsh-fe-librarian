@@ -1,5 +1,6 @@
 "use client";
 import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
+import appStrings from "@/helpers/appStrings";
 import { color } from "@/helpers/resources";
 import { useAppDispatch } from "@/hooks/useDispatch";
 import { useSelector } from "@/hooks/useSelector";
@@ -28,6 +29,8 @@ function SelectedBook( props: IProps ){
 																								<Typography variant = "h5" fontWeight = { "bold" } sx = { { ...truncateTextStyle } }>{ book.bookInstance.bookName }</Typography>
 																								<Typography variant = "caption">{ book.bookInstance.code }</Typography>
 																								<Typography variant = "h6" fontWeight = { "lighter" }>{ book.bookInstance.bookVersion }</Typography>
+																								<Typography variant = "h6" fontWeight = { "lighter" }>{appStrings.shelf.POSITION}: { book.bookInstance.shelfPosition }</Typography>
+
 																				</CardContent>
 																</Grid>
 												) ) }

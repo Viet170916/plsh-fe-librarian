@@ -107,6 +107,21 @@ const addEditBookDataSlice: AddEditBookDataSlice = createSlice( {
 								},
 								setAddEditBookWithBookData: ( state: WritableDraft<AddEditBookData>, action: PayloadAction<BookData> ) => {
 												state.id = action.payload.id;
+												if( (action.payload.quantity ?? 0) > 0 ){
+																state.baseInfo.availability.push( {
+																				kind: "physical", isChecked: true, quantity: action.payload.quantity,
+																} );
+												}
+												if( (action.payload.epubResource) ){
+																state.baseInfo.availability.push( {
+																				kind: "epub", isChecked: true,
+																} );
+												}
+												if( (action.payload.audioResource) ){
+																state.baseInfo.availability.push( {
+																				kind: "audio", isChecked: true,
+																} );
+												}
 												state.resource.coverImage.localUrl = action.payload.thumbnail;
 												state.authors = action.payload.authors;
 												state.baseInfo.title = action.payload.title;

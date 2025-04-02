@@ -1,8 +1,9 @@
 "use client";
+import { appToaster } from "@/components/primary/toaster";
 import appStrings from "@/helpers/appStrings";
 import { BookData } from "@/helpers/appType";
 import { deepEqual } from "@/helpers/comparation";
-import { compressImage, deepCleanObject, objectToFormData, urlToFile } from "@/helpers/convert";
+import { compressImage, objectToFormData, urlToFile } from "@/helpers/convert";
 import { color } from "@/helpers/resources";
 import { isInternalUrl } from "@/helpers/text";
 import { bookApi, useAddUpdateBookMutation, useLazyCheckCategoryNameIsDuplicatedQuery, useUploadBookResourceMutation } from "@/stores/slices/api/book.api.slice";
@@ -23,7 +24,7 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 				const dispatch = useDispatch();
 				const router = useRouter();
 				const [ addBook, { data: bookData, isLoading: isBookLoading, error: bookError } ] = useAddUpdateBookMutation( {} );
-				const [ uploadResource ] = useUploadBookResourceMutation( {} );
+				const [ uploadResource, { data: resourceUploadedRes, error: resourceError } ] = useUploadBookResourceMutation( {} );
 				const [ checkCategory, {
 								data: dataCategory,
 								error: errorCategory,
@@ -61,17 +62,13 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												payload.categoryId = data.baseInfo.category.id;
 												payload.category = data.baseInfo.category;
 								}
-								const bookResponse = await addBook( objectToFormData( deepCleanObject( payload ) as object ) );
+								const bookResponse = await addBook( payload );
 								if( !bookResponse.data || !bookResponse.data.id ) return;
 								if( eBook?.kind === "epub" && eBook.resource && eBook.resource.localUrl ){
 												try{
 																const fileAfterConverted = await urlToFile( eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip" );
 																console.log( objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) );
 																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...eBook.resource, file: fileAfterConverted } ) } );
-																if( resourceUpload.data ){
-																				dispatch( clearData() );
-																				router.push( `/resources/books/add` );
-																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_EBOOK );
 												}
@@ -80,10 +77,6 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												try{
 																const fileAfterConverted = await compressImage( await urlToFile( audioBook.resource.localUrl, audioBook.resource.name ?? "unknown", audioBook.resource.fileType ?? "audio/mpeg" ), "LOWEST_240P" );
 																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...audioBook.resource, fileAfferConverted: fileAfterConverted } ) } );
-																if( resourceUpload.data ){
-																				dispatch( clearData() );
-																				router.push( `/resources/books/add` );
-																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_AUDIO_BOOK );
 												}
@@ -92,15 +85,13 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 												try{
 																const fileAfterConverted = await urlToFile( coverImage.localUrl, coverImage.name ?? "unknown", coverImage.fileType ?? "image/png" );
 																const resourceUpload = await uploadResource( { bookId: bookResponse.data.id, data: objectToFormData( { ...coverImage, file: fileAfterConverted } ) } );
-																if( resourceUpload.data ){
-																				dispatch( clearData() );
-																				router.push( `/resources/books/add` );
-																}
 												}catch{
 																toast.error( appStrings.error.FAIL_TO_UPLOAD_COVER );
 												}
 								}
 								dispatch( bookApi.util.resetApiState() );
+								dispatch( clearData() );
+								// router.push( `/resources/books/add` );
 				}, [ store, addBook, dispatch, uploadResource, router ] );
 				const
 								onSubmit = async() => {
@@ -115,25 +106,30 @@ function HandleSaveChangeButton( props: HandleSaveChangeButtonProps ): JSX.Eleme
 																}
 																await onAddBook();
 												}else{
-																toast.info( appStrings.NOTHING_CHANGE );
+																appToaster.info( appStrings.NOTHING_CHANGE );
 												}
 								};
 				const [ suggestions, setSuggestions ] = useState<Category[] | undefined>();
 				useEffect( () => {
+								if( resourceError ){
+												appToaster.error( appStrings.error.RESOURCE_SAVE_FAIL );
+								}
+				}, [ resourceError ] );
+				useEffect( () => {
 								if( bookError )
-												toast.error( appStrings.error.REQUEST_ERROR );
+												appToaster.error( appStrings.error.REQUEST_ERROR );
 				}, [ bookError ] );
 				useEffect( () => {
 								if( errorCategory )
-												toast.error( appStrings.error.REQUEST_ERROR );
+												appToaster.error( appStrings.error.REQUEST_ERROR );
 				}, [ errorCategory ] );
 				useEffect( () => {
 								if( bookData )
-												toast.success( appStrings.success.SAVE_SUCCESS );
+												appToaster.success( appStrings.success.SAVE_SUCCESS );
 				}, [ bookData ] );
 				useEffect( () => {
 								if( dataCategory && dataCategory.status === "duplicated" ){
-												toast.warning( appStrings.warning.CATEGORY_MIGHT_BE_DUPLICATED );
+												appToaster.warning( appStrings.warning.CATEGORY_MIGHT_BE_DUPLICATED );
 												setSuggestions( dataCategory.suggestions );
 								}
 				}, [ dataCategory ] );

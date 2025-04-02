@@ -1,7 +1,7 @@
 import { AvailabilityItem } from "@/components/book-table/BookRowItem";
 import ModalPanel from "@/components/primary/ModalPanel";
 import appStrings from "@/helpers/appStrings";
-import { AnyObject, Availability } from "@/helpers/appType";
+import { Availability } from "@/helpers/appType";
 import { color } from "@/helpers/resources";
 import { addBookAvailability, modifyBookAvailability, removeBookAvailability } from "@/stores/slices/book-states/book.add-edit.slice";
 import { RootState } from "@/stores/store";
@@ -10,9 +10,8 @@ import Grid from "@mui/material/Grid2";
 import React, { memo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-type PhysicBookAvailabilityProps = AnyObject
 const PhysicBookAvailability =
-				memo( function PhysicBookAvailability( props: PhysicBookAvailabilityProps ){
+				memo( function PhysicBookAvailability(){
 								const dispatch = useDispatch();
 								const availabilities = useSelector( ( state: RootState ) => state.addEditBookData.baseInfo?.availability ?? [] );
 								const pysicAvaiRef = useRef<number>( 0 );
@@ -46,9 +45,6 @@ const PhysicBookAvailability =
 												pysicAvaiRef.current = 0;
 												setTriggerCloseModal( !triggerCloseModal );
 								}
-								// function physicSelectChange(event: React.SyntheticEvent, value: string | null) {
-								//     pysicAvaiRef.current = value ?? 0;
-								// }
 								function onQuantityChange( value: number ){
 												pysicAvaiRef.current = value;
 								}
@@ -65,7 +61,7 @@ const PhysicBookAvailability =
 																				buttonContent = {
 																								<AvailabilityItem
 																												kind = { "physical" } title = { appStrings.book.PHYSIC_BOOK }
-																												isChecked = { availabilities.find( a => a.kind === "physical" )?.isChecked }
+																												isChecked = { (availabilities.find( a => a.kind === "physical" )?.isChecked) }
 																								/>
 																				}
 																>
@@ -84,6 +80,7 @@ const PhysicBookAvailability =
 																								<Grid size = { 6 }>
 																												<TextField
 																																type = { "number" }
+																																value = { availabilities.find( a => a.kind === "physical" )?.quantity }
 																																onChange = { ( e ) => onQuantityChange( Number( e.target.value ) ) }
 																																label = { appStrings.QUANTITY }
 																												/>

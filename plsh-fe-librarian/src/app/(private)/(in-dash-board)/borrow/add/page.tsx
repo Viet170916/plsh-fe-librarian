@@ -7,10 +7,7 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React from "react";
 
-interface IProps{
-				children?: React.ReactNode;
-}
-async function AddBorrowPage( {} ){
+async function AddBorrowPage(  ){
 				return (
 								<Grid spacing = { 2 } container sx = { { p: 4, width: "100%" } }>
 												{/* Form Section */ }

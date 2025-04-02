@@ -4,25 +4,17 @@ import { objectToQueryParams } from "@/helpers/convert";
 import { baseQueryWithReAuth } from "@/stores/slices/api/api.config";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
-export type AuthorResponse = {
-				data?: AuthorData[];
-}
-export type AuthorAddEditResponse = {
-				kind: "add"
-				data?: AuthorData;
-} | {
-				kind: "edit"
-				data?: AuthorData;
-}
 const httpMethods = constants.http.method;
 const API = createApi( {
 				reducerPath: "authorApi",
 				baseQuery: baseQueryWithReAuth,
+				tagTypes: [ "Authors" ],
 				endpoints: ( builder ) => ({
 								getAuthor: builder.query<AuthorData[], { keyword?: string }>( {
 												query: ( params ) => {
 																return `/author${ objectToQueryParams( params ) }`;
 												},
+												providesTags: () => [ { type: "Authors" } ],
 								} ),
 								addAuthor: builder.mutation<Author, FormData>( {
 												query: ( payload ) => ({
@@ -30,6 +22,7 @@ const API = createApi( {
 																method: httpMethods.POST,
 																body: payload,
 												}),
+												invalidatesTags: () => [ { type: "Authors" } ],
 								} ),
 				}),
 } );

@@ -140,7 +140,7 @@ const appStrings =
 												WRONG_REQUIRED: "Chưa đủ các thông tin yêu cầu hoặc nhập sai, vùi lòng kiểm tra lại!",
 												BORROW_BOOK_WRONG_FIELD_REQUIRED: "Ngày mượn và ngày trả không hợp lệ, vui lòng kiểm tra và nhập lại!",
 												APPROVE_FAIL: "Duyệt thất bại",
-												MEMBER_NOT_FOUND: "Thành viên không tồn tại", LOAN_NOT_FOUND: "Phiên mượn không tồn tại",
+												MEMBER_NOT_FOUND: "Thành viên không tồn tại", LOAN_NOT_FOUND: "Phiên mượn không tồn tại", RESOURCE_SAVE_FAIL: "Lưu file không thành công",
 								},
 								AUTHOR_NAME: "Tên tác giả",
 								EDIT_AUTHOR: "Chỉnh sửa thông tin tác giả",
@@ -205,7 +205,7 @@ const appStrings =
 												BOOK_CODE: "Mã sách",
 												BOOK_IN_STORE: "Sách trong kho",
 												BOOK_ON_SHELF: "Sách trên kệ",
-												VERSION: "Phiên bản", ENTER_ISBN: "Nhập mã sách hoặc ISBN",
+												VERSION: "Phiên bản", ENTER_ISBN: "Nhập mã sách hoặc ISBN", NEW_CATEGORY: "Thêm thể loại mới",
 								},
 								REMOVE: "Xoá",
 								PDF_PREVIEW: "Đọc sách PDF",
@@ -258,7 +258,7 @@ const appStrings =
 												NEW_SHELF: "Kệ mới",
 												UN_LABEL: "Không có nhãn",
 												SHELF_NAME: "Tên kệ",
-												SHELF_LABEL: "Nhãn", ADD_ROW_ON_SHELF: "Thêm hàng sách", SHELF_EMPTY: "Kệ sách đang trống",
+												SHELF_LABEL: "Nhãn", ADD_ROW_ON_SHELF: "Thêm hàng sách", SHELF_EMPTY: "Kệ sách đang trống", POSITION: "Vị trí trên kệ",
 								},
 								ACTION: "Hành động",
 								EDIT: "Chỉnh sửa",
@@ -313,7 +313,7 @@ const appStrings =
 								SEARCH: "Tìm kiếm",
 								FILTER_KEYWORD: "Từ khoá tìm kiếm",
 								ALL: "Tất cả",
-								AVAILABLE: "Còn trên kệ", CODE: "Mã",
+								AVAILABLE: "Còn sẵn", CODE: "Mã",
 				};
 export default appStrings;
 

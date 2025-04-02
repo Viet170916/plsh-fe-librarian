@@ -70,11 +70,13 @@ function BookSearch(): JSX.Element{
 																																				{ instance.bookName }
 																																</Typography>
 																												</Grid>
-																												{ instance.isInBorrowing ?
-																																<Typography sx = { { color: color.SERIOUS } }>{ appStrings.CHECKED_OUT__UNAVAILABLE }</Typography> :
-																																<Typography sx = { { color: color.COMFORT } }>{ appStrings.AVAILABLE }</Typography> }
+																												<Grid>
+																																{ instance.isInBorrowing ?
+																																				<Typography sx = { { color: color.SERIOUS } }>{ appStrings.CHECKED_OUT__UNAVAILABLE }</Typography> :
+																																				<Typography sx = { { color: color.COMFORT } }>{ appStrings.AVAILABLE }</Typography> }
+																												</Grid>
 																								</Grid>
-																								<Grid size = { 12 }>
+																								<Grid size = { 9 }>
 																												<Typography
 																																component = "span"
 																																variant = "h6"
@@ -83,10 +85,13 @@ function BookSearch(): JSX.Element{
 																																{ instance.code }
 																												</Typography>
 																								</Grid>
-																								<Grid size = { 12 }>
+																								<Grid size = { 5 }>
 																												<Typography sx = { { fontSize: 12, color: color.DARK_LIGHTER_TEXT } }>
 																																{ instance.bookVersion }
 																												</Typography>
+																								</Grid>
+																								<Grid container size = { "grow" } justifyContent = { "end" }>
+																												<Typography variant = "h6" fontWeight = { "lighter" }>{ appStrings.shelf.POSITION }: { instance.shelfPosition }</Typography>
 																								</Grid>
 																								<Grid size = { 12 }>
 																												<Typography sx = { { fontSize: 10, ...truncateMaxLineTextStyle( 2 ) } }>
@@ -118,7 +123,7 @@ function BookSearch(): JSX.Element{
 												</Dialog>
 												{ isLoading && <LinearProgress /> }
 												{ error && <Typography>{ appStrings.error.GET_BOOK_FAIL }</Typography> }
-												<List>
+												<List sx = { { maxHeight: 400, overflowY: "auto" } }>
 																{ bookList }
 												</List>
 								</Grid>

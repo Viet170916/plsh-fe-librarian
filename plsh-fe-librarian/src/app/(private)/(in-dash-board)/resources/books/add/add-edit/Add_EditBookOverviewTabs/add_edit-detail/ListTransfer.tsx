@@ -43,7 +43,10 @@ function ListTransfer( { items, disableItems, onChange, noDisable }: ListTransfe
 																												onClick = { !isDisable ? handleToggle( value ) : undefined }
 																												disabled = { isDisable }
 																								>
-																												<ListItemText id = { labelId } primary = { `${ appStrings.book.BOOK_CODE }: ${ value.code }` } />
+																												<ListItemText
+																																id = { labelId } primary = { `${ appStrings.book.BOOK_CODE }: ${ value.code }` }
+																																secondary = { `${ value.shelfPosition }` }
+																												/>
 																												<ListItemIcon>
 																																<Checkbox
 																																				checked = { checked.map( item => item.id ).includes( value.id ) }
