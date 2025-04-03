@@ -36,6 +36,8 @@ build_plsh-fe-librarian:
     - echo "GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID" >> .env
     - echo "GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET" >> .env
     - echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+    - echo "NEXT_PUBLIC_SERVER_HOST=$NEXT_PUBLIC_SERVER_HOST" >> .env
+    - echo "NEXT_PUBLIC_GG_API_KEY=$NEXT_PUBLIC_GG_API_KEY" >> .env
     - cat .env
     - corepack enable
     - yarn install
