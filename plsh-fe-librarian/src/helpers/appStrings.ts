@@ -55,8 +55,9 @@ const appStrings =
 												FINE_TYPE: "Hình thức phạt",
 												EXTEND_DATE: "Ngày gia hạn",
 												NEXT_RETURN_DATE: "Hạn trả lần tiếp",
-												RETURN_CONFIRM: "Xác nhận trả sách",
-								},
+												RETURN_CONFIRM: "Xác nhận trả sách", BORROW_DATE_RANGE_ANALYTIC: "Các khoảng gia hạn"
+
+                },
 								BORROWED_BOOK: "Sách được mượn",
 								OVERDUE: "Sách quá hạn",
 								MEMBERS: "Thành viên",

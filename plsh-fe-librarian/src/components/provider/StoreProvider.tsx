@@ -1,4 +1,5 @@
 "use client";
+import NotificationProvider from "@/components/provider/NotificationProvider";
 import { theme } from "@/helpers/resources";
 import { AppSession, setSession } from "@/stores/slices/session.slice";
 import { store } from "@/stores/store";
@@ -12,6 +13,7 @@ import { SessionProvider } from "next-auth/react";
 import React, { Suspense, useEffect } from "react";
 import { Provider } from "react-redux";
 import "dayjs/locale/vi";
+
 interface IProps{
 				children?: React.ReactNode;
 				session: Session | null | undefined;
@@ -23,6 +25,7 @@ export function Providers( { children, session, dataSession }: IProps ){
 				}, [ dataSession ] );
 				return (
 								<LocalizationProvider dateAdapter = { AdapterDayjs } adapterLocale = "vi">
+												<NotificationProvider />
 												<AppRouterCacheProvider options = { { enableCssLayer: false } }>
 																<Suspense fallback = { <LinearProgress /> }>
 																				<ThemeProvider theme = { theme }>

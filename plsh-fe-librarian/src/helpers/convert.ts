@@ -175,62 +175,67 @@ interface OnLoanPeriods{
 				chartData: ChartData[];
 }
 export function getOnLoanPeriods(
-				borrowDate: Dayjs,
-				expectedReturnDates: Dayjs[],
-				renewalStartDates: Dayjs[],
-				actualReturnOrToday: Dayjs,
-): OnLoanPeriods{
-				const onLoanPeriods: Period[] = [];
-				const overduePeriods: Period[] = [];
-				if( expectedReturnDates.length === 0 ){
-								return { onLoan: onLoanPeriods, overdue: overduePeriods, chartData: [] };
-				}
-				onLoanPeriods.push( { start: borrowDate, end: expectedReturnDates[0] } );
-				for( let i = 0; i < renewalStartDates.length; i++ ){
-								const start = renewalStartDates[i];
-								const end = expectedReturnDates[i + 1] || actualReturnOrToday;
-								onLoanPeriods.push( { start, end } );
-				}
-				const lastEnd = expectedReturnDates[expectedReturnDates.length - 1];
-				if( lastEnd.isBefore( actualReturnOrToday, 'day' ) ){
-								overduePeriods.push( { start: lastEnd, end: actualReturnOrToday } );
-				}
-				const dateRange: Dayjs[] = [];
-				for( let d = borrowDate; d.isBefore( actualReturnOrToday, 'day' ); d = d.add( 1, 'day' ) ){
-								dateRange.push( d );
-				}
-				const chartData: ChartData[] = [];
-				let yLevel = 1;
-				onLoanPeriods.forEach( ( { start, end } ) => {
-								const seriesData: (number | null)[] = new Array( dateRange.length ).fill( null );
-								for( let d = start; d.isBefore( end, 'day' ) || d.isSame( end, 'day' ); d = d.add( 1, 'day' ) ){
-												const index = dateRange.findIndex( ( date ) => date.isSame( d, 'day' ) );
-												if( index !== -1 ) seriesData[index] = yLevel;
-								}
-								chartData.push( { data: seriesData } );
-								yLevel++;
-				} );
-				const overdueLevel = 1.5;
-				for( let i = 0; i < onLoanPeriods.length - 1; i++ ){
-								const prevEnd = onLoanPeriods[i].end;
-								const nextStart = onLoanPeriods[i + 1].start;
-								if( prevEnd.isBefore( nextStart, 'day' ) ){
-												overduePeriods.push( { start: prevEnd, end: nextStart } );
-								}
-				}
-				const overdueSeriesData: (number | null)[] = new Array( dateRange.length ).fill( null );
-				overduePeriods.forEach( ( { start, end } ) => {
-								for( let d = start; d.isBefore( end, 'day' ) || d.isSame( end, 'day' ); d = d.add( 1, 'day' ) ){
-												const index = dateRange.findIndex( date => date.isSame( d, 'day' ) );
-												if( index !== -1 ) overdueSeriesData[index] = overdueLevel;
-								}
-				} );
-				chartData.push( {
-								label: appStrings.borrow.OVERDUE,
-								lineWidth: 6,
-								color: color.SERIOUS,
-								data: overdueSeriesData,
-				} );
-				console.log( chartData );
-				return { onLoan: onLoanPeriods, overdue: overduePeriods, chartData };
+    borrowDate: Dayjs,
+    expectedReturnDates: Dayjs[],
+    renewalStartDates: Dayjs[],
+    actualReturnOrToday: Dayjs
+): OnLoanPeriods & { labels: string[] } {
+    const onLoanPeriods: Period[] = [];
+    const overduePeriods: Period[] = [];
+
+    if (expectedReturnDates.length === 0) {
+        return { onLoan: onLoanPeriods, overdue: overduePeriods, chartData: [], labels: [] };
+    }
+
+    onLoanPeriods.push({ start: borrowDate, end: expectedReturnDates[0] });
+    for (let i = 0; i < renewalStartDates.length; i++) {
+        const start = renewalStartDates[i];
+        const end = expectedReturnDates[i + 1] || actualReturnOrToday;
+        onLoanPeriods.push({ start, end });
+    }
+
+    const lastEnd = expectedReturnDates[expectedReturnDates.length - 1];
+    if (lastEnd.isBefore(actualReturnOrToday, 'day')) {
+        overduePeriods.push({ start: lastEnd, end: actualReturnOrToday });
+    }
+
+    const dateRange: Dayjs[] = [];
+    for (let d = borrowDate; d.isBefore(actualReturnOrToday, 'day'); d = d.add(1, 'day')) {
+        dateRange.push(d);
+    }
+
+    const labels = dateRange.map((date) => date.format('DD/MM/YY'));
+
+    const chartData: ChartData[] = [];
+    let yLevel = 1;
+
+    onLoanPeriods.forEach(({ start, end }) => {
+        const seriesData: (number | null)[] = new Array(dateRange.length).fill(null);
+        for (let d = start; d.isBefore(end, 'day') || d.isSame(end, 'day'); d = d.add(1, 'day')) {
+            const index = dateRange.findIndex((date) => date.isSame(d, 'day'));
+            if (index !== -1) seriesData[index] = yLevel;
+        }
+        chartData.push({ data: seriesData, color:color.COMFORT, label:"Khoảng thời gian mượn" });
+        yLevel++;
+    });
+
+    const overdueLevel = 1.5;
+    for (let i = 0; i < onLoanPeriods.length - 1; i++) {
+        const prevEnd = onLoanPeriods[i].end;
+        const nextStart = onLoanPeriods[i + 1].start;
+        if (prevEnd.isBefore(nextStart, 'day')) {
+            overduePeriods.push({ start: prevEnd, end: nextStart });
+        }
+    }
+
+    overduePeriods.forEach(({ start, end }) => {
+        const seriesData: (number | null)[] = new Array(dateRange.length).fill(null);
+        for (let d = start; d.isBefore(end, 'day') || d.isSame(end, 'day'); d = d.add(1, 'day')) {
+            const index = dateRange.findIndex((date) => date.isSame(d, 'day'));
+            if (index !== -1) seriesData[index] = overdueLevel;
+        }
+        chartData.push({ data: seriesData, color:color.SERIOUS, label:"Khoảng quá hạn" });
+    });
+
+    return { onLoan: onLoanPeriods, overdue: overduePeriods, chartData, labels };
 }

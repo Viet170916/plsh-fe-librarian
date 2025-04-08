@@ -14,6 +14,9 @@ export const bookApi = createApi( {
 								getBooks: builder.query<BooksResponse, PagingParams>( {
 												query: ( param: PagingParams ): string => `/book${ objectToQueryParams( param ) }`,
 								} ),
+								getBook: builder.query<BaseResponse<BookData>, number>( {
+												query: ( id: number ): string => `/book${ id }`,
+								} ),
 								getBookInstances: builder.query<BaseResponse<BookInstance[]>, { bookId?: number, isbnOrBookCode?: string, keyword?: string }>( {
 												query: ( param ) => ({
 																url: `/book/book-instances`,
@@ -70,6 +73,7 @@ export const {
 				useGetBooksQuery,
 				useAddUpdateBookMutation,
 				useLazyGetBookInstancesQuery,
+				useLazyGetBookQuery,
 				useDeleteBookInstancesMutation,
 				useGetBookInstancesQuery,
 				useUploadBookResourceMutation,

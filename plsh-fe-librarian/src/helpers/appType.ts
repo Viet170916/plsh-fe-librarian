@@ -4,7 +4,77 @@ import { Session } from "next-auth";
 import { FileType } from "next/dist/lib/file-exists";
 import type { OnLoadingComplete, PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import React from "react";
-
+import { Path, PathValue } from "react-hook-form";
+import {LoanDto} from "@/helpers/dataTransfer";
+export type ReviewDto = {
+    id?: number;
+    accountSenderId?: number;
+    accountSenderName?: string;
+    accountSenderAvatar?: string;
+    bookId?: number;
+    bookTitle?: string;
+    resourceId?: number;
+    resourceUrl?: string;
+    resourceFile?: File;
+    rating?: number;
+    content?: string;
+    messages?: MessageDto[];
+    createdDate: string;
+    updatedDate?: string;
+};
+export type NotificationDto = {
+    id: number;
+    title?: string;
+    content?: string;
+    date: string;
+    isRead?: boolean;
+    referenceId?: number;
+    accountId: number;
+    account?: Member;
+} & ({
+    reference?: "Review";
+    referenceData?: ReviewDto;
+} | {
+    reference?: "Message";
+    referenceData?: MessageDto;
+}|{
+    reference?: "Loan";
+    referenceData?: LoanDto;
+})
+export type FilterParams<OrderByKeys> = {
+    descending?: boolean;
+    keyword?: string;
+    role?: string;
+    accountStatus?: string;
+    approveStatus?: string;
+    orderBy?: keyof OrderByKeys;
+    page: number | 1;
+    pageCount?: number;
+    limit: number | 10;
+};
+export type MessageDto = {
+    id?: number;
+    isYouAreSender?: boolean;
+    senderId?: number;
+    senderName?: string;
+    senderAvatar?: string;
+    repliedId?: number | null;
+    repliedAvatar?: number;
+    repliedPersonName?: string;
+    reviewId?: number;
+    review?: ReviewDto;
+    reviewTitle?: string;
+    content?: string;
+    resourceId?: number;
+    resourceUrl?: string;
+    resourceFile?: File;
+    createdDate: string;
+    updatedDate?: string;
+};
+export type Payload<ParentObj, Key extends Path<ParentObj>> = {
+				key: Key,
+				value: PathValue<ParentObj, Key>,
+}
 export type BaseResponse<DataType, StatusType = string> = {
 				message: string;
 				pageCount?: number;
