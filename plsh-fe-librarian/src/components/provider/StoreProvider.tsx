@@ -25,7 +25,6 @@ export function Providers( { children, session, dataSession }: IProps ){
 				}, [ dataSession ] );
 				return (
 								<LocalizationProvider dateAdapter = { AdapterDayjs } adapterLocale = "vi">
-												<NotificationProvider />
 												<AppRouterCacheProvider options = { { enableCssLayer: false } }>
 																<Suspense fallback = { <LinearProgress /> }>
 																				<ThemeProvider theme = { theme }>
