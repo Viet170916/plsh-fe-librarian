@@ -1,5 +1,5 @@
 "use client"
-import React, {JSX, memo, useCallback, useEffect, useMemo} from "react";
+import React, {JSX, memo, useCallback, useMemo} from "react";
 import {LoanStatus} from "@/helpers/dataTransfer";
 import {Button, Chip} from "@mui/material";
 import {useAppDispatch} from "@/hooks/useDispatch";
@@ -7,10 +7,9 @@ import {shallowEqual, useSelector} from "react-redux";
 import {RootState} from "@/stores/store";
 import {useUpdateLoanStatusMutation} from "@/stores/slices/api/borrow.api.slice";
 import {setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
-import {appToaster} from "@/components/primary/toaster";
-import appStrings from "@/helpers/appStrings";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
+import useFetchingToast from "@/hooks/useFetchingToast";
 
 export function renderLoanStatusChip(status: LoanStatus) {
     switch (status) {
@@ -44,28 +43,13 @@ function ChangeStatusButton(): JSX.Element {
     const dispatch = useAppDispatch();
     const loan = useSelector((state: RootState) => state.loanState.currentLoan, shallowEqual);
     const [updateLoanStatus, {error, data, isLoading}] = useUpdateLoanStatusMutation();
-    useEffect(() => {
-        if (data) {
+
+    useFetchingToast(data, error, [dispatch], [], {
+        handleSuccess() {
             dispatch(setPropToLoanState({key: "currentLoan", value: undefined}));
-            appToaster.success(data.message);
         }
-    }, [data, dispatch]);
-    useEffect(() => {
-        if (error) {
-            appToaster.success(appStrings.error.APPROVE_FAIL);
-        }
-    }, [error]);
-    useEffect(() => {
-        if (data) {
-            dispatch(setPropToLoanState({key: "currentLoan", value: undefined}));
-            appToaster.success(data.message);
-        }
-    }, [data, dispatch]);
-    useEffect(() => {
-        if (error) {
-            appToaster.success(appStrings.error.APPROVE_FAIL);
-        }
-    }, [error]);
+    });
+
     const handleUpdateStatus = useCallback(async (status: LoanStatus) => {
         if (loan?.id) {
             await updateLoanStatus({loanId: loan?.id, status});
@@ -155,7 +139,6 @@ function ChangeStatusButton(): JSX.Element {
         <>
             {loan?.aprovalStatus && <Grid>{renderLoanStatusChip(loan.aprovalStatus)}</Grid>}
             {
-
                 actionButton
             }
 

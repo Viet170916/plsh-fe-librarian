@@ -1,62 +1,66 @@
 "use client";
 
-import React, {ChangeEvent, memo, SyntheticEvent, useCallback, useEffect, useMemo, useState} from "react";
-import {
-    Autocomplete,
-    AutocompleteInputChangeReason,
-    Box, Button,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    IconButton, LinearProgress,
-    TextField
-} from "@mui/material";
+import React, {ChangeEvent, memo, useCallback, useEffect, useMemo, useState} from "react";
+import {Box, Button, Dialog, DialogContent, DialogTitle, LinearProgress, TextField} from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import {color} from "@/helpers/resources";
 import {debounce} from "@mui/material/utils";
 import WebcamScanner from "@/components/primary/WebcamScanner";
 import {BookData} from "@/helpers/appType";
-import {useGetBooksWithIsbnQuery} from "@/stores/slices/api/book.api.slice";
-import {skipToken} from "@reduxjs/toolkit/query";
+import {useLazyGetBooksWithIsbnQuery} from "@/stores/slices/api/book.api.slice";
 import Grid from "@mui/material/Grid2";
 import {truncateMaxLineTextStyle, truncateTextStyle} from "@/style/text.style";
 import {FaBarcode} from "react-icons/fa6";
 import appStrings from "@/helpers/appStrings";
-import {toast} from "sonner";
+import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
+import {appToaster} from "@/components/primary/toaster";
 
 function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void }) {
-    const [isbn, setIsbn] = useState<string | undefined>(undefined);
-    const {data} = useGetBooksWithIsbnQuery((isbn && isbn !== "") ? {
-        isbn
-    } : skipToken);
+    const [getBooks, {data, error, isFetching}] = useLazyGetBooksWithIsbnQuery();
+
+    function onScanDone(code?: string) {
+        if (code)
+            getBooks({isbn: code})
+    };
+    useEffect(() => {
+        if (error) {
+            appToaster.error(appStrings.book.NOT_BOOK_FOUND)
+        }
+    }, [error]);
 
     useEffect(() => {
-        if ((data && data.length === 0 && isbn)) {
-            toast.warning(appStrings.book.NOT_BOOK_FOUND);
-            setIsbn(undefined);
-        } else if (isbn && data && data.length > 0) {
+        if (data && data.length <= 0) {
+            appToaster.error(appStrings.book.NOT_BOOK_FOUND)
+        } else if (data && data.length > 0) {
             onResult?.(data[0]);
-            setIsbn(undefined);
         }
-    }, [isbn, data, onResult]);
+    }, [data, onResult])
+
+    // useEffect(() => {
+    //     if ((data && data.length === 0 && isbn)) {
+    //         toast.warning(appStrings.book.NOT_BOOK_FOUND);
+    //         setIsbn(undefined);
+    //     } else if (isbn && data && data.length > 0) {
+    //         onResult?.(data[0]);
+    //         setIsbn(undefined);
+    //     }
+    // }, [isbn, data, onResult]);
     const [open, setOpen] = useState(false);
     useEffect(() => {
-        if (isbn && isbn !== "") {
-            if (open) setOpen(false);
-        }
-    }, [isbn, open]);
+        // if (open) setOpen(false);
+    }, [open]);
 
     return (
         <Grid container spacing={1} width={"100%"} size={12} height={"fit-content"}>
+            <BarcodeScanner onScanDone={onScanDone}/>
             <Grid size={12} height={"fit-content"}>
-                <Button fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)} variant="contained"
+                <Button loading={isFetching} fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)}
+                        variant="contained"
                         sx={{color: color.LIGHT_TEXT}}>
                     {appStrings.SCAN_BAR_CODE}
                 </Button>
@@ -67,7 +71,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
             <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
                 <DialogTitle>Quét mã ISBN</DialogTitle>
                 <DialogContent style={{textAlign: "center"}}>
-                    <WebcamScanner onScanSuccess={setIsbn}/>
+                    <WebcamScanner onScanSuccess={onScanDone}/>
                 </DialogContent>
             </Dialog>
         </Grid>
@@ -76,9 +80,13 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
 
 const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) => {
     const [query, setQuery] = useState<string>("");
-    const {data, isLoading, error} = useGetBooksWithIsbnQuery((query || query !== "") ? {
-        keyword: query
-    } : skipToken);
+    const [getBooks, {data, isFetching, error}] = useLazyGetBooksWithIsbnQuery();
+    useEffect(() => {
+        if (query) {
+            getBooks({keyword: query})
+        }
+    }, [query]);
+
 
     const debouncedSetInputChange = useMemo(
         () => debounce((value: string) => setQuery(value), 500), []);
@@ -88,8 +96,8 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
         }, [debouncedSetInputChange]);
 
     const onSelected = useCallback((result: BookData) => {
-            onSelect?.(result);
-        }, [onSelect])
+        onSelect?.(result);
+    }, [onSelect])
 
     const listBook = useMemo(() => {
         if (data && data.length > 0)
@@ -147,6 +155,7 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
     }, [data, onSelected]);
     return (
         <Grid container spacing={2} size={12} justifyContent={"start"}>
+
             <Grid size={12}>
                 <TextField
                     onChange={onInputChange}
@@ -159,7 +168,7 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
             </Grid>
             <Grid size={12}>
                 {
-                    isLoading ? <LinearProgress/> : <></>
+                    isFetching ? <LinearProgress/> : <></>
                 }
                 <List
                     sx={{width: '100%', maxHeight: 300, overflowY: 'auto'}}>
