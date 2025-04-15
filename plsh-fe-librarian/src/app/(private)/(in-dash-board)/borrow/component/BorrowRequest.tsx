@@ -13,7 +13,6 @@ import {BaseQueryFn} from "@reduxjs/toolkit/query/react";
 import {parsErrorToBaseResponse} from "@/helpers/error";
 
 function BorrowRequest(): JSX.Element {
-
     const subscriptionRef = useRef<QueryActionCreatorResult<QueryDefinition<unknown, BaseQueryFn<unknown>, string, unknown>> | undefined>(undefined);
     const [filter, setFilter] = useState<FilterParams<LoanDto> & { approveStatus: LoanStatus }>({
         keyword: "",

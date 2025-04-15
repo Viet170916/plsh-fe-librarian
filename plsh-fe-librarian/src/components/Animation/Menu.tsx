@@ -1,5 +1,5 @@
 "use client"
-import React, {JSX, memo, useEffect, useState} from "react";
+import React, {JSX, memo, useEffect, useRef, useState} from "react";
 import {motion} from "framer-motion";
 import Grid from "@mui/material/Grid2";
 import {color} from "@/helpers/resources";
@@ -18,14 +18,21 @@ function AnimatedMenu({children, open, maxHeight, maxWidth, initHeight}: Animate
     const [phase, setPhase] = useState<'closed' | 'width' | 'height' | 'closingHeight' | 'closingWidth'>('closed');
     const [shouldRender, setShouldRender] = useState(false);
 
+    const phaseRef = useRef(phase);
+    useEffect(() => {
+        phaseRef.current = phase;
+    }, [phase]);
+
     useEffect(() => {
         if (open) {
             setShouldRender(true);
             setPhase('width');
         } else {
-            if (phase !== 'closed') setPhase('closingHeight');
+            if (phaseRef.current !== 'closed') setPhase('closingHeight');
         }
-    }, [open, phase]);
+    }, [open]);
+
+
 
     const handleAnimationComplete = () => {
         if (phase === 'width') {

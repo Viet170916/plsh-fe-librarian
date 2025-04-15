@@ -31,11 +31,14 @@ const BottomMenu = ({
         if (open) {
             setShouldRender(true);
             setPhase('width');
-        } else {
-            if (phase !== 'closed') setPhase('closingHeight');
+        }
+    }, [open]);
+
+    useEffect(() => {
+        if (!open && phase !== 'closed') {
+            setPhase('closingHeight');
         }
     }, [open, phase]);
-
     const handleAnimationComplete = () => {
         if (phase === 'width') {
             setPhase('height');
