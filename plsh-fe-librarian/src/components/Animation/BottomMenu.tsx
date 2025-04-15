@@ -1,5 +1,5 @@
 "use client";
-import React, {memo, ReactNode, useEffect, useState} from "react";
+import React, {memo, ReactNode, useEffect, useRef, useState} from "react";
 import {Box, IconButton} from "@mui/material";
 import {motion} from "framer-motion";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
@@ -26,19 +26,19 @@ const BottomMenu = ({
     const [open, setOpen] = useState(false);
     const [phase, setPhase] = useState<'closed' | 'width' | 'height' | 'closingHeight' | 'closingWidth'>('closed');
     const [shouldRender, setShouldRender] = useState(false);
-
+    const phaseRef = useRef(phase);
+    useEffect(() => {
+        phaseRef.current = phase;
+    }, [phase]);
     useEffect(() => {
         if (open) {
             setShouldRender(true);
             setPhase('width');
+        } else {
+            if (phaseRef.current !== 'closed') setPhase('closingHeight');
         }
     }, [open]);
 
-    useEffect(() => {
-        if (!open && phase !== 'closed') {
-            setPhase('closingHeight');
-        }
-    }, [open, phase]);
     const handleAnimationComplete = () => {
         if (phase === 'width') {
             setPhase('height');

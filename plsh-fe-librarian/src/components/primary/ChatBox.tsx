@@ -9,6 +9,7 @@ import {generateRandomNumber} from "@/helpers/generate";
 import {useSelector} from "@/hooks/useSelector";
 import ChatAnimation from "@/components/Animation/lotties/Chat";
 import AppButton from "@/components/primary/Input/AppButton";
+import {color} from "@/helpers/resources";
 
 type ChatBoxProps = {
     messages: MessageDto[],
@@ -34,7 +35,7 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
                 senderId: myId,
             })
         }
-    }, [myId, reset,messages]);
+    }, [myId, reset, messages]);
     const submit = (value: MessageDto) => {
         onSubmit(value)
         if (!error) {
@@ -65,6 +66,7 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
+                position: "relative",
             }}
             spacing={2}
             useFlexGap
@@ -72,6 +74,7 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
             <Stack
                 sx={{
                     width: "100%",
+                    position: "relative",
                     flexGrow: 1,
                     p: 2,
                     overflowY: "auto",
@@ -84,23 +87,25 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
                 {isLoading && <ChatAnimation/>}
             </Stack>
             <Box sx={{display: "flex", gap: 1, width: "100%"}}>
-                <form onSubmit={handleSubmit(submit)}>
-                    <Controller
-                        render={({field}) => (
-                            <TextField
-                                size={"small"}
-                                // multiline
-                                fullWidth
-                                variant="outlined"
-                                placeholder="Nhập tin nhắn..."
-                                {...field}
-                            />)}
-                        control={control}
-                        name={"content"}
-                    />
-                    <AppButton type={"submit"} variant="outlined" size={"small"}>
-                        Gửi
-                    </AppButton>
+                <form onSubmit={handleSubmit(submit)} style={{width: "100%"}}>
+                    <Box sx={{display: "flex", gap: 1, width: "100%"}}>
+                        <Controller
+                            render={({field}) => (
+                                <TextField
+                                    size={"small"}
+                                    // multiline
+                                    fullWidth
+                                    variant="outlined"
+                                    placeholder="Nhập tin nhắn..."
+                                    {...field}
+                                />)}
+                            control={control}
+                            name={"content"}
+                        />
+                        <AppButton type={"submit"} variant="outlined" size={"small"}>
+                            Gửi
+                        </AppButton>
+                    </Box>
                 </form>
 
             </Box>

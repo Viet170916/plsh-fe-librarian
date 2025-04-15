@@ -25,7 +25,7 @@ function AddBookPage() {
     return (
         <>
             <BottomMenu>
-                <Grid sx={{bgcolor: color.WHITE, height: "100%", p: 2}} spacing={2} position={"relative"}>
+                <Grid sx={{bgcolor: color.WHITE, height: "100%", p: 2, width:"100%"}} spacing={2} position={"relative"}>
                     <Box sx={{position: "absolute"}}>
                         <Bot/>
                     </Box>
