@@ -20,7 +20,6 @@ function ShelfContext( { data }: IProps ){
 								dispatch( setShelfState( data ) );
 				}, [ data, dispatch ] );
 				const shelf = useSelector( ( state: RootState ) => state.shelfState );
-				console.log( shelf );
 				const onAddRow = async function(){
 								if( shelf?.shelfBaseInfo?.id ){
 												const rowResponse = await addRowMutate( { shelfId: shelf.shelfBaseInfo.id } );

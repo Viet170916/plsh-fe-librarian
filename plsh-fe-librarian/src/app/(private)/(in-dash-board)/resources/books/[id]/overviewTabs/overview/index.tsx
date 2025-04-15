@@ -1,34 +1,32 @@
 "use client";
-import About from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/About";
-import BaseInfo from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/BaseInfo";
+import About, {AboutSkeleton,} from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/About";
+import BaseInfo, {
+    BaseInfoSkeleton,
+} from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/BaseInfo";
 import Feedback from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/Feedback";
-import Sumary from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/Sumary";
-import { BookData } from "@/helpers/appType";
+import Summary, {
+    SummarySkeleton,
+} from "@/app/(private)/(in-dash-board)/resources/books/[id]/overviewTabs/overview/Sumary";
+import {useSelector} from "@/hooks/useSelector";
 import Grid from "@mui/material/Grid2";
-import React, { memo } from "react";
+import React, {memo} from "react";
 
-interface IProps{
-  book: BookData;
+function Overview() {
+    const book = useSelector((state) => state.bookState.currentBook);
+    return (
+        <Grid container spacing={2}>
+            <Grid size={12}>
+                {book ? <BaseInfo book={book}/> : <BaseInfoSkeleton/>}
+            </Grid>
+            <Grid size={12}>
+                {book ? <Summary book={book}/> : <SummarySkeleton/>}
+            </Grid>
+            <Grid size={6}>{book ? <About book={book}/> : <AboutSkeleton/>}</Grid>
+            <Grid size={6}>
+                <Feedback/>
+            </Grid>
+        </Grid>
+    );
 }
-function Overview( { book }: IProps ){
-  return (
-    <Grid container spacing = { 2 }>
-      <Grid size = { 12 }>
-        <BaseInfo book = { book } />
-      </Grid>
-      <Grid size = { 12 }>
-        <Sumary book={book} />
-      </Grid>
-      <Grid size = { 6 }>
-        <About book = { book } />
-      </Grid>
-      <Grid size = { 6 }>
-        <Feedback />
-      </Grid>
-    </Grid>
-  )
-    ;
-}
-export default memo( Overview );
 
-
+export default memo(Overview);

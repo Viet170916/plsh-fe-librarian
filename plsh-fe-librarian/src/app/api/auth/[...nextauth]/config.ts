@@ -65,7 +65,6 @@ const authOptions: NextAuthOptions = {
       //     console.error( "err", JSON.parse( err.response?.config.data ) );
       //     //handle register here
       //   } );
-      // console.log( "a", ( typeof serverResponse === "object" ? serverResponse.data : {} ) );
       // return !!( typeof serverResponse === "object" && serverResponse.data?.statusCode === 200 && serverResponse?.data.data.isAuthenticated );
       return true;
     }

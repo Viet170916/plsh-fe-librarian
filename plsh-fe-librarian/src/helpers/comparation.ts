@@ -32,9 +32,6 @@ export function validateBorrowedBooks( borrowedBooks: BorrowedBookData[] ): "com
 								}
 								const start = new Date( book.borrowDateRange.start );
 								const end = new Date( book.borrowDateRange.end );
-								console.log( start, nowPlus20Min );
-								console.log( end, nowPlus10Min );
-								console.log( start < nowPlus20Min || end < nowPlus10Min );
 								if( isNaN( start.getTime() ) || isNaN( end.getTime() ) || start < nowPlus20Min || end < nowPlus10Min ){
 												return "incomplete";
 								}

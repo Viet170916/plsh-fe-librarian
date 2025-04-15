@@ -30,3 +30,9 @@ export const concaveContainerStyle: SxProps = {
 export const shadowContainerStyle: SxProps<Theme> = {
     boxShadow: `0px 0px 4px ${color.SHADOW}`,
 }
+export const shadowStyle: SxProps<Theme> = {
+    boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+}
+export const primaryGradientBg: SxProps<Theme> = {
+    background: `linear-gradient(to right, ${color.SIXTH},${color.PRIMARY})`,
+}

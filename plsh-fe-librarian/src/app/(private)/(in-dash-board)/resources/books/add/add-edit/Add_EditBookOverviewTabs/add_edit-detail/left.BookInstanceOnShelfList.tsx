@@ -29,9 +29,7 @@ function BookInstanceInStoreList( { bookId, rowShelfId, shelfId }: BookInstanceI
 								bookInstanceRef.current = value;
 				}, [] );
 				useEffect( () => {
-								console.log( shelfId, rowShelfId );
 								if( booksResponse?.data && shelfId && rowShelfId ){
-												console.log( booksResponse.data );
 												dispatch( setBookToRow( {
 																rowId: rowShelfId, shelfId, value: booksResponse.data.length ? booksResponse.data : [],
 												} ) );

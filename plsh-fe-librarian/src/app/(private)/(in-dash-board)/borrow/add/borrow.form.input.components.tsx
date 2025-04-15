@@ -28,8 +28,6 @@ const DateRangeStart = memo( ( { bookInstanceId }: DateRangeProps ) => {
 												value = { value ? dayjs( value ) : null }
 												views = { [ "year", "month", "day", "hours", "minutes" ] }
 												onChange = { datePicked => {
-																console.log( datePicked?.toISOString() );
-																console.log( new Date().toISOString() );
 																dispatch(
 																				setPropToBorrowedBook( {
 																								idBorrowedBookOrBookInstance: bookInstanceId,

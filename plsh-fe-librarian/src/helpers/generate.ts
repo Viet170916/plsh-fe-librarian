@@ -13,3 +13,6 @@ export function generateOpacityGradient( hexColor: string, steps: number ): stri
 								return `#${ rgbPart }${ alphaHex }`;
 				} );
 }
+export function generateRandomNumber(min = 1000, max = 99999999): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}

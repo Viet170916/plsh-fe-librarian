@@ -19,9 +19,11 @@ import {FaBarcode} from "react-icons/fa6";
 import appStrings from "@/helpers/appStrings";
 import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
 import {appToaster} from "@/components/primary/toaster";
+import AiSupport from "@/app/(private)/(in-dash-board)/resources/books/add/AiSupport";
 
 function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void }) {
     const [getBooks, {data, error, isFetching}] = useLazyGetBooksWithIsbnQuery();
+    const [openAiSupport, setOpenAiSupport] = useState<boolean>(false);
 
     function onScanDone(code?: string) {
         if (code)
@@ -30,6 +32,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
     useEffect(() => {
         if (error) {
             appToaster.error(appStrings.book.NOT_BOOK_FOUND)
+            setOpenAiSupport(true);
         }
     }, [error]);
 
@@ -41,15 +44,6 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
         }
     }, [data, onResult])
 
-    // useEffect(() => {
-    //     if ((data && data.length === 0 && isbn)) {
-    //         toast.warning(appStrings.book.NOT_BOOK_FOUND);
-    //         setIsbn(undefined);
-    //     } else if (isbn && data && data.length > 0) {
-    //         onResult?.(data[0]);
-    //         setIsbn(undefined);
-    //     }
-    // }, [isbn, data, onResult]);
     const [open, setOpen] = useState(false);
     useEffect(() => {
         // if (open) setOpen(false);
@@ -57,6 +51,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
 
     return (
         <Grid container spacing={1} width={"100%"} size={12} height={"fit-content"}>
+            <AiSupport open={openAiSupport} setOpen={setOpenAiSupport}/>
             <BarcodeScanner onScanDone={onScanDone}/>
             <Grid size={12} height={"fit-content"}>
                 <Button loading={isFetching} fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)}
@@ -85,7 +80,7 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
         if (query) {
             getBooks({keyword: query})
         }
-    }, [query]);
+    }, [query,getBooks]);
 
 
     const debouncedSetInputChange = useMemo(

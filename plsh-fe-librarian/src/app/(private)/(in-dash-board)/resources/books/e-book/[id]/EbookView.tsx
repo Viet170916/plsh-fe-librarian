@@ -25,11 +25,9 @@ export default function EbookView( { bookId }: EbookViewProps ){
 				const [ pages, setPages ] = useState<string[][]>( [] );
 				const [ currentPage, setCurrentPage ] = useState( 0 );
 				useEffect( () => {
-								console.log( data );
 								if( data ){
 												const container = document.createElement( "div" );
 												container.innerHTML = data;
-												console.log( data );
 												paginateContent( container.innerHTML );
 								}
 				}, [ data ] );

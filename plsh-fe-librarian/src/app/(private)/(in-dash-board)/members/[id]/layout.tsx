@@ -1,47 +1,23 @@
-
 import TabLink from "@/app/(private)/(in-dash-board)/members/[id]/TabLink";
-import appStrings from "@/helpers/appStrings";
-import { TabItem } from "@/helpers/appType";
-import { Box, Stack } from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import React from "react";
+import SaveToStore from "@/app/(private)/(in-dash-board)/members/[id]/SaveToStore";
 
-interface IProps{
-				children?: React.ReactNode;
+interface IProps {
+    children?: React.ReactNode;
 }
-const tabLinks: TabItem[] = [ {
-				kind: "link",
-				segment: "info",
-				title: appStrings.member.BASE_INFO,
-}, {
-				kind: "link",
-				segment: "card",
-				title: appStrings.member.CARD,
-}, {
-				kind: "link",
-				segment: "borrow-request",
-				title: appStrings.member.BORROW_REQUEST,
-}, {
-				kind: "link",
-				segment: "history",
-				title: appStrings.member.HISTORY,
-}, {
-				kind: "link",
-				segment: "reading",
-				title: appStrings.member.READING,
-}, {
-				kind: "link",
-				segment: "setting",
-				title: appStrings.member.SETTING,
-} ];
-function MemberLayout( props: IProps ){
-				return (
-								<Stack direction = { "column" } height = { "100%" }>
-												<Box flexGrow = { 0 }>
-															<TabLink/>
-												</Box>
-												<Box flexGrow = { 1 } bottom = { 0 } overflow = { "auto" } padding = { "40px" }>
-																{ props.children }
-												</Box>
-								</Stack>);
+
+function MemberLayout(props: IProps) {
+    return (
+        <Stack direction={"column"} height={"100%"}>
+            <SaveToStore/>
+            <Box flexGrow={0}>
+                <TabLink/>
+            </Box>
+            <Box flexGrow={1} bottom={0} overflow={"auto"} sx={{p: 5, pt: 0}}>
+                {props.children}
+            </Box>
+        </Stack>);
 }
+
 export default MemberLayout;

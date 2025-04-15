@@ -1,31 +1,20 @@
 "use client";
 import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
-import {appToaster} from "@/components/primary/toaster";
 import appStrings from "@/helpers/appStrings";
-import {constants} from "@/helpers/constants";
-import {LoanDto, LoanStatus} from "@/helpers/dataTransfer";
-import {color} from "@/helpers/resources";
+import {LoanDto} from "@/helpers/dataTransfer";
 import {useUpdateLoanStatusMutation} from "@/stores/slices/api/borrow.api.slice";
 import {truncateTextStyle} from "@/style/text.style";
-import {Box, Button, Typography} from "@mui/material";
+import {Avatar, Box, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import dayjs from "dayjs";
 import Link from "next/link";
-import React, {memo, useEffect} from "react";
+import React, {memo} from "react";
 import {renderLoanStatusChip} from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
+import TimeViewer from "@/components/primary/TimeViewer";
+import useFetchingToast from "@/hooks/useFetchingToast";
 
 const BorrowItem = ({borrowItem, onSelected}: { borrowItem: LoanDto, onSelected: (borrowItem: LoanDto) => void }) => {
     const [updateStatus, {error, isLoading, data}] = useUpdateLoanStatusMutation();
-    useEffect(() => {
-        if (data) {
-            appToaster.success(data.message);
-        }
-    }, [data]);
-    useEffect(() => {
-        if (error) {
-            appToaster.success(appStrings.error.REQUEST_ERROR);
-        }
-    }, [error]);
+    useFetchingToast(data, error);
 
     async function onApprove() {
         await updateStatus({loanId: borrowItem.id, status: "approved"});
@@ -34,9 +23,9 @@ const BorrowItem = ({borrowItem, onSelected}: { borrowItem: LoanDto, onSelected:
     return (
         <Box
             sx={{
-                borderRadius: 2,
+                borderRadius: 12,
                 width: "100%",
-                p: 2,
+                p: 1,
                 bgcolor: "white",
                 display: "flex",
                 alignItems: "center",
@@ -56,72 +45,44 @@ const BorrowItem = ({borrowItem, onSelected}: { borrowItem: LoanDto, onSelected:
                             justifyContent: "center",
                         }}
                     >
-                        <ImageWithBgCover src={borrowItem.borrower?.avatarUrl} sx={{width: "100%", height: "100%"}}/>
+                        <Avatar src={borrowItem.borrower?.avatarUrl}/>
                     </Box>
                 </Grid>
-                <Grid size={3}>
+                <Grid size={3} container spacing={.1}>
                     <Link href={`/borrow/${borrowItem.id}`} onClick={(e) => {
                         e.stopPropagation();
                     }}>
+
                         <Typography sx={{textDecoration: "underline"}}
-                                    variant="h6">{dayjs(borrowItem.borrowingDate).format(constants.dateFormat)}</Typography>
+                                    variant="h6">#{
+                            borrowItem.id ?? "--"
+                        }</Typography>
                     </Link>
+                    <Grid size={12}>
+                        <Typography
+                            variant="h5">{borrowItem.borrower?.fullName}</Typography>
+                    </Grid>
                     <Typography
-                        variant="body2">{borrowItem.borrower?.fullName}, {borrowItem.borrower?.email}</Typography>
-                    <Typography variant="body2" sx={{...truncateTextStyle}}>{borrowItem.note}</Typography>
+                        variant="h5">{borrowItem.borrower?.email}</Typography>
                 </Grid>
                 {/* Usage, Format, Penalties, Charges */}
                 <Grid size={1}>
                     <Typography>{`${borrowItem.dayUsageCount} ${appStrings.unit.DAY}`}</Typography>
                 </Grid>
                 <Grid size={1}>
-                    <Typography>{`${borrowItem.bookBorrowings.length} ${appStrings.unit.BOOK}`}</Typography>
+                    <Typography>{`${borrowItem.bookBorrowings?.length} ${appStrings.unit.BOOK}`}</Typography>
                 </Grid>
                 <Grid size={1.5}>
                     {borrowItem?.aprovalStatus && <Grid>{renderLoanStatusChip(borrowItem.aprovalStatus)}</Grid>}
                 </Grid>
-                <Grid size={2}>
-                    {/*{ status }*/}
-                </Grid>
                 <Grid>
-                    <Button onClick={onApprove} loading={isLoading} variant="outlined" size="small"
-                            sx={{color: color.COMFORT, borderColor: color.COMFORT}}>
-                        {appStrings.borrow.APPROVE}
-                    </Button>
+                    <Typography variant="body2" sx={{...truncateTextStyle}}>{borrowItem.note}</Typography>
+                </Grid>
+                <Grid size={"grow"} container>
+                    <TimeViewer targetDateTime={borrowItem.borrowingDate}/>
                 </Grid>
             </Grid>
         </Box>
     );
 };
-
-function getColorApprovalStatus(kind: LoanStatus) {
-    switch (kind) {
-        case "rejected":
-            return color.SERIOUS;
-        case "approved":
-            return color.COMFORT;
-        case "pending":
-            return color.WARNING;
-        case "return-all":
-            return color.WARNING;
-        case "cancel":
-            return color.WARNING;
-        case "taken":
-            return color.WARNING;
-    }
-}
-
-function getColorForBorrowStatus(kind: "overdue" | "on-loan" | "returned" | "partially-returned") {
-    switch (kind) {
-        case "overdue":
-            return color.SERIOUS;
-        case "on-loan":
-            return color.PRIMARY;
-        case "returned":
-            return color.COMFORT;
-        case "partially-returned":
-            return color.WARNING;
-    }
-}
-
 export default memo(BorrowItem);

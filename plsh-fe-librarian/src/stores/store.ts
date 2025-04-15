@@ -35,6 +35,12 @@ import {configureStore} from "@reduxjs/toolkit";
 import {useStore} from "react-redux";
 import {notificationApi} from "@/stores/slices/api/notification.api.slice";
 import notificationStateReducer from "@/stores/slices/notification/notification.slice";
+import {geminiApi} from "@/stores/slices/api/gemini.api.slice";
+import chatStateReducer from "@/stores/slices/chat-state/chat.slice";
+import {audioBookApi} from "@/stores/slices/api/audio-book.api.slice";
+import audioBookStateReducer from "@/stores/slices/book-states/audio.book.slice";
+import bookStateReducer from "@/stores/slices/book-states/book.slice";
+import {reviewApi} from "@/stores/slices/api/review.api.slice";
 
 export const store = configureStore({
     reducer: {
@@ -50,6 +56,9 @@ export const store = configureStore({
         loanState: loanStateReducer,
         librarianState: libraryRoomStateSliceReducer,
         notificationState: notificationStateReducer,
+        chatState: chatStateReducer,
+        audioBookState: audioBookStateReducer,
+        bookState: bookStateReducer,
         //apis
         analytic: analyticsApiReducer,
         [analyticsApiReducerPath]: analyticsApiReducer,
@@ -68,6 +77,9 @@ export const store = configureStore({
         _loanApi: loanApiReducer,
         [loanApiReducerPath]: loanApiReducer,
         [notificationApi.reducerPath]: notificationApi.reducer,
+        [geminiApi.reducerPath]: geminiApi.reducer,
+        [audioBookApi.reducerPath]: audioBookApi.reducer,
+        [reviewApi.reducerPath]: reviewApi.reducer,
 
     },
     middleware: (getDefaultMiddleware) => {
@@ -82,6 +94,9 @@ export const store = configureStore({
                 .concat(accountApiMiddleware)
                 .concat(loanApiMiddleware)
                 .concat(notificationApi.middleware)
+                .concat(geminiApi.middleware)
+                .concat(audioBookApi.middleware)
+                .concat(reviewApi.middleware)
 
         );
     },

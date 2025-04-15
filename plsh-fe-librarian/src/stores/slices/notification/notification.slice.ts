@@ -8,10 +8,16 @@ import {createSelector} from "reselect";
 type NotificationState = {
     currentNotification?: NotificationDto;
     currentNotifications: NotificationDto[];
+    isRead: boolean;
+    openNotification: boolean,
+    unreadCount: number;
 };
 export const initNotificationState: NotificationState = {
     currentNotification: undefined,
     currentNotifications: [],
+    isRead: true,
+    openNotification: false,
+    unreadCount: 0,
 };
 export type PayLoad<ParentObj, Key extends Path<ParentObj>> = {
     key: Key;
@@ -20,11 +26,12 @@ export type PayLoad<ParentObj, Key extends Path<ParentObj>> = {
 type NotificationStateSlice = Slice<
     NotificationState,
     {
+        addUnread: (state: WritableDraft<NotificationState>) => void;
         setPropToNotificationState: <K extends Path<NotificationState>>(
             state: WritableDraft<NotificationState>,
             action: PayloadAction<PayLoad<NotificationState, K>>,
         ) => void;
-        addNotificationToTop: <TReference extends object>(
+        addNotificationToTop: (
             state: WritableDraft<NotificationState>,
             action: PayloadAction<NotificationDto>,
         ) => void;
@@ -45,6 +52,9 @@ const notificationStateSlice: NotificationStateSlice = createSlice({
     name: "notificationState",
     initialState: initNotificationState,
     reducers: {
+        addUnread(state) {
+            state.unreadCount = state.unreadCount + 1;
+        },
         addNotificationToTop(state, {payload: notification}) {
             state.currentNotifications.unshift(notification);
         },
@@ -70,6 +80,7 @@ export const selectNotificationById = createSelector(
 export const {
     setPropToNotificationState,
     addNotificationToTop,
+    addUnread,
     clearPropToNotificationState,
     clearAllNotificationState,
 } = notificationStateSlice.actions;

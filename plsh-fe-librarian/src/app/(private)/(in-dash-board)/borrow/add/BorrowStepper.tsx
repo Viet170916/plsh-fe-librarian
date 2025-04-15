@@ -94,7 +94,6 @@ function BorrowStepper(){
 								const dataHasFiles = await mapToLoanApi( borrowData, true );
 								if( (checkedBorrowDataHasImage.length > 0) && dataHasFiles && loanResponse.data?.data ){
 												const requestForm = objectToFormData( mergeToUploadImage( dataHasFiles.bookBorrowings, loanResponse.data.data.bookBorrowings ) );
-												console.log( requestForm );
 												await uploadBookBorrowingImages( { loanId: loanResponse.data.data.id, data: requestForm } );
 								}
 				};

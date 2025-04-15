@@ -8,7 +8,6 @@ import { shallowEqual } from "react-redux";
 
 function BorrowerForm(): JSX.Element{
 				const borrower = useSelector( state => state.addEditBorrowData.borrower, shallowEqual );
-				console.log( borrower );
 				return (
 								<Grid size = { 12 } width = { "100%" }>
 												<AfterLoad_Member member = { borrower as Member } />

@@ -1,6 +1,7 @@
-import {BookInstance, Member, Resource} from "@/helpers/appType";
+import {BookData, BookInstance, Member, Resource} from "@/helpers/appType";
 import {compressImage, urlToFile} from "@/helpers/convert";
 import {AddEditBorrowData, BorrowStatusData} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
+import {AddEditBookData, BookBaseInfo, BookOverview} from "@/stores/slices/book-states/book.add-edit.slice";
 
 export async function mapToLoanApi(data: AddEditBorrowData, isKeepFile: boolean = false): Promise<LoanDto> {
     return {
@@ -128,4 +129,66 @@ export function mergeToUploadImage(rawData: BookBorrowingDto[],
 export type BorrowingStatus = "Borrowed" | "Returned" | "Overdue"; // Trạng thái sách đã mượn
 export type FineType = "lateReturn" | "damagedBook" | "lostBook"; // Loại phạt
 export type LoanStatus = "pending" | "approved" | "rejected" | "taken" | "cancel" | "return-all"; // Trạng thái duyệt
+
+function isValidValue(value: unknown): boolean {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string' && value.trim() === '') return false;
+    if (typeof value === 'number' && isNaN(value)) return false;
+    if (Array.isArray(value) && value.length === 0) return false;
+    if (typeof value === 'object' && Object.keys(value).length === 0) return false;
+    return true;
+}
+
+export function mergeBookDataToAddEdit(
+    bookData: BookData,
+    existing: AddEditBookData
+): AddEditBookData {
+    const mergedBaseInfo: BookBaseInfo = {
+        ...existing.baseInfo,
+        ...(isValidValue(bookData.title) && { title: bookData.title }),
+        ...(isValidValue(bookData.version) && { version: bookData.version }),
+        ...(isValidValue(bookData.publisher) && { publisher: bookData.publisher }),
+        ...(isValidValue(bookData.publishDate) && { publishDate: bookData.publishDate }),
+        ...(isValidValue(bookData.language) && { language: bookData.language }),
+        ...(isValidValue(bookData.pageCount) && { pageCount: bookData.pageCount }),
+        ...(isValidValue(bookData.isbnNumber13) && { isbnNumber13: bookData.isbnNumber13 }),
+        ...(isValidValue(bookData.isbnNumber10) && { isbnNumber10: bookData.isbnNumber10 }),
+        ...(isValidValue(bookData.price) && { price: bookData.price }),
+        ...(isValidValue(bookData.otherIdentifier) && { otherIdentifier: bookData.otherIdentifier }),
+        ...(isValidValue(bookData.height) && { height: bookData.height }),
+        ...(isValidValue(bookData.width) && { width: bookData.width }),
+        ...(isValidValue(bookData.thickness) && { thickness: bookData.thickness }),
+        ...(isValidValue(bookData.weight) && { weight: bookData.weight }),
+        ...(isValidValue(bookData.category) && { category: bookData.category }),
+        ...(isValidValue(bookData.newCategory) && { newCategory: bookData.newCategory }),
+    };
+
+    const mergedOverview: BookOverview = {
+        ...existing.overview,
+        ...(isValidValue(bookData.language) && { language: bookData.language }),
+        ...(isValidValue(bookData.pageCount) && { pageCount: bookData.pageCount }),
+        ...(isValidValue(bookData.publisher) && { publisher: bookData.publisher }),
+        ...(isValidValue(bookData.publishDate) && { publishDate: bookData.publishDate }),
+        ...(isValidValue(bookData.isbnNumber13) && { isbnNumber13: bookData.isbnNumber13 }),
+        ...(isValidValue(bookData.isbnNumber10) && { isbnNumber10: bookData.isbnNumber10 }),
+        ...(isValidValue(bookData.price) && { price: bookData.price }),
+        ...(isValidValue(bookData.otherIdentifier) && { otherIdentifier: bookData.otherIdentifier }),
+        ...(isValidValue(bookData.description) && { description: bookData.description }),
+        ...(isValidValue(bookData.height) && { height: bookData.height }),
+        ...(isValidValue(bookData.width) && { width: bookData.width }),
+        ...(isValidValue(bookData.thickness) && { thickness: bookData.thickness }),
+        ...(isValidValue(bookData.weight) && { weight: bookData.weight }),
+    };
+
+    const mergedAuthors = isValidValue(bookData.authors)
+        ? bookData.authors
+        : existing.authors;
+
+    return {
+        resource: existing.resource,
+        baseInfo: mergedBaseInfo,
+        overview: mergedOverview,
+        authors: mergedAuthors,
+    };
+}
 

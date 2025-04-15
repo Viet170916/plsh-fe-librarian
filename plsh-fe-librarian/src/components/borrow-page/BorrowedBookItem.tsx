@@ -1,15 +1,15 @@
 "use client";
 import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
 import appStrings from "@/helpers/appStrings";
-import {constants} from "@/helpers/constants";
 import {BookBorrowingDto} from "@/helpers/dataTransfer";
 import {color} from "@/helpers/resources";
 import {truncateTextStyle} from "@/style/text.style";
 import {Box, Button, ButtonGroup, Card, CardContent, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import dayjs from "dayjs";
 import Link from "next/link";
 import React, {memo, useMemo} from "react";
+import {formatTime} from "@/helpers/time";
+import dayjs from "dayjs";
 
 // import { FaBook, FaBookAtlas, FaHeadphones } from "react-icons/fa6";
 interface IProps {
@@ -26,31 +26,7 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
     };
     const avaiButtons = useMemo(() => {
         return (<></>);
-        // return (borrowedBook.book?.availabilities.map( a => {
-        // 								if( a.kind === "epub" ) return (
-        // 												<Tooltip key = { a.kind } title = { appStrings.book.E_BOOK }>
-        // 																<Button variant = "outlined" color = "primary" fullWidth>
-        // 																				<FaBookAtlas />
-        // 																</Button>
-        // 												</Tooltip>
-        // 								);
-        // 								else if( a.kind === "audio" ) return (
-        // 												<Tooltip key = { a.kind } title = { appStrings.book.AUDIO_BOOK }>
-        // 																<Button variant = "outlined" color = "primary" fullWidth>
-        // 																				{ (a.kind === "audio" && <FaHeadphones />) }
-        // 																</Button>
-        // 												</Tooltip>);
-        // 								else if( a.kind === "physical" ) return (
-        // 												<Tooltip key = { a.kind } title = { appStrings.book.PHYSIC_BOOK }>
-        // 																<Button variant = "outlined" color = "primary" fullWidth>
-        // 																				<FaBook />
-        // 																</Button>
-        // 												</Tooltip>
-        // 								);
-        // 				},
-        // ));
     }, []);
-    console.log(borrowedBook.borrowDate)
     return (
         <Card sx={{maxWidth: 400, p: 2, borderRadius: 3, boxShadow: 3, cursor: "pointer"}} onClick={handleSelected}>
             <Grid container spacing={2}>
@@ -65,7 +41,6 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                         </Typography>
                         <Typography variant="h6" fontWeight={"lighter"} color="text.secondary">
                             {`${borrowedBook.bookInstance?.bookAuthor}`
-                                // ${ borrowedBook.book?.authors?.[0]?.birthYear && borrowedBook.book?.authors[0]?.deathYear ? `,${ borrowedBook.book?.authors[0]?.birthYear }-${ borrowedBook.book?.authors[0]?.deathYear }` : (borrowedBook.book?.authors[0]?.birthYear ? `,${ borrowedBook.book?.authors[0]?.birthYear }` : "") }`
                             }
                         </Typography>
                     </Link>
@@ -93,7 +68,7 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                                 {appStrings.borrow.BORROW_DATE}
                             </Typography>
                             <Typography variant="body2" fontWeight={"lighter"} color="text.secondary">
-                                {dayjs(borrowedBook.borrowDate + "Z").format(constants.dateFormat)}
+                                {formatTime(borrowedBook.borrowDate)}
                             </Typography>
                         </Box>
                         <Box>
@@ -101,7 +76,7 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                                 {appStrings.borrow.DUE_DATE}
                             </Typography>
                             <Typography variant="body2" fontWeight={"lighter"} color="text.secondary">
-                                {dayjs(borrowedBook.returnDates?.[borrowedBook.returnDates.length - 1]).format(constants.dateFormat)}
+                                {formatTime(borrowedBook.returnDates?.[borrowedBook.returnDates.length - 1])}
                             </Typography>
                             {
                                 (dayjs(borrowedBook.returnDates[borrowedBook.returnDates.length - 1] + "Z")) < (dayjs()) ?
@@ -122,9 +97,6 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                                                     fullWidth
                                                 >
                                                     {borrowedBook.borrowingStatus}
-                                                    {/*<Typography*/}
-                                                    {/*    variant={"h6"}>({appStrings.borrow.DUE_DATE}: {borrowedBook.borrowStatus.dayLeftCount}){appStrings.unit.DAY}*/}
-                                                    {/*</Typography>*/}
                                                 </Button>);
                                         case "returned":
                                             return (
@@ -151,9 +123,6 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                                     }
                                 })()
                             }
-                            {/*<Button variant="contained" color="success" fullWidth>*/}
-                            {/*    {borrowedBook.borrowStatus?.title}*/}
-                            {/*</Button>*/}
                             <ButtonGroup size="small" fullWidth>
                                 {avaiButtons}
                             </ButtonGroup>

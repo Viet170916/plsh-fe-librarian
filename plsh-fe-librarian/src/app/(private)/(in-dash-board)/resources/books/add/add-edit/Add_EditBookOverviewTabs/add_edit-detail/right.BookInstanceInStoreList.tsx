@@ -18,7 +18,6 @@ type BookInstanceInStoreListProps = {
 				shelfId?: number;
 }
 function RightBookInstanceInStoreList( { bookId, shelfId, rowShelfId }: BookInstanceInStoreListProps ): JSX.Element{
-				console.log( rowShelfId );
 				const { data: bookInstancesResponse, refetch: bookInstancesRefetch } = useGetBookInstancesQuery( { bookId } );
 				const [ modifyBooksOnShelfPut ] = usePutBooksOntoShelfMutation();
 				const bookInstanceRef = useRef<BookInstance[]>( [] );

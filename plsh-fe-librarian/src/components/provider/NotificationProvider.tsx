@@ -4,19 +4,26 @@ import {NotificationDto} from "@/helpers/appType";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {useSignalR} from "@/signalR/signal-r.config";
 import {useLazyGetNotificationsQuery} from "@/stores/slices/api/notification.api.slice";
-import {addNotificationToTop, setPropToNotificationState,} from "@/stores/slices/notification/notification.slice";
+import {
+    addNotificationToTop,
+    addUnread,
+    setPropToNotificationState,
+} from "@/stores/slices/notification/notification.slice";
 import React, {memo, useEffect} from "react";
 import {LoanNotification, MessageNotification, ReviewNotification} from "@/components/notification/notification";
 
 
 function NotificationProvider() {
     const dispatch = useAppDispatch();
-    const [getNotifications, {data: notificationResponse, isLoading, error}] =
+    const [getNotifications, {data: notificationResponse}] =
         useLazyGetNotificationsQuery();
     const {data: notification} = useSignalR<NotificationDto>(
         "bookHiveHub",
         "ReceiveNotification",
     );
+    useEffect(() => {
+        getNotifications({page: 1, limit: 20});
+    }, [getNotifications]);
     useEffect(() => {
         if (notificationResponse) {
             dispatch(
@@ -25,6 +32,21 @@ function NotificationProvider() {
                     value: notificationResponse.data,
                 }),
             );
+            dispatch(
+                setPropToNotificationState({
+                    key: "unreadCount",
+                    value: notificationResponse.unreadCount,
+                }),
+            );
+            if (notificationResponse.unreadCount > 0) {
+                dispatch(
+                    setPropToNotificationState({
+                        key: "isRead",
+                        value: false
+                    }),
+                );
+            }
+            dispatch(addUnread());
         }
     }, [notificationResponse, dispatch]);
     useEffect(() => {

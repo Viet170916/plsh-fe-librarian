@@ -36,7 +36,6 @@ function UpdateForm( { rowId }: UpdateFormProps ): JSX.Element{
 																toast.error( appStrings.error.EDIT_FAIL );
 												}
 								}
-								console.log( rowOnShelf );
 				};
 				const onMaxColValid = useCallback( ( pre: RowShelf[keyof RowShelf], current: RowShelf[keyof RowShelf] ) => {
 												const rowOnShelf = getRowOnShelf();

@@ -74,7 +74,6 @@ const API = createApi( {
 																				await queryFulfilled;
 																				dispatch( bookApiInvalidatesTags( [ { type: "BookInstances" } ] ) );
 																}catch{
-																				console.log( "update Fail" );
 																}
 												},
 								} ),
@@ -90,7 +89,6 @@ const API = createApi( {
 																				await queryFulfilled;
 																				dispatch( bookApiInvalidatesTags( [ { type: "BookInstances" } ] ) );
 																}catch{
-																				console.log( "update Fail" );
 																}
 												},
 								} ),

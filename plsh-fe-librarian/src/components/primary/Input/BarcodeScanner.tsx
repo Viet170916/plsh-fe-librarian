@@ -31,7 +31,7 @@ const BarcodeScanner = ({onScanDone}: BarcodeScannerProps) => {
                 return;
             }
 
-            if (event.key.length === 1) {
+            if (event.key?.length === 1) {
                 buffer.current += event.key;
                 lastTime.current = currentTime;
             }
@@ -46,7 +46,7 @@ const BarcodeScanner = ({onScanDone}: BarcodeScannerProps) => {
         return () => {
             window.removeEventListener('keydown', handleKeydown);
         };
-    }, []);
+    }, [onScanDone]);
 
     return <></>;
 };

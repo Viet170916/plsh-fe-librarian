@@ -80,7 +80,7 @@ function ChangeStatusButton(): JSX.Element {
                         loading={isLoading}
 
                         variant="contained"
-                        sx={{bgcolor: color.WARNING, color: color.LIGHT_TEXT}}
+                        sx={{bgcolor: color.FOUR, color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("cancel")}
                     >
                         Huỷ
@@ -110,7 +110,7 @@ function ChangeStatusButton(): JSX.Element {
                         <Button
                             loading={isLoading}
                             variant="contained"
-                            sx={{bgcolor: color.WARNING, color: color.LIGHT_TEXT}}
+                            sx={{bgcolor: color.FOUR, color: color.LIGHT_TEXT}}
                             onClick={() => handleUpdateStatus("cancel")}
                         >
                             Huỷ

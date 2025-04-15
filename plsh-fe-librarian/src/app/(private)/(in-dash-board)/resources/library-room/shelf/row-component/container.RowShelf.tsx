@@ -15,8 +15,6 @@ export const RowShelf_Container = memo( function RSC( { rowId }: { rowId: number
 				const dispatch = useDispatch();
 				const handleDragEnd = useCallback( ( event: DragEndEvent ) => {
 								const { active, over } = event;
-								console.log( active );
-								console.log( over );
 								if( !over ) return;
 								dispatch( setBookPosition( { rowId, bookOnShelfId: Number( active.id ), newPosition: Number( over.id ) } ) );
 				}, [ rowId, dispatch ] );

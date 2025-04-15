@@ -10,10 +10,8 @@ export const notificationApi = createApi({
     tagTypes: ["Notifications", "Notification"],
     endpoints: (builder) => ({
         getNotifications: builder.query<
-            BaseResponse<NotificationDto[]> & {
-            isAccountHasNotificationForThisBook?: boolean;
-        },
-            FilterParams<NotificationDto> & { bookId: number }
+            BaseResponse<NotificationDto[]> & { unreadCount: number },
+            FilterParams<NotificationDto>
         >({
             query: (param) => ({
                 url: `/notification`,
@@ -21,6 +19,16 @@ export const notificationApi = createApi({
             }),
             providesTags: () => [{type: "Notifications"}],
         }),
+        readNotification: builder.mutation<
+            BaseResponse<NotificationDto> & { unreadCount: number },
+            number
+        >({
+            query: (id: number) => ({
+                url: `/notification/read/${id}`,
+                method: httpMethods.POST,
+            }),
+            invalidatesTags: () => [{type: "Notifications"}],
+        }),
     }),
 });
-export const {useLazyGetNotificationsQuery, usePrefetch} = notificationApi;
+export const {useLazyGetNotificationsQuery, useReadNotificationMutation, usePrefetch} = notificationApi;

@@ -1,35 +1,26 @@
 "use client";
-import {appToaster} from "@/components/primary/toaster";
 import appStrings from "@/helpers/appStrings";
 import {constants} from "@/helpers/constants";
 import {LoanStatus} from "@/helpers/dataTransfer";
 import {useAppDispatch} from "@/hooks/useDispatch";
-import {useUpdateLoanStatusMutation} from "@/stores/slices/api/borrow.api.slice";
 import {setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
 import {RootState} from "@/stores/store";
 import {Button, Drawer, Stack, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
-import React, {memo, useCallback, useEffect, useMemo} from "react";
+import React, {memo} from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
+import Link from "next/link";
+import AppButton from "@/components/primary/Input/AppButton";
 
 const LoanDrawer = () => {
-    dayjs.locale("vi");
     const dispatch = useAppDispatch();
     const loan = useSelector((state: RootState) => state.loanState.currentLoan, shallowEqual);
-    const [updateLoanStatus, {error, data}] = useUpdateLoanStatusMutation();
-
 
     function onClose() {
         dispatch(setPropToLoanState({key: "currentLoan", value: undefined}));
     }
-
-    function handleReturnAll() {
-    }
-
-
-
 
     return (
         <Grid>
@@ -39,9 +30,7 @@ const LoanDrawer = () => {
                     <Typography>ID: {loan?.id}</Typography>
                     <Typography>{appStrings.NOTE}: {loan?.note}</Typography>
                     <Typography>{appStrings.borrow.BORROWER}: {loan?.borrower?.fullName || "N/A"}</Typography>
-                    {/*<Typography>Thủ thư: { loan.librarianId }</Typography>*/}
                     <Typography>{appStrings.borrow.BORROW_DATE}: {dayjs(loan?.borrowingDate).format(constants.dateFormat)}</Typography>
-                    {/*<Typography>Ngày trả: { loan.returnDate || "Chưa trả" }</Typography>*/}
                     <Typography>{appStrings.STATUS}: {getLoanStatusText(loan?.aprovalStatus)}</Typography>
                     <Typography>
                         Số lần gia hạn: {loan?.extensionCount}
@@ -51,6 +40,11 @@ const LoanDrawer = () => {
                             <ChangeStatusButton/>
                         </Stack>
                     )}
+                    <Link href={`/borrow/${loan?.id}`}>
+                        <AppButton fullWidth variant={"outlined"}>
+                            {appStrings.SEE_DETAIL}
+                        </AppButton>
+                    </Link>
                 </Stack>
             </Drawer>
         </Grid>

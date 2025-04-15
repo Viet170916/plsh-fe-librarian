@@ -1,9 +1,10 @@
-import {BaseResponse, BookData, BookInstance, BooksResponse, PagingParams, Resource} from "@/helpers/appType";
+import {BaseResponse, BookData, BookInstance, FilterParams, LanguageCode, Resource} from "@/helpers/appType";
 import {constants} from "@/helpers/constants";
 import {objectToQueryParams} from "@/helpers/convert";
 import {baseQueryWithReAuth} from "@/stores/slices/api/api.config";
 import {Category} from "@/stores/slices/book-states/book.add-edit.slice";
 import {createApi} from "@reduxjs/toolkit/query/react";
+import {Path} from "react-hook-form";
 
 const httpMethods = constants.http.method;
 export const bookApi = createApi({
@@ -11,11 +12,58 @@ export const bookApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["BookInstances", "Book", "Books"],
     endpoints: (builder) => ({
-        getBooks: builder.query<BooksResponse, PagingParams>({
-            query: (param: PagingParams): string => `/book${objectToQueryParams(param)}`,
+
+        getFieldGenerate: builder.mutation<BaseResponse<{
+            key: Path<BookData>,
+            value: string | number | boolean
+        }[]>, { bookName: string, prompt: string }>({
+            query(params) {
+                return (
+                    {
+                        url: `ai/fields-generate`,
+                        method: httpMethods.POST,
+                        body: params
+                    }
+                );
+            }
         }),
-        getBook: builder.query<BaseResponse<BookData>, number>({
-            query: (id: number): string => `/book${id}`,
+        getTextChapter: builder.query<BaseResponse<{
+            text: string,
+            p: number
+        }[]>, { bookId: number, chapter?: number, lang?: LanguageCode }>({
+            query({bookId, ...params}) {
+                return (
+                    {
+                        url: `book/${bookId}/to-text`,
+                        params
+                    }
+                );
+            }
+        }),
+        getBooks: builder.query<BaseResponse<BookData[]>, FilterParams<BookData> & {
+            authorId?: number,
+        }>({
+            query: (param) => ({
+                url: `/book`,
+                params: param,
+            }),
+            providesTags: () => [{type: "Books"}],
+        }),
+        getBookImageFromGgs: builder.query<string[], string>({
+            query: (query) => ({
+                url: `/resource/gg/images`,
+                params: {query}
+            }),
+        }),
+        getBook: builder.query<BookData, number>({
+            query: (id: number): string => `/book/${id}`,
+        }),
+        getBookAiSearch: builder.mutation<BaseResponse<BookData>, { title: string, version?: string }>({
+            query: (params) => ({
+                url: `/book/generate-from-gemini`,
+                method: httpMethods.POST,
+                body: params,
+            }),
         }),
         getBookInstances: builder.query<BaseResponse<BookInstance[]>, {
             bookId?: number,
@@ -74,10 +122,14 @@ export const bookApiReducer = bookApi.reducer;
 export const bookApiReducerPath = bookApi.reducerPath;
 export const bookApiMiddleware = bookApi.middleware;
 export const {
-    useGetBooksQuery,
     useAddUpdateBookMutation,
     useLazyGetBookInstancesQuery,
+    useLazyGetBooksQuery,
+    useGetFieldGenerateMutation,
     useLazyGetBookQuery,
+    useGetBookAiSearchMutation,
+    useLazyGetTextChapterQuery,
+    useLazyGetBookImageFromGgsQuery,
     useDeleteBookInstancesMutation,
     useGetBookInstancesQuery,
     useUploadBookResourceMutation,

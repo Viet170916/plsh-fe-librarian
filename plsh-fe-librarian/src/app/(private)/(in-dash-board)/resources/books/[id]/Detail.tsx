@@ -1,14 +1,16 @@
 import BookPage from "@/app/(private)/(in-dash-board)/resources/books/[id]/BookPage";
 import Grid from "@mui/material/Grid2";
-import React, { memo } from "react";
+import React, {memo} from "react";
 
-interface IProps{
-  children?: React.ReactNode;
+interface IProps {
+    children?: React.ReactNode;
 }
-function DetailTab( props: IProps ){
-  return (
-    <Grid width = { "100%" }>
-      <BookPage />
-    </Grid>);
+
+function DetailTab(props: IProps) {
+    return (
+        <Grid width={"100%"}>
+            <BookPage/>
+        </Grid>);
 }
-export default memo( DetailTab );
+
+export default memo(DetailTab);

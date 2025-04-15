@@ -35,7 +35,6 @@ function TabLink(): JSX.Element{
 				const tabs = tabLinks.map( ( tab, index ) => {
 								return { ...tab, segment: `/members/${ [ params.id ] }${ tab.kind === "link" && tab.segment ? `/${ tab.segment }` : undefined }` };
 				} );
-				console.log( "re" );
 				return (
 								<NavTabs tabs = { tabs } />
 				);

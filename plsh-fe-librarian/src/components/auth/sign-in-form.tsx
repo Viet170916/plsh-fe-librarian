@@ -24,9 +24,7 @@ function SignInForm( props: IProps ): React.JSX.Element{
 								if( value.email && value.password ){
 												dispatch( setStateToAccountState( { key: "registerForm", value: { email: value.email, password: value.password } } ) );
 												const { data } = await checkAccount( { email: value.email } );
-												console.log( data );
 												if( data?.data.emailExisted ){
-																console.log( data?.data.emailExisted );
 																const response = await loginPost( value );
 																if( response.data?.data ){
 																				localStorage.setItem( "token", response.data.data );
@@ -55,7 +53,6 @@ function SignInForm( props: IProps ): React.JSX.Element{
 																const response = await loginGgPost( { googleToken: credentialResponse.credential } );
 																if( response.data?.data ){
 																				localStorage.setItem( "token", response.data.data );
-																				console.log( "register form" );
 																				router.push( `/` );
 																}else{
 																				toast.error( appStrings.error.LOGIN_FAIL, { duration: 1500 } );

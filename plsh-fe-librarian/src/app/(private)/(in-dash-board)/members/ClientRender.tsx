@@ -43,7 +43,6 @@ function ClientRender( {}: ClientRenderProps ): JSX.Element{
 				}, [ error ] );
 				const onFilterApply = useCallback( ( value: FilterParams<Member> ) => {
 								filterParams.current = value;
-								console.log( filterParams.current );
 								refetch();
 				}, [ refetch ] );
 				return (

@@ -5,6 +5,7 @@ import {Box, Stack,} from "@mui/material";
 import MenuDashboard from "@/components/primary/MenuDashboard";
 import {NAVIGATION} from "@/configs/navigation.config";
 import NotificationProvider from "@/components/provider/NotificationProvider";
+import AppNavigation from "@/app/(private)/(in-dash-board)/navigation";
 
 interface IProps {
     children?: React.ReactNode;
@@ -17,7 +18,6 @@ function DashboardLayoutBasic(props: IProps) {
 
     return (
         <>
-            <NotificationProvider/>
             <Stack
                 direction="row"
                 sx={{
@@ -31,7 +31,8 @@ function DashboardLayoutBasic(props: IProps) {
                     flexGrow: 1,
                     minHeight: "fit-content",
                 }}>
-                    <MenuDashboard items={NAVIGATION}/>
+                    <AppNavigation/>
+                    {/*<MenuDashboard items={NAVIGATION}/>*/}
                 </Box>
                 <Box sx={{
                     background: `linear-gradient(to bottom, ${color.WHITE},${color.PAGE_BACKGROUND}, ${color.PAGE_BACKGROUND})`,

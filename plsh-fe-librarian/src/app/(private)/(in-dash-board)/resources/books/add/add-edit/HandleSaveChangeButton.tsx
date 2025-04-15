@@ -21,21 +21,20 @@ import {
 import {RootState, useAppStore} from "@/stores/store";
 import {Button, Checkbox, Dialog, List, ListItem, ListItemText, ListSubheader, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import {useRouter} from "next/navigation";
 import React, {JSX, memo, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "sonner";
 
-type HandleSaveChangeButtonProps = {
-    children?: React.ReactNode;
-}
-
-function HandleSaveChangeButton(props: HandleSaveChangeButtonProps): JSX.Element {
+function HandleSaveChangeButton(): JSX.Element {
     const store = useAppStore();
     const dispatch = useDispatch();
-    const router = useRouter();
+    // const router = useRouter();
     const [addBook, {data: bookData, isLoading: isBookLoading, error: bookError}] = useAddUpdateBookMutation({});
-    const [uploadResource, {data: resourceUploadedRes, error: resourceError}] = useUploadBookResourceMutation({});
+    const [uploadResource, {
+        // data: resourceUploadedRes,
+        error: resourceError,
+        isLoading: resourceLoading
+    }] = useUploadBookResourceMutation({});
     const [checkCategory, {
         data: dataCategory,
         error: errorCategory,
@@ -50,6 +49,7 @@ function HandleSaveChangeButton(props: HandleSaveChangeButtonProps): JSX.Element
         const payload: BookData = {
             ...data.baseInfo,
             ...data.overview,
+            availableBookCount:0,
             pageCount: data.overview.pageCount ?? 0,
             categoryId: undefined,
             category: data.baseInfo.newCategory?.chosen ? data.baseInfo.newCategory : data.baseInfo.category,
@@ -78,7 +78,6 @@ function HandleSaveChangeButton(props: HandleSaveChangeButtonProps): JSX.Element
         if (eBook?.kind === "epub" && eBook.resource && eBook.resource.localUrl) {
             try {
                 const fileAfterConverted = await urlToFile(eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip");
-                console.log(objectToFormData({...eBook.resource, file: fileAfterConverted}));
                 const resourceUpload = await uploadResource({
                     bookId: bookResponse.data.id,
                     data: objectToFormData({...eBook.resource, file: fileAfterConverted})
@@ -103,7 +102,10 @@ function HandleSaveChangeButton(props: HandleSaveChangeButtonProps): JSX.Element
                 const fileAfterConverted = await urlToFile(coverImage.localUrl, coverImage.name ?? "unknown", coverImage.fileType ?? "image/png");
                 const resourceUpload = await uploadResource({
                     bookId: bookResponse.data.id,
-                    data: objectToFormData({...coverImage, file: fileAfterConverted})
+                    data: objectToFormData({
+                        ...coverImage,
+                        file: await compressImage(fileAfterConverted, "LOWEST_240P")
+                    })
                 });
             } catch {
                 toast.error(appStrings.error.FAIL_TO_UPLOAD_COVER);
@@ -168,6 +170,7 @@ function HandleSaveChangeButton(props: HandleSaveChangeButtonProps): JSX.Element
                     height: 61,
                     borderRadius: 1,
                 }}
+                loading={isBookLoading || resourceLoading}
             >
                 <Typography variant="h6" sx={{color: "white"}}>
                     {appStrings.SAVE}

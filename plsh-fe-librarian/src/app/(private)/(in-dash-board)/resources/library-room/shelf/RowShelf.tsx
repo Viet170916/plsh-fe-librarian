@@ -22,14 +22,12 @@ const RowShelf = ( { rowId }: { rowId: number } ) => {
 				const [ open, setOpen ] = useState( false );
 				const [ errorMessage, setErrorMessage ] = useState( "" );
 				async function handleDeleteRow(){
-								console.log( 24, rowId );
 								const anyBookResponse = await checkHasAnyBookOnRow( { rowId } );
 								if( anyBookResponse.data?.hasBooks ){
 												setOpen(true);
 								}else{
 												try{
 																const deleteResponse = await deleteRow( { rowId } );
-																console.log( deleteResponse );
 																if( deleteResponse.data ){
 																				dispatch( removeRow( rowId ) );
 																}
@@ -41,7 +39,6 @@ const RowShelf = ( { rowId }: { rowId: number } ) => {
 				}
 				const handleOk = useCallback( async() => {
 								try{
-												console.log( 43, rowId );
 												const deleteResponse = await deleteRow( { rowId } );
 												if( deleteResponse.data )
 																dispatch( removeRow( rowId ) );

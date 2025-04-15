@@ -19,14 +19,12 @@ function CreateMemberForm( { children }: CreateMemberFormProps ): JSX.Element{
 				const { control, handleSubmit, reset } = useForm<AccountEdited>();
 				const [ open, setOpen ] = useState( false );
 				const onSubmit = async( data: AccountEdited ) => {
-								console.log( "Registered Member:", data );
 								try{
 												const memberCreatedRes = await createMemberPost( data );
 												if( memberCreatedRes?.data ){
 																toast.success( memberCreatedRes.data.message );
 												}else if( memberCreatedRes.error ){
 																const error = memberCreatedRes.error as { data: BaseResponse<AnyObject> };
-																console.log( error );
 																toast.error( error.data.message );
 												}
 								}catch( e ){
