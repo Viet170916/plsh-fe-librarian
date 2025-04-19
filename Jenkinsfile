@@ -5,7 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         ZAP_SERVER = credentials('zap-server-url')
         SONAR_SERVER = credentials('sonarqube-server-url')
-        STAGING_SERVER = credentials('staging-server-url')
+        STAGING_SERVER = 'http://192.168.230.101:8080'
         SNYK_TOKEN = credentials('snyk-api-token')
         SONAR_TOKEN = credentials('g67_se490_spr25')
     }
@@ -142,7 +142,6 @@ pipeline {
             steps {
                 script {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
-                    def targetUrl = "http://192.168.230.101:8080"
 
                     sh """
                         cd /opt/zaproxy
@@ -151,11 +150,11 @@ pipeline {
                         sleep 30
 
                         echo "Spider scan..."
-                        curl -s "${ZAP_SERVER}/JSON/spider/action/scan/?url=${targetUrl}"
+                        curl -s "${ZAP_SERVER}/JSON/spider/action/scan/?url=${STAGING_SERVER}"
                         sleep 30
 
                         echo "Active scan..."
-                        curl -s "${ZAP_SERVER}/JSON/ascan/action/scan/?url=${targetUrl}"
+                        curl -s "${ZAP_SERVER}/JSON/ascan/action/scan/?url=${STAGING_SERVER}"
                         sleep 120
 
                         echo "Tạo báo cáo..."
