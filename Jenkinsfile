@@ -148,12 +148,7 @@ pipeline {
                         cd /opt/zaproxy
 
                         ./zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true -config api.addrs.addr.name=192.168.230.97 &
-
-                        until curl -s -o /dev/null -w "%{http_code}" "${ZAP_SERVER}/JSON/core/view/version/" | grep -q "200"; do
-                            echo "ZAP chưa sẵn sàng, đợi tiếp..."
-                            sleep 5
-                        done
-
+                        sleep 30
 
                         echo "Spider scan..."
                         curl -s "${ZAP_SERVER}/JSON/spider/action/scan/?url=${targetUrl}"
