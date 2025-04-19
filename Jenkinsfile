@@ -43,11 +43,7 @@ pipeline {
                         env.TIMESTAMP = timestamp
 
                         // Truy vấn issues từ Sonar API (HIGH + MEDIUM severity, status OPEN hoặc CONFIRMED)
-                        sh """
-                            curl -u $SONAR_TOKEN: \
-                            "$SONAR_SERVER/api/issues/search?componentKeys=plsh-fe-librarian&impactSeverities=HIGH,MEDIUM&statuses=OPEN,CONFIRMED" \
-                            -o issues_${timestamp}.json
-                        """
+                        sh "curl -u $SONAR_TOKEN: \"$SONAR_SERVER/api/issues/search?componentKeys=plsh-fe-librarian&impactSeverities=HIGH,MEDIUM&statuses=OPEN,CONFIRMED\" -o issues_${timestamp}.json"
 
                         // Chuyển đổi sang HTML (nhớ có sẵn file Python convert_issue_json.py)
                         sh "python3 convert_issue_json.py issues_${timestamp}.json sonarqube-report-${timestamp}.html"
