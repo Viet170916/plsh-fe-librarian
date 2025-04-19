@@ -146,7 +146,10 @@ pipeline {
                     sh """
                         cd /opt/zaproxy
 
-                        ./zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true -config api.addrs.addr.name=192.168.230.97 &
+                        ./zap.sh -daemon -port 8090 -host 0.0.0.0 \\
+                        -config api.disablekey=true \\
+                        -config api.addrs.addr.name=127.0.0.1 \\
+                        -config api.addrs.addr.regex=true &
                         sleep 30
 
                         echo "Spider scan..."
