@@ -88,6 +88,22 @@ pipeline {
             }
         }
 
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    // Quét Docker image bằng Trivy
+                    sh '''
+                        trivy image --timeout 10m --format json --output plsh-fe-trivy.json --severity HIGH,CRITICAL plsh-fe-librarian:latest
+                        python3 convert_json.py plsh-fe-trivy.json plsh-fe-trivy.html
+                    '''
+
+                    // Lưu báo cáo HTML
+                    archiveArtifacts artifacts: 'plsh-fe-trivy.html', fingerprint: true
+                }
+            }
+        }
+
+
 
 
 
