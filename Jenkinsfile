@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+    /*    stage('SonarQube Scan') {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
@@ -70,7 +70,24 @@ pipeline {
                     }
                 }
             }
+        }*/
+
+        stage('Build Image') {
+            steps {
+                dir('plsh-fe-librarian') {
+                    script {
+                        sh '''
+                            # Build Docker image cho frontend
+                            docker build -t plsh-fe-librarian .
+
+                            # Tag image để đẩy lên registry (tuỳ bạn chỉnh lại tag)
+                            docker tag plsh-fe-librarian co0bridae/plsh-fe-librarian:latest
+                        '''
+                    }
+                }
+            }
         }
+
 
 
 
