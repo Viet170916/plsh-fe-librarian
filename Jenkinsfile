@@ -58,6 +58,7 @@ pipeline {
         stage('Snyk Scan') {
             steps {
                 script {
+                    dir('plsh-fe-librarian') {
                     sh 'npm install' 
                     sh 'snyk config set api=$SNYK_API'
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
@@ -66,6 +67,7 @@ pipeline {
                         snyk-to-html -i snyk.json -o snyk-report-${timestamp}.html || true
                     """
                     archiveArtifacts artifacts: "snyk-report-${timestamp}.html", fingerprint: true
+                    }
                 }
             }
         }
