@@ -34,7 +34,6 @@ pipeline {
                                 npx @sonar/scan \
                                 -Dsonar.projectKey=plsh-fe-librarian \
                                 -Dsonar.sources=. \
-                                -Dsonar.exclusions=node_modules/**,.next/**,public/** \
                                 -Dsonar.host.url=$SONAR_SERVER \
                                 -Dsonar.token=$SONAR_TOKEN
                             '''
@@ -60,6 +59,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Snyk Scan') {
+            steps {
+                script {
+                    sh 'npm install' 
+                    sh 'snyk config set api=$SNYK_API'
+                    def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                    sh """
+                        snyk test --severity-threshold=high --json-file-output=snyk.json || true
+                        snyk-to-html -i snyk.json -o snyk-report-${timestamp}.html || true
+                    """
+                    archiveArtifacts artifacts: "snyk-report-${timestamp}.html", fingerprint: true
+                }
+            }
+        }
+
 
 
 
