@@ -26,7 +26,7 @@ pipeline {
                         withSonarQubeEnv('Sonarqube server connection') {
 
                             // Cài dependencies nếu chưa có
-                            sh 'npm install'
+                            sh 'npm install --legacy-peer-deps'
 
                             // Thực hiện scan bằng sonar-scanner
                             sh '''
