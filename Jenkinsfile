@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-    /*    stage('SonarQube Scan') {
+        stage('SonarQube Scan') {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
@@ -53,7 +53,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 
         stage('Snyk Scan') {
             steps {
