@@ -120,10 +120,14 @@ pipeline {
 
                         docker pull co0bridae/plsh-fe-librarian:latest
 
-                        docker run -d --name plsh-fe-librarian -p 8080:8080 co0bridae/plsh-fe-librarian:latest
+                        docker run -d \\
+                        --name plsh-fe-librarian \\
+                        -p 8080:8080 \\
+                        -e NEXTAUTH_SECRET=84c63ac9-a8a2-43d4-a0d0-217dfbc1f7a7 \\
+                        co0bridae/plsh-fe-librarian:latest
                     """
 
-                    // SSH deploy qua staging server
+                    // Gửi script qua SSH và chạy
                     sshagent(['jenkins-ssh-key']) {
                         sh """
                             ssh -o StrictHostKeyChecking=no root@192.168.230.101 'echo "${deploying}" > /root/deploy.sh && chmod +x /root/deploy.sh && /root/deploy.sh'
@@ -132,6 +136,7 @@ pipeline {
                 }
             }
         }
+
 
 
 
