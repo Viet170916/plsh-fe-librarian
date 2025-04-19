@@ -49,7 +49,8 @@ pipeline {
             steps {
                 dir('plsh-fe-librarian') {
                     script {
-                        sh 'yarn install --immutable || true'
+                        sh 'npm install -g yarn'
+                        sh 'yarn install || true'
                         sh 'snyk config set api=$SNYK_TOKEN'
                         def timestamp = new Date().format("yyyyMMdd_HHmmss")
                         sh """
