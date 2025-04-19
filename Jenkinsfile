@@ -161,7 +161,7 @@ pipeline {
                         sleep 60
 
                         echo "📝 Xuất báo cáo..."
-                        curl -s "http://127.0.0.1:8090/OTHER/core/other/htmlreport/" -o "zap_report-${timestamp}.html"
+                        curl -s "http://127.0.0.1:8090/OTHER/core/other/htmlreport/" -o "${WORKSPACE}/zap_report-${timestamp}.html"
 
                         echo "🛑 Tắt ZAP..."
                         curl -s "http://127.0.0.1:8090/JSON/core/action/shutdown/"
