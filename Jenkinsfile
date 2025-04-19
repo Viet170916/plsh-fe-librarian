@@ -17,18 +17,12 @@ pipeline {
             }
         }
 
-    /*    stage('SonarQube Scan') {
+        stage('SonarQube Scan') {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
-
-                        // Kết nối SonarQube qua Jenkins config
                         withSonarQubeEnv('Sonarqube server connection') {
-
-                            // Cài dependencies nếu chưa có
                             sh 'npm install --legacy-peer-deps'
-
-                            // Thực hiện scan bằng sonar-scanner
                             sh '''
                                 npx @sonar/scan \
                                 -Dsonar.projectKey=plsh-fe-librarian \
@@ -38,17 +32,13 @@ pipeline {
                             '''
                         }
 
-                        // Tạo timestamp để phân biệt báo cáo
                         def timestamp = new Date().format("yyyyMMdd_HHmmss")
                         env.TIMESTAMP = timestamp
 
-                        // Truy vấn issues từ Sonar API (HIGH + MEDIUM severity, status OPEN hoặc CONFIRMED)
                         sh "curl -u $SONAR_TOKEN: \"$SONAR_SERVER/api/issues/search?componentKeys=plsh-fe-librarian&impactSeverities=HIGH,MEDIUM&statuses=OPEN,CONFIRMED\" -o issues_${timestamp}.json"
 
-                        // Chuyển đổi sang HTML (nhớ có sẵn file Python convert_issue_json.py)
                         sh "python3 convert_issue_json.py issues_${timestamp}.json sonarqube-report-${timestamp}.html"
 
-                        // Lưu artifact để xem hoặc tải
                         archiveArtifacts artifacts: "sonarqube-report-${timestamp}.html", fingerprint: true
                     }
                 }
@@ -70,7 +60,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 
         stage('Build Image') {
             steps {
@@ -79,8 +69,6 @@ pipeline {
                         sh '''
                             # Build Docker image cho frontend
                             docker build -t plsh-fe-librarian .
-
-                            # Tag image để đẩy lên registry (tuỳ bạn chỉnh lại tag)
                             docker tag plsh-fe-librarian co0bridae/plsh-fe-librarian:latest
                         '''
                     }
@@ -91,17 +79,34 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 script {
-                    // Quét Docker image bằng Trivy
-                    sh '''
-                        trivy image --timeout 10m --format json --output plsh-fe-trivy.json --severity HIGH,CRITICAL plsh-fe-librarian:latest
-                        python3 convert_json.py plsh-fe-trivy.json plsh-fe-trivy.html
-                    '''
+                    def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                    env.TIMESTAMP = timestamp
 
-                    // Lưu báo cáo HTML
-                    archiveArtifacts artifacts: 'plsh-fe-trivy.html', fingerprint: true
+                    sh """
+                        trivy image --timeout 10m --format json --output plsh-fe-trivy-${timestamp}.json --severity HIGH,CRITICAL plsh-fe-librarian:latest
+                        python3 convert_json.py plsh-fe-trivy-${timestamp}.json plsh-fe-trivy-${timestamp}.html
+                    """
+                    archiveArtifacts artifacts: "plsh-fe-trivy-${timestamp}.html", fingerprint: true
                 }
             }
         }
+
+
+        stage('Push Image to Docker Hub') {
+            steps {
+                script {
+                    sh '''
+                        # Đăng nhập Docker Hub
+                        echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+
+                        # Tag và push image frontend
+                        docker tag plsh-fe-librarian co0bridae/plsh-fe-librarian:latest
+                        docker push co0bridae/plsh-fe-librarian:latest
+                    '''
+                }
+            }
+        }
+
 
 
 
