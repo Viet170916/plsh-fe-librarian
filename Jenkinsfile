@@ -150,16 +150,7 @@ pipeline {
                         -config api.disablekey=true \\
                         -config api.addrs.addr.name=127.0.0.1 \\
                         -config api.addrs.addr.regex=true &
-
-                        echo "⏳ Chờ ZAP khởi động..."
-                        for i in {1..20}; do
-                            if curl -s http://127.0.0.1:8090/JSON/core/view/version/ | grep -q "version"; then
-                                echo "✅ ZAP đã sẵn sàng!"
-                                break
-                            fi
-                            echo "🔁 ZAP chưa sẵn sàng, chờ tiếp..."
-                            sleep 5
-                        done
+                        sleep 30
 
                         echo "🕷️ Spider scan..."
                         curl -s "http://127.0.0.1:8090/JSON/spider/action/scan/?url=http://192.168.230.101:8080"
