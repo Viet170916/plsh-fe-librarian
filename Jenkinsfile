@@ -7,7 +7,7 @@ pipeline {
         SONAR_SERVER = credentials('sonarqube-server-url')
         STAGING_SERVER = credentials('staging-server-url')
         SNYK_TOKEN = credentials('snyk-api-token')
-        GITLAB_TOKEN = credentials('g67_se490_spr25')
+        SONAR_TOKEN = credentials('g67_se490_spr25')
     }
 
     stages {
