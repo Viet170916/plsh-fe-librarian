@@ -144,26 +144,36 @@ pipeline {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
 
                     sh """
+                        echo "🚀 Khởi động ZAP..."
                         cd /opt/zaproxy
-
                         ./zap.sh -daemon -port 8090 -host 0.0.0.0 \\
                         -config api.disablekey=true \\
                         -config api.addrs.addr.name=127.0.0.1 \\
                         -config api.addrs.addr.regex=true &
+
+                        echo "⏳ Chờ ZAP khởi động..."
+                        for i in {1..20}; do
+                            if curl -s http://127.0.0.1:8090/JSON/core/view/version/ | grep -q "version"; then
+                                echo "✅ ZAP đã sẵn sàng!"
+                                break
+                            fi
+                            echo "🔁 ZAP chưa sẵn sàng, chờ tiếp..."
+                            sleep 5
+                        done
+
+                        echo "🕷️ Spider scan..."
+                        curl -s "http://127.0.0.1:8090/JSON/spider/action/scan/?url=http://192.168.230.101:8080"
                         sleep 30
 
-                        echo "Spider scan..."
-                        curl -s "${ZAP_SERVER}/JSON/spider/action/scan/?url=${STAGING_SERVER}"
-                        sleep 30
+                        echo "⚔️ Active scan..."
+                        curl -s "http://127.0.0.1:8090/JSON/ascan/action/scan/?url=http://192.168.230.101:8080"
+                        sleep 60
 
-                        echo "Active scan..."
-                        curl -s "${ZAP_SERVER}/JSON/ascan/action/scan/?url=${STAGING_SERVER}"
-                        sleep 120
+                        echo "📝 Xuất báo cáo..."
+                        curl -s "http://127.0.0.1:8090/OTHER/core/other/htmlreport/" -o "zap_report-${timestamp}.html"
 
-                        echo "Tạo báo cáo..."
-                        curl -s "${ZAP_SERVER}/OTHER/core/other/htmlreport/" -o "${WORKSPACE}/zap_report-${timestamp}.html"
-
-                        curl -s "${ZAP_SERVER}/JSON/core/action/shutdown/"
+                        echo "🛑 Tắt ZAP..."
+                        curl -s "http://127.0.0.1:8090/JSON/core/action/shutdown/"
                     """
 
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
