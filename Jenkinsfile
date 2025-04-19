@@ -149,11 +149,17 @@ pipeline {
 
                         ./zap.sh -daemon -port 8090 -host 0.0.0.0 -config api.disablekey=true -config api.addrs.addr.name=192.168.230.97 &
 
-                        echo "Đợi ZAP khởi động..."
-                        until curl -s "${ZAP_SERVER}/JSON/core/view/version/" | grep "version"; do
-                            echo "ZAP chưa sẵn sàng, đợi..."
-                            sleep 5
+                        # Kiểm tra ZAP đã khởi động
+                        READY=0
+                        while [ $READY -eq 0 ]; do
+                            if curl -s "${ZAP_SERVER}/JSON/core/view/version/" | grep "version"; then
+                                READY=1
+                            else
+                                echo "Đang chờ OWASP ZAP khởi động..."
+                                sleep 5
+                            fi
                         done
+
 
                         echo "Spider scan..."
                         curl -s "${ZAP_SERVER}/JSON/spider/action/scan/?url=${targetUrl}"
