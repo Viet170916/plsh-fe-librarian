@@ -20,8 +20,7 @@ pipeline {
         stage('SonarQube Scan') {
             steps {
                 script {
-                    // Chuyển vào thư mục chứa project Node.js (Next.js)
-                    dir('/var/lib/jenkins/workspace/Lab_iap491/g4_se1818net_swp391_su2024/plsh-fe-librarian') {
+                    dir('plsh-fe-librarian') {
 
                         // Kết nối SonarQube qua Jenkins config
                         withSonarQubeEnv('Sonarqube server connection') {
