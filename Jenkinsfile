@@ -118,9 +118,9 @@ pipeline {
                         docker ps -q --filter "name=plsh-fe-librarian" && docker stop plsh-fe-librarian || true
                         docker ps -a -q --filter "name=plsh-fe-librarian" && docker rm plsh-fe-librarian || true
 
-                        docker pull yourdockerhub/plsh-fe-librarian:latest
+                        docker pull co0bridae/plsh-fe-librarian:latest
 
-                        docker run -d --name plsh-fe-librarian -p 8080:8080 yourdockerhub/plsh-fe-librarian:latest
+                        docker run -d --name plsh-fe-librarian -p 8080:8080 co0bridae/plsh-fe-librarian:latest
                     """
 
                     // SSH deploy qua staging server
