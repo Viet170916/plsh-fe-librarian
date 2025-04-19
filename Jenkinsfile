@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
-                    sh 'npm install' 
+                    sh 'npm install --legacy-peer-deps' 
                     sh 'snyk config set api=$SNYK_API'
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
                     sh """
