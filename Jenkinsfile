@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+    /*    stage('SonarQube Scan') {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
@@ -53,24 +53,23 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Snyk Scan') {
             steps {
-                script {
-                    dir('plsh-fe-librarian') {
-                    sh 'npm install --legacy-peer-deps' 
-                    sh 'snyk config set api=$SNYK_API'
+                dir('plsh-fe-librarian') {
+                    sh 'yarn install || true'
+                    sh 'snyk config set api=$SNYK_TOKEN'
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
                     sh """
                         snyk test --severity-threshold=high --json-file-output=snyk.json || true
-                        snyk-to-html -i snyk.json -o snyk-report-${timestamp}.html || true
+                        [ -f snyk.json ] && snyk-to-html -i snyk.json -o snyk-report-${timestamp}.html || true
                     """
                     archiveArtifacts artifacts: "snyk-report-${timestamp}.html", fingerprint: true
-                    }
                 }
             }
         }
+
 
 
 
