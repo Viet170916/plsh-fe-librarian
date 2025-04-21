@@ -31,11 +31,12 @@ pipeline {
                                 -Dsonar.token=$SONAR_TOKEN
                             '''
                         }
+                        sleep 30
 
                         def timestamp = new Date().format("yyyyMMdd_HHmmss")
                         env.TIMESTAMP = timestamp
 
-                        sh "curl -u $SONAR_TOKEN: \"$SONAR_SERVER/api/issues/search?componentKeys=plsh-fe-librarian&impactSeverities=HIGH,MEDIUM&statuses=OPEN,CONFIRMED\" -o issues_${timestamp}.json"
+                        sh "curl -u $SONAR_TOKEN: \"$SONAR_SERVER/api/issues/search?componentKeys=plsh-fe-librarian&impactSeverities=BLOCKER,HIGH,MEDIUM&statuses=OPEN,CONFIRMED\" -o issues_${timestamp}.json"
 
                         sh "python3 convert_issue_json.py issues_${timestamp}.json sonarqube-report-${timestamp}.html"
 
@@ -45,7 +46,7 @@ pipeline {
             }
         }
 
-        stage('Snyk Scan') {
+    /*    stage('Snyk Scan') {
             steps {
                 dir('plsh-fe-librarian') {
                     script {
@@ -165,7 +166,7 @@ pipeline {
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
                 }
             }
-        }
+        }*/
 
 
     }
