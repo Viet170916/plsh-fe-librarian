@@ -11,8 +11,8 @@ import {FaUsers} from "react-icons/fa";
 import {ImBooks} from "react-icons/im";
 import {IoLogOut, IoSettings} from "react-icons/io5";
 import {motion} from 'framer-motion';
-import {ImageWithBgCoverWithoutSkeleton} from "@/components/primary/ImageWithBgCover";
 import {HiOutlineLibrary} from "react-icons/hi";
+import Book from "@/components/Animation/lotties/Book";
 
 const navItems = [
     {label: appStrings.DASHBOARD, icon: <TbLayoutDashboardFilled size={24}/>, href: '/dashboard'},
@@ -30,35 +30,35 @@ const navItems = [
 
 export const AppNavigation = () => {
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'))
-    const pathname = usePathname()
+    const pathname = usePathname();
     const expanded = isLargeScreen
 
     return (
         <Box
             sx={{
-                height: '100vh',
+                height: '100%',
                 width: expanded ? 240 : 80,
                 bgcolor: color.PRIMARY,
                 p: 2,
+                pt: 0,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2,
                 transition: 'width 0.3s ease',
-                borderTopRightRadius: 24,
+                // borderTopRightRadius: 24,
                 borderBottomRightRadius: 24,
             }}
         >
             {isLargeScreen && <Box sx={{
-                bgcolor: color.WHITE,
+                bgcolor: color.PRIMARY,
                 p: 1,
+                pt: 0,
                 borderRadius: 2,
                 borderBottomRightRadius: 23,
                 borderTopRightRadius: 23,
                 width: "100%"
             }}>
-                        <Box sx={{width: 70, height: 60,}}>
-                                    <ImageWithBgCoverWithoutSkeleton src={`/images/logo.svg`}/>
-                        </Box>
+                        <Book width={160} height={70}/>
             </Box>}
 
 

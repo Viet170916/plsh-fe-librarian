@@ -84,7 +84,7 @@ export type BaseResponse<DataType, StatusType = string> = {
     count?: number,
     page?: number,
     limit?: number,
-    currenPage?: number;
+    currentPage?: number;
 }
 export type VoidFunc = () => void;
 export type VoidFuncAsync = () => Promise<void>;
@@ -138,8 +138,19 @@ export type BookAvailabilityStatusData = {
 export type LoanSortByCategoryAnalyticsData = {
     genre: string, borrowCount: number,
 };
+export type EBook = {
+    "id": number,
+    "bookId": number,
+    "book"?: BookData,
+    "chapterIndex": number,
+    "fileName"?: string,
+    "htmlContent": string,
+    "plainText": string;
+    "title"?: string,
+}
 //book
 export type BookData = {
+    hasEbook?: boolean;
     availableBookCount: number;
     newCategory?: Category;
     id?: number;

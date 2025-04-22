@@ -50,8 +50,7 @@ const PrimarySearchAppBar = (): JSX.Element => {
 
 
     return (
-
-        <Box sx={{flexGrow: 1, padding: "38px 0"}}>
+        <Box sx={{flexGrow: 1, padding: "38px 0",}}>
             <AppBar position="static" sx={{boxShadow: 'none', background: 'transparent'}}>
                 <Toolbar sx={{background: "transparent", color: color.DARK_TEXT}}>
                     <Grid

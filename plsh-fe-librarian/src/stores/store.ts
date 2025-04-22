@@ -41,6 +41,8 @@ import {audioBookApi} from "@/stores/slices/api/audio-book.api.slice";
 import audioBookStateReducer from "@/stores/slices/book-states/audio.book.slice";
 import bookStateReducer from "@/stores/slices/book-states/book.slice";
 import {reviewApi} from "@/stores/slices/api/review.api.slice";
+import eBookStateReducer from "@/stores/slices/book-states/e-book.book.slice";
+import bookInstanceStateReducer from "@/stores/slices/book-states/book-instance.book.slice";
 
 export const store = configureStore({
     reducer: {
@@ -59,6 +61,8 @@ export const store = configureStore({
         chatState: chatStateReducer,
         audioBookState: audioBookStateReducer,
         bookState: bookStateReducer,
+        eBookState: eBookStateReducer,
+        bookInstanceState: bookInstanceStateReducer,
         //apis
         analytic: analyticsApiReducer,
         [analyticsApiReducerPath]: analyticsApiReducer,

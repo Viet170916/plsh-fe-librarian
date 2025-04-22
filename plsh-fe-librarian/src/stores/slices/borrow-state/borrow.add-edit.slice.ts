@@ -39,6 +39,7 @@ export type AddEditBorrowData = {
     status: BorrowStatusData;
     borrowedBooks: BorrowedBookData[];
     selectedBookId?: number;
+    note?: string;
 }
 type AddEditBorrowDataSlice = Slice<AddEditBorrowData, {
     modifyBorrowedBook: (state: WritableDraft<AddEditBorrowData>, action: PayloadAction<{
@@ -60,7 +61,12 @@ type AddEditBorrowDataSlice = Slice<AddEditBorrowData, {
         idBorrowedBookOrBookInstance: number,
         key: K, value: PathValue<BorrowedBookData, K>,
     }>) => void,
+    applyDateRangeForAll: (state: WritableDraft<AddEditBorrowData>, action: PayloadAction<{
+        start?: string,
+        end?: string
+    }>) => void,
     clearData: (state: WritableDraft<AddEditBorrowData>) => void;
+    deleteBorrowedBook: (state: WritableDraft<AddEditBorrowData>, action: PayloadAction<number>) => void,
     addBorrowedBook: (state: WritableDraft<AddEditBorrowData>, action: PayloadAction<BookInstance>) => void,
 },
     "addEditBorrowData", "addEditBorrowData", SliceSelectors<AddEditBorrowData>>
@@ -76,6 +82,11 @@ const addEditBorrowDataSlice: AddEditBorrowDataSlice = createSlice({
         name: "addEditBorrowData",
         initialState: initAddEditBorrowData,
         reducers: {
+            applyDateRangeForAll(state, {payload}) {
+                state.borrowedBooks.forEach(b => {
+                    b.borrowDateRange = payload;
+                });
+            },
             modifyBorrowedBook: (state, action: PayloadAction<{ value: BorrowedBookData, id: number }>) => {
                 const borrowedBook = state.borrowedBooks.find(b => b.bookInstance.id === action.payload.id);
                 if (borrowedBook) {
@@ -83,6 +94,9 @@ const addEditBorrowDataSlice: AddEditBorrowDataSlice = createSlice({
                     borrowedBook.afterBorrow = action.payload.value.afterBorrow;
                     borrowedBook.borrowDateRange = action.payload.value.borrowDateRange;
                 }
+            },
+            deleteBorrowedBook: (state, action: PayloadAction<number>) => {
+                state.borrowedBooks = state.borrowedBooks.filter(b => b.bookInstance.id !== action.payload);
             },
             addBorrowedBook: (state: WritableDraft<AddEditBorrowData>, action: PayloadAction<BookInstance>) => {
                 const borrowedBook = state.borrowedBooks.find(b => b.bookInstance.id === action.payload.id);
@@ -163,7 +177,9 @@ const addEditBorrowDataSlice: AddEditBorrowDataSlice = createSlice({
 export const {
     setAddEditBorrowData,
     addBorrowedBook,
+    deleteBorrowedBook,
     modifyBorrowedBook,
+    applyDateRangeForAll,
     setPropToBaseInfoBorrow,
     setPropToBorrowedBook,
     setPropToBorrow, clearPropToBorrow, setPropToAccountBorrow,

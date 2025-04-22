@@ -130,6 +130,7 @@ export const {
     useGetBookAiSearchMutation,
     useLazyGetTextChapterQuery,
     useLazyGetBookImageFromGgsQuery,
+    useLazyGetCategoriesQuery,
     useDeleteBookInstancesMutation,
     useGetBookInstancesQuery,
     useUploadBookResourceMutation,

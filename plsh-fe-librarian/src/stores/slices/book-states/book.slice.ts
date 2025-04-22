@@ -1,4 +1,4 @@
-import {BookData, MessageDto, ReviewDto} from "@/helpers/appType";
+import {BookData, FilterParams, MessageDto, ReviewDto} from "@/helpers/appType";
 import {RootState} from "@/stores/store";
 import {createSlice, PayloadAction, Slice, SliceSelectors,} from "@reduxjs/toolkit";
 import {WritableDraft} from "immer";
@@ -11,6 +11,7 @@ type BookState = {
     currentReview?: ReviewDto;
     currentMessage?: MessageDto;
     isAccountHasReviewForThisBook?: boolean;
+    booksFilter?: FilterParams<BookData> & { categories: string[] };
 };
 export const initBookState: BookState = {
     currentBook: undefined,

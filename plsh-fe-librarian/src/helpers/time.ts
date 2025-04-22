@@ -59,6 +59,11 @@ export function formatTimeAgo(inputDate: string): string {
 }
 
 export function formatTime(ioString: string) {
-    const term = ioString?.endsWith("z") || ioString?.endsWith("Z") ? ioString : `${ioString}Z`;
-    return dayjs(term).format(constants.dateFormat);
+
+    return dayjs(correctTime(ioString)).format(constants.dateFormat);
+}
+
+export function correctTime(ioString: string) {
+    const term = (ioString?.endsWith("z") || ioString?.endsWith("Z")) ? ioString : `${ioString}Z`;
+    return term;
 }

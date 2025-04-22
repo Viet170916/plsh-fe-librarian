@@ -1,10 +1,9 @@
-import Borrower from "@/app/(private)/(in-dash-board)/borrow/[code]/Borrower";
 import ClientRender from "@/app/(private)/(in-dash-board)/borrow/[code]/ClientRender";
-import LoanInfo from "@/app/(private)/(in-dash-board)/borrow/[code]/LoanInfo";
-import {color} from "@/helpers/resources";
-import Grid from "@mui/material/Grid2";
 import React from "react";
+import Grid from "@mui/material/Grid2";
+import Borrower from "@/app/(private)/(in-dash-board)/borrow/[code]/Borrower";
 import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
+import LoanInfo from "@/app/(private)/(in-dash-board)/borrow/[code]/LoanInfo";
 
 interface IProps {
     children?: React.ReactNode;
@@ -15,25 +14,11 @@ async function BorrowInfoPage(props: {
 }) {
     const params = await props.params;
 
-    function getStatusColor(kind: "partially-returned" | "returned" | "overdue" | "on-loan") {
-        switch (kind) {
-            case "partially-returned":
-                return color.WARNING;
-            case "returned":
-                return color.COMFORT;
-            case "on-loan":
-                return color.PRIMARY;
-            case "overdue":
-                return color.SERIOUS;
-        }
-    }
 
     return (
         <Grid container spacing={2}>
-            <ClientRender code={params.code}/>
             <Grid size={12} container width={"100%"} padding={4}>
                 <Grid size={{xl: 12}}>
-
                 </Grid>
                 <Grid size={12}>
                     <Borrower/>

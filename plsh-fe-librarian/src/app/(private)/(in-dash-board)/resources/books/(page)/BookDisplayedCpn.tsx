@@ -5,6 +5,7 @@ import {BookData} from "@/helpers/appType";
 import {useLazyGetBooksQuery} from "@/stores/slices/api/book.api.slice";
 import {Pagination} from "@mui/material";
 import React, {memo, useCallback, useEffect, useMemo, useState} from "react";
+import AppPagination from "@/components/primary/Input/AppPagination";
 
 interface IProps {
     children?: React.ReactNode;
@@ -28,7 +29,10 @@ BookDisplayedCpn(props: IProps) {
         setPage(page);
     }, []);
     const pagination = useMemo(() => {
-        return <Pagination count={data?.pageCount ?? 2} variant="outlined" shape="rounded" onChange={onPageChange}/>;
+        return (
+            <AppPagination
+                count={data?.pageCount ?? 2} variant="outlined" shape="rounded" onChange={onPageChange}
+            />);
     }, [data?.pageCount, onPageChange]);
     return (
         <Container maxWidth={"xl"} sx={{justifyContent: "center", alignItems: "center", padding: "0!important"}}>

@@ -1,8 +1,5 @@
-import Container from "@/components/primary/Container";
-import { Box } from "@mui/material";
-import React, {memo} from "react";
-import PrimarySearchAppBar from "@/components/AppBar";
-import AppTabs from "@/components/AppTab";
+import {Box} from "@mui/material";
+import React from "react";
 
 interface IProps {
     children?: React.ReactNode;
@@ -10,9 +7,7 @@ interface IProps {
 
 function ResourceLayout(props: IProps) {
     return (
-        <Box sx={{padding: 5, minHeight:"100%", maxWidth:"100%", display:"flex"}}>
-            {/*<PrimarySearchAppBar/>*/}
-            {/*<AppTabs/>*/}
+        <Box sx={{minHeight: "100%", maxWidth: "100%", display: "flex"}}>
             {props.children}
         </Box>);
 }

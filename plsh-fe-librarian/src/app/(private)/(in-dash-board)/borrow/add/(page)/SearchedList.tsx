@@ -1,54 +1,59 @@
-"use client";
-import WebcamScanner from "@/components/primary/WebcamScanner";
-import appStrings from "@/helpers/appStrings";
+"use client"
+import React, {JSX, memo, useCallback, useEffect, useMemo} from "react";
 import {BookInstance} from "@/helpers/appType";
-import {color} from "@/helpers/resources";
-import {useAppDispatch} from "@/hooks/useDispatch";
-import {useLazyGetBookInstancesQuery} from "@/stores/slices/api/book.api.slice";
 import {addBorrowedBook} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
-import {truncateMaxLineTextStyle, truncateTextStyle} from "@/style/text.style";
-import {Box, Button, Dialog, LinearProgress, TextField, Typography} from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Divider from "@mui/material/Divider";
-import Grid from "@mui/material/Grid2";
-import List from "@mui/material/List";
+import {Box, LinearProgress, Typography} from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import React, {JSX, memo, useMemo, useState} from "react";
-import {Controller, useForm} from "react-hook-form";
-import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
+import Avatar from "@mui/material/Avatar";
+import Grid from "@mui/material/Grid2";
+import {color} from "@/helpers/resources";
+import {truncateMaxLineTextStyle, truncateTextStyle} from "@/style/text.style";
+import appStrings from "@/helpers/appStrings";
+import Divider from "@mui/material/Divider";
+import {useAppDispatch} from "@/hooks/useDispatch";
+import List from "@mui/material/List";
+import {setPropToBookInstanceState} from "@/stores/slices/book-states/book-instance.book.slice";
+import {useLazyGetBookInstancesQuery} from "@/stores/slices/api/book.api.slice";
+import {useSelector} from "@/hooks/useSelector";
+import {useAddBookBorrowingMutation} from "@/stores/slices/api/borrow.api.slice";
+import {useAppStore} from "@/stores/store";
+import {appToaster} from "@/components/primary/toaster";
+import {parsErrorToBaseResponse} from "@/helpers/error";
 
-function BookSearch(): JSX.Element {
-    const [open, setOpen] = useState<boolean>(false);
+function SearchedList(): JSX.Element {
+    const store = useAppStore();
     const dispatch = useAppDispatch();
     const [getInstancesGet, {data: InstancesData, isFetching, error}] = useLazyGetBookInstancesQuery();
-    const {control, handleSubmit} = useForm<{ isbnOrBookCode?: string, keyword?: string }>();
-
-    async function setIsbn(value: string) {
-        if (value) {
-            await getInstancesGet({isbnOrBookCode: value});
-            setOpen(false);
+    const filter = useSelector(state => state.bookInstanceState.bookInstanceFilter);
+    const [addBookBorrowing, {isLoading}] = useAddBookBorrowingMutation();
+    useEffect(() => {
+        if (filter) {
+            getInstancesGet(filter);
         }
-    }
-
-    async function submitSearch(value: { isbnOrBookCode?: string, keyword?: string }) {
-        if (value.isbnOrBookCode) {
-            await getInstancesGet({isbnOrBookCode: value.isbnOrBookCode});
-        } else if (value.keyword) {
-            await getInstancesGet({keyword: value.keyword});
+    }, [filter, getInstancesGet]);
+    useEffect(() => {
+        if (InstancesData) {
+            dispatch(setPropToBookInstanceState({key: "currentBookInstances", value: InstancesData.data}))
         }
-    }
-
-    function onScanDone(code?: string) {
-        getInstancesGet({isbnOrBookCode: code})
-    }
-
-    const bookList = useMemo(() => {
-        function onSelected(instance: BookInstance) {
+    }, [InstancesData, dispatch]);
+    const onSelected = useCallback(async function (instance: BookInstance) {
+        const loanId = store.getState().addEditBorrowData.id;
+        if (loanId && instance.id) {
+            const response = await addBookBorrowing({loanId, bookId: instance.id});
+            if (response.data) {
+                dispatch(addBorrowedBook(instance));
+            }
+            if (response.error) {
+                appToaster.error(parsErrorToBaseResponse(response.error)?.message)
+            }
+        } else if (!loanId) {
             dispatch(addBorrowedBook(instance));
         }
+    }, [dispatch, store, addBookBorrowing,])
 
-        return InstancesData?.data.map(instance => (
+    const bookList = useMemo(() => {
+        return InstancesData?.data?.map(instance => (
             <Box key={instance.id} width="100%">
                 <ListItem
                     alignItems="flex-start" onClick={() => {
@@ -114,33 +119,19 @@ function BookSearch(): JSX.Element {
                 <Divider variant="inset" component="li"/>
             </Box>
         ));
-    }, [InstancesData, dispatch]);
+    }, [InstancesData, onSelected]);
+
     return (
-        <Grid>
-            <BarcodeScanner onScanDone={onScanDone}/>
-            <Button onClick={() => setOpen(true)}>{appStrings.SCAN_BAR_CODE}</Button>
-            <form onSubmit={handleSubmit(submitSearch)}>
-                <Controller
-                    control={control} name={"isbnOrBookCode"}
-                    render={({field}) => (<TextField
-                        value={field.value ?? ""}
-                        onChange={(e) => field.onChange(e.target.value)}
-                        label={appStrings.book.ENTER_ISBN}
-                    />)}
-                />
-                <Button type={"submit"}>{appStrings.SEARCH}</Button>
-            </form>
-            <Dialog open={open} onClose={() => setOpen(false)}>
-                <WebcamScanner onScanSuccess={setIsbn}/>
-            </Dialog>
+        <>
             {isFetching && <LinearProgress/>}
             {error && <Typography>{appStrings.error.GET_BOOK_FAIL}</Typography>}
             <List sx={{maxHeight: 400, overflowY: "auto"}}>
                 {bookList}
             </List>
-        </Grid>
+        </>
+
     );
 }
 
-export default memo(BookSearch);
+export default memo(SearchedList);
 

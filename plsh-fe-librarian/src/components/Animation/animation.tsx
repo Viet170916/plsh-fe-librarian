@@ -1,6 +1,7 @@
 "use client";
 import {motion, MotionStyle} from "framer-motion";
 import React, {memo, ReactNode} from "react";
+import {Box} from "@mui/material";
 
 export const ZoomInAnimation = memo(({children}: { children: ReactNode }) => {
     return (
@@ -16,7 +17,8 @@ export const ZoomInAnimation = memo(({children}: { children: ReactNode }) => {
     );
 })
 
-interface SlideInProps {
+interface AnimationProps {
+    ref?: unknown;
     children: ReactNode;
     index: number,
     style?: MotionStyle,
@@ -26,7 +28,7 @@ interface SlideInProps {
 export const SlideInFromRight = memo(({
         children,
         index,
-    }: SlideInProps) => {
+    }: AnimationProps) => {
         return (
             <motion.div
                 initial={{opacity: 0, x: 100}}
@@ -57,7 +59,7 @@ export const SlideInFromRight = memo(({
 export const SlideInFromLeft = memo(({
     children,
     index,
-}: SlideInProps) => {
+}: AnimationProps) => {
     return (
         <motion.div
             initial={{opacity: 0, x: -100}}
@@ -90,7 +92,7 @@ export const Zoom = memo(({
     children,
     index,
     style,
-}: SlideInProps) => {
+}: AnimationProps) => {
     return (
         <motion.div
             initial={{scale: 0.5, opacity: 0}}
@@ -108,3 +110,14 @@ export const Zoom = memo(({
     );
 })
 
+export const ScrollAnimation = motion(Box);
+export const scrollProps = {
+    initial: {y: 10},
+    animate: {y: [10, -5, 0]},
+    transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 15,
+        duration: 0.6,
+    }
+}

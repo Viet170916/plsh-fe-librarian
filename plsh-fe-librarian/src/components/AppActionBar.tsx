@@ -43,18 +43,19 @@ const AppActionBar = () => {
             }}
         >
             <motion.div
-                initial={{x: 100}}
-                animate={{x: open ? 0 : "calc(100% - 40px)"}}
+                initial={{width: 40}}
+                animate={{width: open ? 150 : 40}}
                 transition={{type: "spring", stiffness: 200, damping: 20}}
                 style={{
+                    overflow: 'hidden',
                     display: "flex",
                     alignItems: "center",
-                    gap: 8,
                     background: "#fff",
                     boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
                     borderRadius: "20px 0 0 20px",
-                    padding: "0 16px 0 0",
+                    paddingRight: 16,
                     position: "relative",
+                    minHeight: 60,
                 }}
             >
                 <IconButton
@@ -68,36 +69,54 @@ const AppActionBar = () => {
                         borderRadius: "20px 0 0 20px",
                         position: "relative",
                         zIndex: 10,
+                        flexShrink: 0,
                     }}
                 >
-
                     {open ? <ChevronRight/> :
-                        <Badge color="primary" badgeContent={isRead ? 0 : 1} variant="dot"
-                               anchorOrigin={{
-                                   vertical: 'top',
-                                   horizontal: 'left',
-                               }}>
+                        <Badge
+                            color="primary"
+                            badgeContent={isRead ? 0 : 1}
+                            variant="dot"
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                        >
                             <ChevronLeft/>
                         </Badge>
                     }
                 </IconButton>
-                <Grid container sx={{p: 1, color: color.PRIMARY}} spacing={2}>
 
+                <Grid
+                    container
+                    sx={{
+                        p: 1,
+                        color: color.PRIMARY,
+                        alignItems: "center",
+                        minWidth: 0,
+                        flexWrap: "nowrap",
+                    }}
+                    spacing={2}
+                >
                     <Tooltip title={"Thông báo"}>
                         <IconButton onClick={onOpenNotification}>
-                            <Badge color="primary" badgeContent={unreadCount}
-                                   sx={{
-                                       '& .MuiBadge-badge': {
-                                           color: color.LIGHT_TEXT,
-                                           fontWeight: "lighter",
-                                           fontSize: 10,
-                                       },
-                                   }}
-                                   variant="standard">
+                            <Badge
+                                color="primary"
+                                badgeContent={unreadCount}
+                                sx={{
+                                    '& .MuiBadge-badge': {
+                                        color: color.LIGHT_TEXT,
+                                        fontWeight: "lighter",
+                                        fontSize: 10,
+                                    },
+                                }}
+                                variant="standard"
+                            >
                                 <BiBell color={color.PRIMARY}/>
                             </Badge>
                         </IconButton>
                     </Tooltip>
+
                     <Tooltip title={"Tài khoản"}>
                         <IconButton>
                             <TiUserOutline color={color.PRIMARY}/>
@@ -108,6 +127,7 @@ const AppActionBar = () => {
         </Box>
     );
 };
+
 
 export function getRedirectUrlFromNotification(referenceType?: "Review" | "Loan" | "Message", referenceId?: number) {
     switch (referenceType) {

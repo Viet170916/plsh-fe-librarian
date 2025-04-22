@@ -20,7 +20,7 @@ type AiSupportProps = {
 }
 
 const SlideBounce = forwardRef<HTMLDivElement, React.PropsWithChildren>(
-    ({children}, ref) => {
+    ({children}) => {
         return (
             <SlideInFromLeft index={0}>
                 {children}

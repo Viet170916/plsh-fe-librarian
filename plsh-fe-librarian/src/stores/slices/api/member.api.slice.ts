@@ -1,4 +1,4 @@
-import {FilterParams} from "@/app/(private)/(in-dash-board)/members/ClientRender";
+import {FilterParams} from "@/app/(private)/(in-dash-board)/members/(page)/ClientRender";
 import {BaseResponse, Member} from "@/helpers/appType";
 import {constants} from "@/helpers/constants";
 import {capitalizeWords} from "@/helpers/text";
@@ -63,9 +63,8 @@ export const memberApiReducerPath = API.reducerPath;
 export const memberApiMiddleware = API.middleware;
 export const {
     useCreateMemberMutation,
-    useGetMembersQuery,
+    useLazyGetMembersQuery,
     useGetMemberQuery,
     useUpdateMemberMutation,
     usePrefetch,
-    useLazyGetMembersQuery,
 } = API;

@@ -55,7 +55,10 @@ const appStrings =
             FINE_TYPE: "Hình thức phạt",
             EXTEND_DATE: "Ngày gia hạn",
             NEXT_RETURN_DATE: "Hạn trả lần tiếp",
-            RETURN_CONFIRM: "Xác nhận trả sách", BORROW_DATE_RANGE_ANALYTIC: "Các khoảng gia hạn"
+            RETURN_CONFIRM: "Xác nhận trả sách", BORROW_DATE_RANGE_ANALYTIC: "Các khoảng gia hạn",
+            STATUS_RETURN_ALL: "Đã trả toàn bộ",
+            STATUS_TAKEN: "Đã lấy sách",
+            SAVE_THIS_BOOK_BORROWING: "Lưu thông tin sách mượn"
 
         },
         BORROWED_BOOK: "Sách được mượn",
@@ -146,7 +149,8 @@ const appStrings =
             APPROVE_FAIL: "Duyệt thất bại",
             MEMBER_NOT_FOUND: "Thành viên không tồn tại",
             LOAN_NOT_FOUND: "Phiên mượn không tồn tại",
-            RESOURCE_SAVE_FAIL: "Lưu file không thành công",
+            RESOURCE_SAVE_FAIL: "Lưu file không thành công", APPLY_FAIL: "Áp dụng thất bại"
+
         },
         AUTHOR_NAME: "Tên tác giả",
         EDIT_AUTHOR: "Chỉnh sửa thông tin tác giả",
@@ -219,7 +223,8 @@ const appStrings =
             ADD_BOOK_LAZY: "Thêm sách nhanh",
             ON_SHELF: "Trên kệ",
             OUT_OF_STOCK: "Hết sách",
-            DEFAULT_RATING: "Chưa có đánh giá nào"
+            DEFAULT_RATING: "Chưa có đánh giá nào",
+            ALL: "Tất cả",
 
         },
         REMOVE: "Xoá",
@@ -276,7 +281,8 @@ const appStrings =
             SHELF_LABEL: "Nhãn",
             ADD_ROW_ON_SHELF: "Thêm hàng sách",
             SHELF_EMPTY: "Kệ sách đang trống",
-            POSITION: "Vị trí trên kệ",
+            POSITION: "Vị trí trên kệ", NAME: "Kệ sách"
+
         },
         ACTION: "Hành động",
         EDIT: "Chỉnh sửa",
@@ -308,6 +314,13 @@ const appStrings =
                 " và bạn cần phải dán mã sách này lên từng cuốn sách cứng mà trong kho có sẵn",
             NEW_CATEGORY_CHOSEN: "Chọn tick vào ô này đồng nghĩa với việc bạn chọn tạo 1 thể loại mới chưa có trong hệ thống",
             SUGGESTION_CATEGORY: "Đây là các thể laoij sách chúng tôi tìm được có thể khớp với thể loại bạn muốn thêm. Nếu bạn tìm thấy được thể loại trùng khớp với loại bạn muốn thêm mới, hãy chọn thay vì thêm mới.",
+            CAMERA_SCANNER: "Quét mã barcode bằng webcam",
+            APPLY_FOR_ALL_DATE_RANGE: "Áp dụng ngày mượn ngày trả trên thông tin của sách mượn bạn đang chỉnh sửa lên cho toàn bộ sách mượn khác trong phiên mượn",
+            BOOK_SELECT_PAGE: "Hướng dẫn cho chức năng chọn sách mượn",
+            SCAN_BUTTON: "Ấn vào đây để quét mã vạch, khi chuyển màu xanh là sẵn sàng để quét",
+            ONLY_APPLY_FOR_ALL_DATE_RANGE: "Chỉ áp dụng cho việc chọn khoảng thời gian mượn!",
+            SAVE_THIS_BOOK_BORROWING: "Lưu thông tin của sách mượn mà bạn đang chỉnh sửa",
+            NOTICE_SAVE_THIS_BOOK_BORROWING: "(không phải toàn bộ thông tin sách mượn trong phiên mượn này)"
         },
         GUIDE: "Hướng dẫn",
         NOTICE: "Chú ý",
@@ -357,7 +370,14 @@ const appStrings =
         SEND: "Gửi",
         UNAVAILABLE: "Không có sẵn",
         HAS_SUPPORT: "Có hỗ trợ",
-        NO_DATA: "Không có dữ liệu"
+        NO_DATA: "Không có dữ liệu",
+        PREV: "Trước đó",
+        MENU: "Tuỳ chọn",
+        DELETE: "Xoá",
+        PREV_PAGE: "Trang trước",
+        NEXT_PAGE: "Trang sau", APPLY_SUCCESS: "Áp dụng thành công",
+        APPLY_FOR_ALL: "Áp dụng cho tất cả",
+        GET_NOW: "Lấy thời gian hiện tại"
 
 
     };
