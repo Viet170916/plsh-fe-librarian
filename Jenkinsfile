@@ -46,7 +46,7 @@ pipeline {
             }
         }
 
-    /*    stage('Snyk Scan') {
+        stage('Snyk Scan') {
             steps {
                 dir('plsh-fe-librarian') {
                     script {
@@ -55,7 +55,7 @@ pipeline {
                         sh 'snyk config set api=$SNYK_TOKEN'
                         def timestamp = new Date().format("yyyyMMdd_HHmmss")
                         sh """
-                            snyk test --severity-threshold=high --json-file-output=snyk.json || true
+                            snyk test --json-file-output=snyk.json || true
                             [ -f snyk.json ] && snyk-to-html -i snyk.json -o snyk-report-${timestamp}.html || true
                         """
                         archiveArtifacts artifacts: "snyk-report-${timestamp}.html", fingerprint: true
@@ -69,7 +69,6 @@ pipeline {
                 dir('plsh-fe-librarian') {
                     script {
                         sh '''
-                            # Build Docker image cho frontend
                             docker build -t plsh-fe-librarian .
                             docker tag plsh-fe-librarian co0bridae/plsh-fe-librarian:latest
                         '''
@@ -85,7 +84,7 @@ pipeline {
                     env.TIMESTAMP = timestamp
 
                     sh """
-                        trivy image --timeout 10m --format json --output plsh-fe-trivy-${timestamp}.json --severity HIGH,CRITICAL plsh-fe-librarian:latest
+                        trivy image --timeout 10m --format json --output plsh-fe-trivy-${timestamp}.json plsh-fe-librarian:latest
                         python3 convert_json.py plsh-fe-trivy-${timestamp}.json plsh-fe-trivy-${timestamp}.html
                     """
                     archiveArtifacts artifacts: "plsh-fe-trivy-${timestamp}.html", fingerprint: true
@@ -166,7 +165,7 @@ pipeline {
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
                 }
             }
-        }*/
+        }
 
 
     }
