@@ -5,9 +5,9 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         ZAP_SERVER = credentials('zap-server-url')
         SONAR_SERVER = credentials('sonarqube-server-url')
-        STAGING_SERVER = 'http://192.168.230.101:8080'
         SNYK_TOKEN = credentials('snyk-api-token')
         SONAR_TOKEN = credentials('g67_se490_spr25')
+        NEXTAUTH_SECRET = credentials('nextauth-secret')
     }
 
     stages {
@@ -123,7 +123,7 @@ pipeline {
                         docker run -d \\
                         --name plsh-fe-librarian \\
                         -p 8080:8080 \\
-                        -e NEXTAUTH_SECRET=84c63ac9-a8a2-43d4-a0d0-217dfbc1f7a7 \\
+                        -e NEXTAUTH_SECRET=${env.NEXTAUTH_SECRET}  \\
                         co0bridae/plsh-fe-librarian:latest
                     """
 
