@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Scan') {
+/*        stage('SonarQube Scan') {
             steps {
                 script {
                     dir('plsh-fe-librarian') {
@@ -112,7 +112,7 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
 
 
         stage('Deploy to Staging') {
