@@ -19,16 +19,18 @@ import {
     setValueInBookBaseInfo
 } from "@/stores/slices/book-states/book.add-edit.slice";
 import {RootState, useAppStore} from "@/stores/store";
-import {Button, Checkbox, Dialog, List, ListItem, ListItemText, ListSubheader, Typography} from "@mui/material";
+import {Checkbox, Dialog, List, ListItem, ListItemText, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {JSX, memo, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "sonner";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import {useRouter} from "next/navigation";
 
 function HandleSaveChangeButton(): JSX.Element {
     const store = useAppStore();
     const dispatch = useDispatch();
-    // const router = useRouter();
+    const router = useRouter();
     const [addBook, {data: bookData, isLoading: isBookLoading, error: bookError}] = useAddUpdateBookMutation({});
     const [uploadResource, {
         // data: resourceUploadedRes,
@@ -49,7 +51,7 @@ function HandleSaveChangeButton(): JSX.Element {
         const payload: BookData = {
             ...data.baseInfo,
             ...data.overview,
-            availableBookCount:0,
+            availableBookCount: 0,
             pageCount: data.overview.pageCount ?? 0,
             categoryId: undefined,
             category: data.baseInfo.newCategory?.chosen ? data.baseInfo.newCategory : data.baseInfo.category,
@@ -113,8 +115,9 @@ function HandleSaveChangeButton(): JSX.Element {
         }
         dispatch(bookApi.util.resetApiState());
         dispatch(clearData());
-        // router.push( `/resources/books/add` );
-    }, [store, addBook, dispatch, uploadResource]);
+        if (bookData?.id)
+            router.push(`/resources/books/${bookData.id}/edit`);
+    }, [store, addBook, dispatch, uploadResource, bookData?.id, router]);
     const
         onSubmit = async () => {
             if (!deepEqual(store.getState().global.editedBook_g, store.getState().addEditBookData)) {
@@ -160,12 +163,13 @@ function HandleSaveChangeButton(): JSX.Element {
             onAddBook={onAddBook} suggestions={suggestions}
             setSuggestions={setSuggestions}
         />) : <></>}
-            <Button
+            <NeumorphicButton
                 onClick={onSubmit}
                 fullWidth
-                variant="contained"
+                variant_2="primary"
                 color={"primary"}
                 sx={{
+                    mt: 3,
                     background: color.PRIMARY + "!important",
                     height: 61,
                     borderRadius: 1,
@@ -175,7 +179,7 @@ function HandleSaveChangeButton(): JSX.Element {
                 <Typography variant="h6" sx={{color: "white"}}>
                     {appStrings.SAVE}
                 </Typography>
-            </Button>
+            </NeumorphicButton>
         </>
     );
 }
@@ -206,16 +210,16 @@ const CategorySuggestion = memo(({suggestions, onAddBook, setSuggestions}: {
     };
     return (
         <Dialog open={(suggestions.length > 0)}>
-            <Grid container padding={2} width={400} justifyContent={"center"}>
+            <Grid container padding={2} width={400} justifyContent={"center"} spacing={2}>
                 <Grid size={6}>
                     <List
                         sx={{width: '100%', gap: 1, height: 300, overflowY: 'auto'}}
                         component="nav"
                         aria-labelledby="nested-list-subheader"
                         subheader={
-                            <ListSubheader component="div" id="nested-list-subheader">
+                            <Typography>
                                 {appStrings.book.SUGGESTION_CATEGORY}
-                            </ListSubheader>
+                            </Typography>
                         }
                     >
                         {suggestions.map((item) => (
@@ -240,16 +244,17 @@ const CategorySuggestion = memo(({suggestions, onAddBook, setSuggestions}: {
                         {appStrings.guide.SUGGESTION_CATEGORY}
                     </Typography>
                 </Grid>
-                <Grid size={12} spacing={2}>
-                    <Button variant={"outlined"} fullWidth onClick={onCancel}>
-                        {appStrings.CONTINUE_WITHOUT_CHANGE}
-                    </Button>
-                </Grid>
                 <Grid size={12}>
-                    <Button variant={"outlined"} fullWidth onClick={onAccept}>
+                    <NeumorphicButton variant_2={"primary"} color={"success"} fullWidth onClick={onAccept}>
                         {appStrings.CONTINUE_WITH_CHANGE}
-                    </Button>
+                    </NeumorphicButton>
                 </Grid>
+                <Grid size={12} spacing={2}>
+                    <NeumorphicButton variant={"outlined"} fullWidth onClick={onCancel}>
+                        {appStrings.CONTINUE_WITHOUT_CHANGE}
+                    </NeumorphicButton>
+                </Grid>
+
             </Grid>
         </Dialog>
     );

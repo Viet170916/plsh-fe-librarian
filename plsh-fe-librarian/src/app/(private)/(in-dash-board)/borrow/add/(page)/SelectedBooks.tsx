@@ -72,12 +72,12 @@ function SelectedBook() {
                             }}><HiOutlineTrash/></IconButton>
                             <ImageWithBgCover src={book.bookInstance.bookThumbnail} sx={{width: "100%", height: 200}}/>
                             <CardContent sx={{p: 0, pt: 1}}>
-                                <Typography variant="h5" fontWeight={"bold"}
+                                <Typography  color={"text.primary"} variant="h5" fontWeight={"bold"}
                                             sx={{...truncateTextStyle}}>{book.bookInstance.bookName}</Typography>
-                                <Typography variant="caption">{book.bookInstance.code}</Typography>
-                                <Typography variant="h6"
+                                <Typography color={"text.primary"} variant="caption">{book.bookInstance.code}</Typography>
+                                <Typography color={"text.primary"} variant="h6"
                                             fontWeight={"lighter"}>{book.bookInstance.bookVersion}</Typography>
-                                <Typography variant="h6"
+                                <Typography color={"text.primary"} variant="h6"
                                             fontWeight={"lighter"}>{appStrings.shelf.POSITION}: {book.bookInstance.shelfPosition}</Typography>
                             </CardContent>
                         </Grid>

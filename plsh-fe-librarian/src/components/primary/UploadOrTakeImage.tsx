@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid2";
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {TbPhotoUp} from "react-icons/tb";
 import AppButton from "@/components/primary/Input/AppButton";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 const MAX_IMAGES = 5;
 
@@ -42,7 +43,7 @@ function UploadOrTakeImage({onImageChange, maxImages}: IProps) {
     return (
         <Grid className="p-4 space-y-4" container width={"100%"} justifyContent="center" alignItems="center">
             <Grid size={6}>
-                <AppButton
+                <NeumorphicButton
                     fullWidth
                     sx={{color: color.LIGHT_TEXT, width: "fit-content"}} component={"label"} variant={"contained"}
                     startIcon={<TbPhotoUp/>}
@@ -55,7 +56,7 @@ function UploadOrTakeImage({onImageChange, maxImages}: IProps) {
                         multiple
                         onChange={handleFileChange}
                     />
-                </AppButton>
+                </NeumorphicButton>
             </Grid>
             <Grid size={3} sx={{margin: "0!important"}}>
                 <ModalPanel close={triggerClose} buttonContent={<PhotoCameraIcon/>}
@@ -166,11 +167,11 @@ const TakePicture = memo(function TakePictureMemo(props: {
                 </Grid>
                 <Grid>
                     {!preview ? (
-                        <Button onClick={captureImage} color="primary">Chụp</Button>
+                        <NeumorphicButton onClick={captureImage} color="primary">Chụp</NeumorphicButton>
                     ) : (
                         <>
-                            <Button onClick={retakeImage} color="warning">Chụp lại</Button>
-                            <Button onClick={saveImage} color="primary">Lưu</Button>
+                            <NeumorphicButton onClick={retakeImage} color="warning">Chụp lại</NeumorphicButton>
+                            <NeumorphicButton onClick={saveImage} color="primary">Lưu</NeumorphicButton>
                         </>
                     )}
                 </Grid>

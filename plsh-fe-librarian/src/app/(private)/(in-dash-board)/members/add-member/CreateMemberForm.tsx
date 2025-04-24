@@ -4,13 +4,15 @@ import appStrings from "@/helpers/appStrings";
 import {AnyObject, BaseResponse} from "@/helpers/appType";
 import {constants} from "@/helpers/constants";
 import {color} from "@/helpers/resources";
-import {Autocomplete, Button, Drawer, TextField} from "@mui/material";
+import {Autocomplete, Drawer} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {JSX, memo, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import {IoPersonAdd} from "react-icons/io5";
 import {toast} from "sonner";
-import AppButton from "@/components/primary/Input/AppButton";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 type CreateMemberFormProps = {
     children?: React.ReactNode;
@@ -37,62 +39,72 @@ function CreateMemberForm({children}: CreateMemberFormProps): JSX.Element {
     };
     return (
         <Grid direction={"column"} container width={"100%"}>
-            <AppButton sx={{borderRadius: 12, my: .5, color: color.LIGHT_TEXT}} variant={"contained"}
-                       startIcon={<IoPersonAdd/>}
-                       onClick={() => setOpen(true)} color="primary">
+            <NeumorphicButton sx={{borderRadius: 12, my: .5, color: color.LIGHT_TEXT}}
+                              variant_2={"primary"}
+                              startIcon={<IoPersonAdd/>}
+                              onClick={() => setOpen(true)} color="primary">
                 {appStrings.member.ADD}
-            </AppButton>
+            </NeumorphicButton>
             <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-                <div style={{width: 400, padding: 20}}>
-                    <h2>{appStrings.member.ADD}</h2>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Controller
-                            name={"fullName"}
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => <TextField {...field} label={appStrings.member.FULLNAME} fullWidth
-                                                            margin="normal" required/>}
-                        />
-                        <Controller
-                            name="email"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => <TextField {...field} label={appStrings.member.EMAIL} type="email"
-                                                            fullWidth margin="normal" required/>}
-                        />
-                        <Controller
-                            name="identityCardNumber"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => <TextField {...field} label={appStrings.member.IDENTITY_CARD_NUMBER}
-                                                            fullWidth margin="normal" required/>}
-                        />
-                        <Controller
-                            name="className"
-                            control={control}
-                            defaultValue=""
-                            render={({field}) => <TextField {...field} label={appStrings.member.CLASSNAME} fullWidth
-                                                            margin="normal" required/>}
-                        />
-                        <Controller
-                            name="role"
-                            control={control}
-                            defaultValue={"student"}
-                            render={({field}) => (
-                                <Autocomplete
-                                    {...field}
-                                    options={constants.roles}
-                                    renderInput={(params) => <TextField {...params} label={appStrings.member.ROLE}
-                                                                        fullWidth margin="normal" required/>}
-                                    onChange={(_, value) => field.onChange(value)}
-                                />
-                            )}
-                        />
-                        <Button type="submit" variant="contained" color="primary" fullWidth>
-                            {appStrings.member.ADD}
-                        </Button>
-                    </form>
-                </div>
+                <Grid boxShadow={NEUMORPHIC_SHADOW.INNER_SHADOW()}
+                      sx={{m: 2, width: 400, borderRadius: 2, height: "100%"}}>
+                    <div style={{padding: 20}}>
+                        <h2>{appStrings.member.ADD}</h2>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Controller
+                                name={"fullName"}
+                                control={control}
+                                defaultValue=""
+                                render={({field}) => <NeumorphicTextField {...field} label={appStrings.member.FULLNAME}
+                                                                          fullWidth
+                                                                          margin="normal" required/>}
+                            />
+                            <Controller
+                                name="email"
+                                control={control}
+                                defaultValue=""
+                                render={({field}) => <NeumorphicTextField {...field} label={appStrings.member.EMAIL}
+                                                                          type="email"
+                                                                          fullWidth margin="normal" required/>}
+                            />
+                            <Controller
+                                name="identityCardNumber"
+                                control={control}
+                                defaultValue=""
+                                render={({field}) => <NeumorphicTextField {...field}
+                                                                          label={appStrings.member.IDENTITY_CARD_NUMBER}
+                                                                          fullWidth margin="normal" required/>}
+                            />
+                            <Controller
+                                name="className"
+                                control={control}
+                                defaultValue=""
+                                render={({field}) => <NeumorphicTextField {...field} label={appStrings.member.CLASSNAME}
+                                                                          fullWidth
+                                                                          margin="normal" required/>}
+                            />
+                            <Controller
+                                name="role"
+                                control={control}
+                                defaultValue={"student"}
+                                render={({field}) => (
+                                    <Autocomplete
+                                        {...field}
+                                        options={constants.roles}
+                                        renderInput={(params) => <NeumorphicTextField {...params}
+                                                                                      label={appStrings.member.ROLE}
+                                                                                      fullWidth margin="normal"
+                                                                                      required/>}
+                                        onChange={(_, value) => field.onChange(value)}
+                                    />
+                                )}
+                            />
+                            <NeumorphicButton type="submit" variant_2={"primary"} color="primary" fullWidth>
+                                {appStrings.member.ADD}
+                            </NeumorphicButton>
+                        </form>
+                    </div>
+                </Grid>
             </Drawer>
         </Grid>
     );

@@ -1,5 +1,5 @@
 import React, {JSX, memo, useEffect, useRef} from "react";
-import {Box, Button, IconButton, Modal, TextField, Tooltip, Typography} from "@mui/material";
+import {Box, Button, IconButton, Modal, Tooltip, Typography} from "@mui/material";
 import {TiUserAdd} from "react-icons/ti";
 import Container from "@/components/primary/Container";
 import Grid from "@mui/material/Grid2";
@@ -18,6 +18,8 @@ import {compressImage, objectToFormData} from "@/helpers/convert";
 import {toast} from "sonner";
 import {toastError} from "@/helpers/error";
 import {addAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 interface IProps {
     children?: React.ReactNode,
@@ -120,14 +122,14 @@ function FormModalAddEditAuthor({
 
                         <Grid container spacing={1}>
                             <Grid size={12}>
-                                <Typography id="modal-modal-title"
+                                <Typography color={"text.primary"} id="modal-modal-title"
                                             sx={{color: color.DARK_TEXT, fontSize: 30}}>
                                     {editMode ? appStrings.EDIT_AUTHOR : appStrings.ADD_AN_AUTHOR}
                                 </Typography>
                             </Grid>
                             <Grid size={12} container spacing={1} width={"100%"}>
                                 <Grid width={"100%"}>
-                                    <TextField
+                                    <NeumorphicTextField
                                         {...register("fullName")}
                                         variant="outlined"
                                         color="primary"
@@ -139,7 +141,7 @@ function FormModalAddEditAuthor({
                                 </Grid>
                                 <Grid width={"100%"}>
 
-                                    <TextField
+                                    <NeumorphicTextField
                                         {...register("description")}
                                         multiline
                                         maxRows={6}
@@ -174,7 +176,7 @@ function FormModalAddEditAuthor({
 
                             </Grid>
                             <Grid size={6} alignSelf={"end"}>
-                                <Button
+                                <NeumorphicButton
                                     loading={isLoading}
                                     fullWidth
                                     sx={{
@@ -186,7 +188,7 @@ function FormModalAddEditAuthor({
                                         handleSubmit(onSubmit)();
                                     }}>
                                     {appStrings.SAVE}
-                                </Button>
+                                </NeumorphicButton>
                             </Grid>
                             <Grid height={150} size={6} container spacing={1}>
                                 <UploadImageButton

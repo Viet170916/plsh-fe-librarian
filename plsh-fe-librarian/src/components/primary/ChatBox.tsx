@@ -1,6 +1,6 @@
 "use client"
 import React, {memo, useEffect, useMemo} from "react";
-import {Box, Paper, Stack, TextField, Typography} from "@mui/material";
+import {Box, Paper, Stack, Typography} from "@mui/material";
 import {motion} from "framer-motion";
 import {MessageDto} from "@/helpers/appType";
 import {Controller, useForm} from "react-hook-form";
@@ -10,6 +10,8 @@ import {useSelector} from "@/hooks/useSelector";
 import ChatAnimation from "@/components/Animation/lotties/Chat";
 import AppButton from "@/components/primary/Input/AppButton";
 import {color} from "@/helpers/resources";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 type ChatBoxProps = {
     messages: MessageDto[],
@@ -91,7 +93,7 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
                     <Box sx={{display: "flex", gap: 1, width: "100%"}}>
                         <Controller
                             render={({field}) => (
-                                <TextField
+                                <NeumorphicTextField
                                     size={"small"}
                                     // multiline
                                     fullWidth
@@ -102,9 +104,9 @@ function ChatBox({messages, onSubmit, isLoading = false, error}: ChatBoxProps) {
                             control={control}
                             name={"content"}
                         />
-                        <AppButton type={"submit"} variant="outlined" size={"small"}>
+                        <NeumorphicButton type={"submit"} variant="outlined" size={"small"}>
                             Gửi
-                        </AppButton>
+                        </NeumorphicButton>
                     </Box>
                 </form>
 

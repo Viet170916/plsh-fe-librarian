@@ -13,6 +13,7 @@ import React, {ChangeEvent, memo, useCallback} from "react";
 import {BiImageAdd} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
 import GetImageFromGg from "@/app/(private)/(in-dash-board)/resources/books/add/GetImageFromGg";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 interface BookImageProps {
     src: string;
@@ -40,7 +41,6 @@ const Add_EditBookImage = (props: BookImageProps) => {
                 height: 405,
                 borderRadius: 2,
                 overflow: "hidden",
-                bgcolor: "white",
             }}
         >
             <Box sx={{width: 209, height: 277, margin: "32px"}} position={"relative"}>
@@ -70,8 +70,6 @@ const Add_EditBookImage = (props: BookImageProps) => {
                                 width: '100%',
                                 bottom: 0,
                                 height: 40,
-                                background: color.SHADOW,
-                                color: color.WHITE,
                                 textAlign: "center",
                             }}
                         >

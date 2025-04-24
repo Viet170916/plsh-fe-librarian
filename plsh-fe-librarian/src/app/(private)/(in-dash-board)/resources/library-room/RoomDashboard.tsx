@@ -4,14 +4,13 @@ import Grid from "@mui/material/Grid2";
 import RoomMap, {Shelf} from "@/app/(private)/(in-dash-board)/resources/library-room/RoomMap";
 import {
     addShelf,
+    LibraryRoomState,
     setColumSize,
-    setRowSize,
     setLibraryRoomState,
-    LibraryRoomState
+    setRowSize
 } from "@/stores/slices/lib-room-state/lib-room.slice";
-import {Button, TextField} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState, useAppStore} from "@/stores/store";
+import {useDispatch} from "react-redux";
+import {useAppStore} from "@/stores/store";
 import {toast} from "sonner";
 import {MdOutlinePostAdd} from "react-icons/md";
 import {color} from "@/helpers/resources";
@@ -19,6 +18,9 @@ import appStrings from "@/helpers/appStrings";
 import {useForm} from "react-hook-form";
 import {generateNewShelf} from "@/app/(private)/(in-dash-board)/resources/library-room/utils";
 import {useModifyLibraryRoomMutation} from "@/stores/slices/api/library-room.api.slice";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {Item} from "@/app/(private)/(in-dash-board)/resources/library-room/(page)/item";
 
 interface IProps {
     children?: React.ReactNode,
@@ -81,7 +83,9 @@ function RoomDashboard({libraryRoom}: IProps) {
 
     async function handleSaveChange() {
         try {
-            const response = await modifyLibraryRoom(store.getState().libraryRoomState).unwrap();
+            const response = await modifyLibraryRoom(store.getState().libraryRoomState as unknown as {
+                shelves: Item[]
+            })?.unwrap();
         } catch (error) {
 
         }
@@ -90,48 +94,48 @@ function RoomDashboard({libraryRoom}: IProps) {
     return (
         <Grid container spacing={2} height={"100%"}>
             <Grid size={12}>
-                <RoomMap gridSize={100}/>
+                {/*<RoomMap/>*/}
             </Grid>
             <Grid size={{lg: 3, md: 4, sm: 6, xs: 12}}>
-                <Button fullWidth variant={"contained"}
-                        sx={{color: color.LIGHT_TEXT}}
-                        onClick={handleAddShelf}
-                        startIcon={<MdOutlinePostAdd color={color.LIGHT_TEXT}/>}>
+                <NeumorphicButton fullWidth variant={"contained"}
+                                  sx={{color: color.LIGHT_TEXT}}
+                                  onClick={handleAddShelf}
+                                  startIcon={<MdOutlinePostAdd color={color.LIGHT_TEXT}/>}>
                     {appStrings.ADD_SHELF}
-                </Button>
+                </NeumorphicButton>
             </Grid>
             <Grid size={{lg: "grow", md: "grow", sm: 7, xs: 12}}>
                 <form onSubmit={handleSubmit(handleAdjustLayout)}>
                     <Grid container spacing={2} justifyContent={"end"}>
                         <Grid size={4}>
 
-                            <TextField {...register("columnSize")} fullWidth
-                                       defaultValue={store.getState().libraryRoomState.columnSize}
-                                       label={appStrings.shelf.COL_SIZE}/>
+                            <NeumorphicTextField {...register("columnSize")} fullWidth
+                                                 defaultValue={store.getState().libraryRoomState.columnSize}
+                                                 label={appStrings.shelf.COL_SIZE}/>
                         </Grid>
                         <Grid size={4}>
 
-                            <TextField {...register("rowSize")} fullWidth
-                                       defaultValue={store.getState().libraryRoomState.rowSize}
-                                       label={appStrings.shelf.ROW_SIZE}/>
+                            <NeumorphicTextField {...register("rowSize")} fullWidth
+                                                 defaultValue={store.getState().libraryRoomState.rowSize}
+                                                 label={appStrings.shelf.ROW_SIZE}/>
                         </Grid>
-                        <Button variant={"outlined"}
-                                type="submit"
+                        <NeumorphicButton variant={"outlined"}
+                                          type="submit"
                         >
                             {appStrings.APPLY}
-                        </Button>
+                        </NeumorphicButton>
 
                     </Grid>
                 </form>
             </Grid>
             <Grid size={12}>
-                <Button variant={"contained"}
-                        type="submit"
-                        onClick={handleSaveChange}
-                        sx={{color: color.LIGHT_TEXT}}
+                <NeumorphicButton variant={"contained"}
+                                  type="submit"
+                                  onClick={handleSaveChange}
+                                  sx={{color: color.LIGHT_TEXT}}
                 >
                     {appStrings.SAVE}
-                </Button>
+                </NeumorphicButton>
             </Grid>
         </Grid>);
 }

@@ -15,6 +15,7 @@ import {color} from "@/helpers/resources";
 import {Stack} from "@mui/material";
 import {useLazyGetAudioQuery} from "@/stores/slices/api/audio-book.api.slice";
 import {useAppDispatch} from "@/hooks/useDispatch";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function Player(): JSX.Element {
     const chapter = useSelector(selectCurrentChapter, shallowEqual);
@@ -65,8 +66,8 @@ const Paragraphs = memo(({phases, chapter}: { chapter: number, phases: TPParagra
     }, [currentPh, continuePlay]);
 
     const PlayPause = useMemo(() => (
-        <AppButton variant={"outlined"} onClick={isRead ? pause : play}>{!isRead ? <IoPlayOutline/> :
-            <IoPauseOutline/>}</AppButton>), [play, pause, isRead]);
+        <NeumorphicButton variant={"outlined"} onClick={isRead ? pause : play}>{!isRead ? <IoPlayOutline/> :
+            <IoPauseOutline/>}</NeumorphicButton>), [play, pause, isRead]);
     return (
         <Grid container width={"100%"} height={"100%"}>
             {PlayPause}

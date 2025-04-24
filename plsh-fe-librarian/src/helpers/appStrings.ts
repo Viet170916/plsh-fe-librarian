@@ -58,7 +58,10 @@ const appStrings =
             RETURN_CONFIRM: "Xác nhận trả sách", BORROW_DATE_RANGE_ANALYTIC: "Các khoảng gia hạn",
             STATUS_RETURN_ALL: "Đã trả toàn bộ",
             STATUS_TAKEN: "Đã lấy sách",
-            SAVE_THIS_BOOK_BORROWING: "Lưu thông tin sách mượn"
+            SAVE_THIS_BOOK_BORROWING: "Lưu thông tin sách mượn",
+            ONLOAN: "Đang mượn",
+            NOT_TAKEN_YET: "Chưa lấy sách",
+            CODE: "Mã phiên mượn"
 
         },
         BORROWED_BOOK: "Sách được mượn",
@@ -224,7 +227,12 @@ const appStrings =
             ON_SHELF: "Trên kệ",
             OUT_OF_STOCK: "Hết sách",
             DEFAULT_RATING: "Chưa có đánh giá nào",
-            ALL: "Tất cả",
+            ALL: "Tất cả", READ: "Đọc",
+            TITLE: "Tiêu đề sách",
+            THUMBNAIL: "Ảnh bìa",
+            STATUS: "Tình trạng sách",
+            INSTANCE: "Sách cứng"
+
 
         },
         REMOVE: "Xoá",
@@ -281,7 +289,8 @@ const appStrings =
             SHELF_LABEL: "Nhãn",
             ADD_ROW_ON_SHELF: "Thêm hàng sách",
             SHELF_EMPTY: "Kệ sách đang trống",
-            POSITION: "Vị trí trên kệ", NAME: "Kệ sách"
+            POSITION: "Vị trí trên kệ", NAME: "Kệ sách",
+            SEE: "Xem chi tiết kệ"
 
         },
         ACTION: "Hành động",
@@ -320,7 +329,27 @@ const appStrings =
             SCAN_BUTTON: "Ấn vào đây để quét mã vạch, khi chuyển màu xanh là sẵn sàng để quét",
             ONLY_APPLY_FOR_ALL_DATE_RANGE: "Chỉ áp dụng cho việc chọn khoảng thời gian mượn!",
             SAVE_THIS_BOOK_BORROWING: "Lưu thông tin của sách mượn mà bạn đang chỉnh sửa",
-            NOTICE_SAVE_THIS_BOOK_BORROWING: "(không phải toàn bộ thông tin sách mượn trong phiên mượn này)"
+            NOTICE_SAVE_THIS_BOOK_BORROWING: "(không phải toàn bộ thông tin sách mượn trong phiên mượn này)",
+            UPLOAD_EBOOK: "Chức năng Tải epub cho phép bạn tải lên sách điện tử định dạng .epub để hệ thống xử lý và lưu trữ. Các file khác không được chấp nhận.\n" +
+                "\n" +
+                "Bước 1: Chuẩn bị file .epub\n" +
+                "- Đảm bảo file của bạn có đuôi .epub (ví dụ: tuyet_the_vo_lam.epub)\n" +
+                "\n" +
+                "- Kích thước file không nên vượt quá 50MB\n" +
+                "\n" +
+                "- Nội dung file phải đúng định dạng EPUB hợp lệ (không bị lỗi cấu trúc)\n" +
+                "\n" +
+                "Bước 2: Tải file lên hệ thống\n" +
+                "- Trên giao diện web:\n" +
+                "Vào trang quản lý sách hoặc mục \"Tải ebook lên\"\n" +
+                "\n" +
+                "- Nhấn \"Chọn file\"\n" +
+                "\n" +
+                "- Chọn file .epub từ máy tính của bạn\n" +
+                "\n" +
+                "- Nhấn \"Tải lên\" (Upload)\n" +
+                "\n" +
+                "!Hệ thống sẽ hiển thị lỗi nếu bạn chọn file không đúng định dạng .epub!"
         },
         GUIDE: "Hướng dẫn",
         NOTICE: "Chú ý",

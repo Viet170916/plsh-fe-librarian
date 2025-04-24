@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Slider, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 const TEXT = `This is a sample text to demonstrate audiobook reading. Each sentence will be highlighted when spoken aloud by the Google Cloud Text-to-Speech engine. Enjoy your listening experience!`;
 
@@ -103,11 +104,11 @@ export default function AudiobookReader() {
                 </Box>
 
                 <Stack direction="row" spacing={2} alignItems="center">
-                    <Button variant="outlined" onClick={() => handleSkip("backward")}>⏮ Back</Button>
-                    <Button variant="contained" onClick={handlePlayPause}>
+                    <NeumorphicButton variant="outlined" onClick={() => handleSkip("backward")}>⏮ Back</NeumorphicButton>
+                    <NeumorphicButton variant="contained" onClick={handlePlayPause}>
                         {isPlaying ? "Pause" : "Play"}
-                    </Button>
-                    <Button variant="outlined" onClick={() => handleSkip("forward")}>Next ⏭</Button>
+                    </NeumorphicButton>
+                    <NeumorphicButton variant="outlined" onClick={() => handleSkip("forward")}>Next ⏭</NeumorphicButton>
                 </Stack>
 
                 <Box>

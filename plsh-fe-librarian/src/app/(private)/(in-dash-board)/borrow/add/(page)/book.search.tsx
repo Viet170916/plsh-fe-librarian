@@ -12,6 +12,7 @@ import AppButton from "@/components/primary/Input/AppButton";
 import AppTextField from "@/components/primary/Input/TextField";
 import {color} from "@/helpers/resources";
 import {PiBarcodeBold} from "react-icons/pi";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function BookSearch(): JSX.Element {
     const [open, setOpen] = useState<boolean>(false);
@@ -65,13 +66,13 @@ function BookSearch(): JSX.Element {
                             label={appStrings.book.ENTER_ISBN}
                         />)}
                 />
-                <AppButton sx={{borderRadius: 12, ml: 1}} variant={"outlined"}
-                           type={"submit"}>{appStrings.SEARCH}</AppButton>
+                <NeumorphicButton sx={{borderRadius: 12, ml: 1}} variant={"outlined"}
+                           type={"submit"}>{appStrings.SEARCH}</NeumorphicButton>
             </form>
             <Tooltip title={appStrings.guide.CAMERA_SCANNER}>
-                <AppButton startIcon={<PiBarcodeBold size={17}/>} variant={"contained"}
+                <NeumorphicButton startIcon={<PiBarcodeBold size={17}/>} variant={"contained"}
                            sx={{borderRadius: 12, color: color.LIGHT_TEXT,}}
-                           onClick={() => setOpen(true)}>{appStrings.SCAN_BAR_CODE}</AppButton>
+                           onClick={() => setOpen(true)}>{appStrings.SCAN_BAR_CODE}</NeumorphicButton>
 
             </Tooltip>
 

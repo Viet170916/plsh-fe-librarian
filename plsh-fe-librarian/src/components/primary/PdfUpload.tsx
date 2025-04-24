@@ -8,6 +8,7 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import React, { memo, useState } from "react";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 interface IProps{
   children?: React.ReactNode;
@@ -80,9 +81,9 @@ function PdfUploader( props: IProps ){
         id = "pdf-upload"
       />
       <label htmlFor = "pdf-upload">
-        <Button variant = "contained" color = "primary" component = "span" startIcon = { <CloudUpload /> } fullWidth>
+        <NeumorphicButton variant = "contained" color = "primary" component = "span" startIcon = { <CloudUpload /> } fullWidth>
           Upload PDF
-        </Button>
+        </NeumorphicButton>
       </label>
       { progress > 0 && progress < 100 && (
         <Box sx = { { mt: 2 } }>
@@ -102,7 +103,7 @@ function PdfUploader( props: IProps ){
         </Box>
       ) }
       { fileURL && (
-        <Button
+        <NeumorphicButton
           variant = "outlined"
           color = "secondary"
           fullWidth
@@ -111,7 +112,7 @@ function PdfUploader( props: IProps ){
           onClick = { () => setOpenPreview( true ) }
         >
           Preview PDF
-        </Button>
+        </NeumorphicButton>
       ) }
       <Modal
         open = { openPreview } onClose = { () => setOpenPreview( false ) }

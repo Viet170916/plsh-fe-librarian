@@ -5,54 +5,58 @@ import appStrings from "@/helpers/appStrings";
 import {LoanDto} from "@/helpers/dataTransfer";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
-import {Box, Typography} from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import {Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import React, {memo} from "react";
-import {SlideInFromRight} from "@/components/Animation/animation";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
+import {useTheme} from "@mui/material/styles";
 
 interface IProps {
-    children?: React.ReactNode;
     items: LoanDto[];
 }
 
-const BorrowTable = (props: IProps) => {
+const BorrowTable = ({items}: IProps) => {
     const dispatch = useAppDispatch();
+    const theme = useTheme();
 
     function onSelected(loan: LoanDto) {
         dispatch(setPropToLoanState({key: "currentLoan", value: loan}));
     }
 
     return (
-        <Box sx={{width: "100%"}}>
+        <Box width={"100%"}>
             <LoanDrawer/>
-            <Grid container spacing={2} sx={{borderRadius: 1}}>
-                <Grid size={4}>
-                    <Typography variant="subtitle1">{appStrings.TITLE}</Typography>
-                </Grid>
-                <Grid size={1}>
-                    <Typography variant="subtitle1">{appStrings.borrow.USAGE_DATE_COUNT}</Typography>
-                </Grid>
-                <Grid size={1}>
-                    <Typography variant="subtitle1">{appStrings.book.BOOK_COUNT}</Typography>
-                </Grid>
-                <Grid size={1.5}>
-                    <Typography variant="subtitle1">{appStrings.borrow.STATUS}</Typography>
-                </Grid>
-                <Grid size={2}>
-                    <Typography variant="subtitle1">{appStrings.OTHER}</Typography>
-                </Grid>
-                <Grid size={1}>
-                    <Typography variant="subtitle1">{appStrings.borrow.BORROW_DATE}</Typography>
-                </Grid>
-            </Grid>
-            {props.items.map((borrowed, index) => (
-                <Box key={borrowed.id} sx={{mb: 1}}>
-                    <SlideInFromRight index={index} >
-                        <BorrowItem borrowItem={borrowed} onSelected={onSelected}/>
-                    </SlideInFromRight>
-                </Box>
-            ))}
+            <Box width={"100%"} borderRadius={3}>
+                <TableContainer sx={{overflow: "visible",}}>
+                    <Table>
+                        <TableHead>
+                            <TableRow
+                                sx={{
+                                    boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
+                                    borderRadius: 3,
+                                }}
+                            >
+                                <TableCell>{appStrings.member.AVATAR}</TableCell>
+                                <TableCell>{appStrings.borrow.CODE}</TableCell>
+                                <TableCell>{appStrings.member.FULLNAME}</TableCell>
+                                <TableCell>{appStrings.member.EMAIL}</TableCell>
+                                <TableCell>{appStrings.borrow.USAGE_DATE_COUNT}</TableCell>
+                                <TableCell>{appStrings.book.BOOK_COUNT}</TableCell>
+                                <TableCell>{appStrings.borrow.STATUS}</TableCell>
+                                <TableCell>{appStrings.OTHER}</TableCell>
+                                <TableCell>{appStrings.borrow.BORROW_DATE}</TableCell>
+                                <TableCell>{appStrings.ACTION}</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {items.map((borrowed) => (
+                                <BorrowItem key={borrowed.id} borrowItem={borrowed} onSelected={onSelected}/>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
         </Box>
     );
 };
+
 export default memo(BorrowTable);

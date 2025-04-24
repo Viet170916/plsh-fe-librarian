@@ -15,10 +15,10 @@ import {
     selectCurrentBookBorrowed,
     setPropToBorrowedBook
 } from "@/stores/slices/borrow-state/borrow.add-edit.slice";
-import {RootState} from "@/stores/store";
+import {RootState, useAppStore} from "@/stores/store";
 import {MenuItem, Select, SelectChangeEvent, TextField, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import React, {memo} from "react";
+import React, {memo, useCallback, useEffect, useRef} from "react";
 import {shallowEqual, useSelector} from "react-redux";
 import BottomDrawer from "@/components/Animation/BottomDrawer";
 import {useAppDispatch} from "@/hooks/useDispatch";
@@ -29,23 +29,26 @@ import Helper from "@/components/primary/display/Helper";
 import {useModifyAllBookBorrowingMutation} from "@/stores/slices/api/borrow.api.slice";
 import {parsErrorToBaseResponse} from "@/helpers/error";
 import AddSingleBookBorrowing from "@/app/(private)/(in-dash-board)/borrow/[code]/edit/(page)/AddSingleBookBorrowing";
+import {deepEqual} from "@/helpers/comparation";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 const Form = memo(({selectedBook}: { selectedBook?: BorrowedBookData }) => {
     return (
         <Grid container spacing={2} sx={{mb: 5}}>
             {selectedBook?.bookInstance ? <>
                     <Grid size={6} spacing={2} container>
-                        <Typography variant={"h4"} fontWeight={"bold"} sx={{color: color.DARK_TEXT}}>
+                        <Typography color={"text.primary"} variant={"h4"} fontWeight={"bold"} sx={{color: color.DARK_TEXT}}>
                             {appStrings.borrow.EDIT_BOOK_SELECTED}
                         </Typography>
-                        <TextField
+                        <NeumorphicTextField
                             fullWidth
                             value={selectedBook.bookInstance.code}
                             disabled
                             label={appStrings.book.CODE}
                             variant="outlined"
                         />
-                        <TextField
+                        <NeumorphicTextField
                             fullWidth
                             value={selectedBook.bookInstance.bookName}
                             disabled label={appStrings.book.NAME}
@@ -65,11 +68,11 @@ const Form = memo(({selectedBook}: { selectedBook?: BorrowedBookData }) => {
                     </Grid>
                     <Grid container spacing={2} size={6}>
                         <Grid width={"100%"} container spacing={1}>
-                            <Typography variant={"h4"} fontWeight={"bold"} sx={{color: color.DARK_TEXT}}>
+                            <Typography color={"text.primary"} variant={"h4"} fontWeight={"bold"} sx={{color: color.DARK_TEXT}}>
                                 {appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
                             </Typography>
                             <BorrowNote bookInstanceId={selectedBook.bookInstance.id as number}/>
-                            <Typography variant={"h5"}>
+                            <Typography color={"text.primary"} variant={"h5"}>
                                 {appStrings.borrow.BOOK_IMAGE_BEFORE_BORROW}
                             </Typography>
                             <Grid size={12} container>
@@ -79,7 +82,7 @@ const Form = memo(({selectedBook}: { selectedBook?: BorrowedBookData }) => {
                         </Grid>
                     </Grid>
                 </> :
-                <Typography variant={"h4"} sx={{color: color.PRIMARY, fontWeight: "bold"}}>
+                <Typography color={"primary"} variant={"h4"} sx={{color: color.PRIMARY, fontWeight: "bold"}}>
                     {appStrings.borrow.NO_BOOK_SELECTED}
                 </Typography>
             }
@@ -155,12 +158,12 @@ const GetTodayButton = memo(() => {
     }
 
     return (
-        <AppButton
+        <NeumorphicButton
             fullWidth
             sx={{borderColor: color.FOUR, color: color.FOUR, borderRadius: 12, height: "fit-content"}}
             variant={"outlined"}
             onClick={onGetToday}
-        >{appStrings.GET_NOW}</AppButton>
+        >{appStrings.GET_NOW}</NeumorphicButton>
     );
 });
 
@@ -200,18 +203,19 @@ const ApplyRangefinderAllButton = memo(() => {
     return (
         <Grid container size={12}>
             <Grid size={"grow"}>
-                <AppButton
+                <NeumorphicButton
                     loading={isLoading}
                     sx={{borderColor: color.FOUR, color: color.FOUR}}
                     variant={"outlined"}
                     onClick={onApplyForAll}
-                >{appStrings.APPLY_FOR_ALL}</AppButton>
+                >{appStrings.APPLY_FOR_ALL}</NeumorphicButton>
             </Grid>
 
             <Helper title={
                 <Grid container>
-                    <Typography>{appStrings.guide.APPLY_FOR_ALL_DATE_RANGE}</Typography>
+                    <Typography color={"text.primary"}>{appStrings.guide.APPLY_FOR_ALL_DATE_RANGE}</Typography>
                     <Typography
+                        color={"warning"}
                         sx={{color: color.WARNING}}>{appStrings.guide.ONLY_APPLY_FOR_ALL_DATE_RANGE}</Typography>
                 </Grid>}/>
         </Grid>
@@ -220,11 +224,32 @@ const ApplyRangefinderAllButton = memo(() => {
 });
 
 function AddEditBorrowForm() {
+    // const store = useAppStore();
+    // const getSelectedBook = useCallback(() => {
+    //     return selectCurrentBookBorrowed(store.getState());
+    // }, [store]);
     const selectedBook = useSelector((state: RootState) => selectCurrentBookBorrowed(state), shallowEqual);
     const dispatch = useAppDispatch();
+    // const oldSelectedBook = useRef<BorrowedBookData | null>(null);
+    // const firstRender = useRef<boolean>(true);
+    // useEffect(() => {
+    //     if (selectedBook && firstRender.current) {
+    //         oldSelectedBook.current = selectedBook ?? null;
+    //         firstRender.current = false;
+    //     }
+    //     return () => {
+    //         firstRender.current = true;
+    //     }
+    // }, [selectedBook]);
     return (
         <Grid>
             <BottomDrawer open={(selectedBook && true) as boolean} onClose={() => {
+                // console.log(deepEqual(selectedBook, oldSelectedBook.current))
+                // console.log(selectedBook)
+                // console.log(oldSelectedBook.current)
+                // if (oldSelectedBook.current && selectedBook && !deepEqual(selectedBook, oldSelectedBook.current)) {
+                //     appToaster.warning("1234567", "top-center");
+                // }
                 dispatch(clearPropToBorrow("selectedBookId"))
             }}>
                 <Form selectedBook={selectedBook}/>

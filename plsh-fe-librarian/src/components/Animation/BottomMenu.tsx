@@ -5,6 +5,7 @@ import {motion} from "framer-motion";
 import {ChevronLeft, ChevronRight} from "@mui/icons-material";
 import Grid from "@mui/material/Grid2";
 import {color} from "@/helpers/resources";
+import {useTheme} from "@mui/material/styles";
 
 const MotionBox = motion.div;
 
@@ -23,6 +24,7 @@ const BottomMenu = ({
     initHeight = 50,
     iconSize = 60,
 }: CornerSlideMenuProps) => {
+    const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [phase, setPhase] = useState<'closed' | 'width' | 'height' | 'closingHeight' | 'closingWidth'>('closed');
     const [shouldRender, setShouldRender] = useState(false);
@@ -114,24 +116,24 @@ const BottomMenu = ({
                 {open ? <ChevronRight/> : <ChevronLeft/>}
             </IconButton>
 
-            {shouldRender && (
-                <MotionBox
-                    initial={{width: 0, height: initHeight, opacity: 0}}
-                    animate={getAnimateProps()}
-                    onAnimationComplete={handleAnimationComplete}
-                    style={{
-                        overflow: 'hidden',
-                        borderRadius: 12,
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                        position: 'relative',
-                        background: color.WHITE,
-                    }}
-                >
-                    <Grid container width={"100%"} height={"100%"}>
-                        {children}
-                    </Grid>
-                </MotionBox>
-            )}
+
+            <MotionBox
+                initial={{width: 0, height: initHeight, opacity: 0}}
+                animate={getAnimateProps()}
+                onAnimationComplete={handleAnimationComplete}
+                style={{
+                    overflow: 'hidden',
+                    borderRadius: 12,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                    position: 'relative',
+                    background: theme.palette.background.default,
+                }}
+            >
+                <Grid container width={"100%"} height={"100%"}>
+                    {children}
+                </Grid>
+            </MotionBox>
+            
         </Box>
     );
 };

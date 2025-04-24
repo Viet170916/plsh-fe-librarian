@@ -1,4 +1,4 @@
-import {DependencyList, useEffect, useMemo} from "react";
+import {useEffect} from "react";
 import {appToaster} from "@/components/primary/toaster";
 import {BaseResponse} from "@/helpers/appType";
 import appStrings from "@/helpers/appStrings";
@@ -21,7 +21,7 @@ function useFetchingToast<ResponseType>(
             option?.handleSuccess?.(data.data);
             appToaster.success(data.message ?? option?.success);
         }
-    }, [data, option?.success, option?.handleSuccess, ...successDeps]);
+    }, [data, option, successDeps]);
 
     // Error effect
     useEffect(() => {
@@ -30,7 +30,7 @@ function useFetchingToast<ResponseType>(
             option?.handleError?.(err);
             appToaster.error(err?.message ?? option?.error ?? appStrings.error.REQUEST_ERROR);
         }
-    }, [error, option?.error, option?.handleError, ...errorDeps]);
+    }, [error, option, errorDeps]);
 }
 
 

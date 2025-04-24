@@ -7,12 +7,12 @@ import Grid from "@mui/material/Grid2";
 import {color} from "@/helpers/resources";
 import {primaryGradientBg, shadowStyle} from "@/style/container.style";
 import appStrings from "@/helpers/appStrings";
-import AppButton from "@/components/primary/Input/AppButton";
 import {useAppStore} from "@/stores/store";
 import {appToaster} from "@/components/primary/toaster";
 import useFetchingToast from "@/hooks/useFetchingToast";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {setAddEditBookWithBookData} from "@/stores/slices/book-states/book.add-edit.slice";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 type AiSupportProps = {
     open: boolean,
@@ -79,16 +79,20 @@ function AiSupport({open, setOpen}: AiSupportProps): JSX.Element {
                     </Typography>
                 </Grid>{
                 (!isSuccess) && <>
-                            <AppButton loading={isLoading} onClick={getBook} size={"small"} variant={"outlined"} sx={{
-                                bgcolor: color.COMFORT_10,
-                                color: color.COMFORT,
-                                borderColor: color.COMFORT
-                            }}>{appStrings.YES}</AppButton>
-                            <AppButton loading={isLoading} size={"small"} onClick={handleClose} variant={"outlined"} sx={{
-                                bgcolor: color.SERIOUS_10,
-                                color: color.SERIOUS,
-                                borderColor: color.SERIOUS
-                            }}>{appStrings.NO_THANKS}</AppButton>
+                            <NeumorphicButton loading={isLoading} onClick={getBook} size={"small"} variant={"outlined"}
+                                              sx={{
+                                                  bgcolor: color.COMFORT_10,
+                                                  color: color.COMFORT,
+                                                  borderColor: color.COMFORT
+                                              }}>{appStrings.YES}
+                            </NeumorphicButton>
+                            <NeumorphicButton loading={isLoading} size={"small"} onClick={handleClose} variant={"outlined"}
+                                              sx={{
+                                                  bgcolor: color.SERIOUS_10,
+                                                  color: color.SERIOUS,
+                                                  borderColor: color.SERIOUS
+                                              }}>{appStrings.NO_THANKS}
+                            </NeumorphicButton>
                 </>
             }
 

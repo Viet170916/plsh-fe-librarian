@@ -125,7 +125,7 @@ function SearchedList(): JSX.Element {
         <>
             {isFetching && <LinearProgress/>}
             {error && <Typography>{appStrings.error.GET_BOOK_FAIL}</Typography>}
-            <List sx={{maxHeight: 400, overflowY: "auto"}}>
+            <List sx={{overflowY: "auto"}}>
                 {bookList}
             </List>
         </>

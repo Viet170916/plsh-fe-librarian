@@ -15,6 +15,7 @@ import appStrings from "@/helpers/appStrings";
 import {color} from "@/helpers/resources";
 import {shadowContainerStyle, shadowStyle} from "@/style/container.style";
 import AppPagination from "@/components/primary/Input/AppPagination";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function Navigation(): JSX.Element {
     const {id} = useParams();
@@ -76,14 +77,14 @@ const ChapterChanger = memo(({
             }}
                    direction="row" spacing={2} alignItems="center" justifyContent="center" mx={"auto"} py={1} px={3}>
 
-                <Button
+                <NeumorphicButton
                     variant="outlined"
                     startIcon={<ArrowBackIcon/>}
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                 >
                     {appStrings.PREV}
-                </Button>
+                </NeumorphicButton>
                 <AppPagination
                     page={currentPage}
                     count={totalPages}
@@ -91,14 +92,14 @@ const ChapterChanger = memo(({
                     siblingCount={1}
                     boundaryCount={2}/>
 
-                <Button
+                <NeumorphicButton
                     variant="outlined"
                     endIcon={<ArrowForwardIcon/>}
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                 >
                     {appStrings.NEXT}
-                </Button>
+                </NeumorphicButton>
             </Stack>
         </Stack>)
 })

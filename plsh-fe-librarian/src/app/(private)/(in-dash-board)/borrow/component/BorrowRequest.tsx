@@ -14,10 +14,10 @@ import {useAppDispatch} from "@/hooks/useDispatch";
 import {useSelector} from "@/hooks/useSelector";
 import {shallowEqual} from "react-redux";
 import {clearPropInLoanState, setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
-import AppTextField from "@/components/primary/Input/TextField";
 import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
-import AppButton from "@/components/primary/Input/AppButton";
-import {color} from "@/helpers/resources";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import Grid from "@mui/material/Grid2";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function BorrowRequest(): JSX.Element {
     const subscriptionRef = useRef<QueryActionCreatorResult<QueryDefinition<unknown, BaseQueryFn<unknown>, string, unknown>> | undefined>(undefined);
@@ -42,7 +42,7 @@ function BorrowRequest(): JSX.Element {
     return (
         <Stack sx={{width: "100%", borderRadius: 2}}>
             <Box sx={{flexGrow: 1}}>
-                <Typography fontSize={35}>{appStrings.member.BORROW_REQUEST}</Typography>
+                <Typography color={"text.primary"} fontSize={35}>{appStrings.member.BORROW_REQUEST}</Typography>
             </Box>
 
             <Box sx={{flexGrow: 1}}>
@@ -83,13 +83,10 @@ export const LoanFilter = memo(() => {
         dispatch(clearPropInLoanState("loansFilter"));
     }, [dispatch]);
     return (
-        <Box sx={{display: "flex", gap: 2, p: .3}}>
+        <Grid sx={{display: "flex", gap: 3, p: .3}} spacing={2}>
             <BarcodeScanner onScanDone={onScanDone}/>
-            <AppTextField
-                value={loansFilter?.keyword ?? ""}
-                sx={{borderRadius: 12}}
-                label={appStrings.FILTER_KEYWORD}
-                variant="outlined"
+            <NeumorphicTextField
+                placeholder={appStrings.FILTER_KEYWORD}
                 size="small"
                 onChange={onInputChange}
             />
@@ -118,13 +115,15 @@ export const LoanFilter = memo(() => {
                 <MenuItem value="taken">{appStrings.borrow.STATUS_TAKEN}</MenuItem>
 
             </Select>
-            <AppButton variant={"contained"} sx={{borderRadius: 12, color: color.LIGHT_TEXT}} onClick={(event) => {
-                onReset();
-                event.currentTarget.blur();
-            }}>
+            <NeumorphicButton variant_2={"primary"}
+                              sx={{borderRadius: 12}}
+                              onClick={(event) => {
+                                  onReset();
+                                  event.currentTarget.blur();
+                              }}>
                 {appStrings.RESET}
-            </AppButton>
-        </Box>)
+            </NeumorphicButton>
+        </Grid>)
 })
 
 export default memo(BorrowRequest);

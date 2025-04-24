@@ -24,6 +24,9 @@ import {get, Path} from "react-hook-form";
 import {FaRegWindowClose} from "react-icons/fa";
 import {shallowEqual, useDispatch} from "react-redux";
 import {toast} from "sonner";
+import {useTheme} from "@mui/material/styles";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 const AfterBorrowField = memo(<K extends Path<LoanState>>({name, label, type}: {
     name: K,
@@ -47,7 +50,7 @@ const AfterBorrowField = memo(<K extends Path<LoanState>>({name, label, type}: {
                 />);
         default:
             return (
-                <TextField
+                <NeumorphicTextField
                     label={label}
                     value={value ?? ""}
                     size={"small"}
@@ -57,6 +60,7 @@ const AfterBorrowField = memo(<K extends Path<LoanState>>({name, label, type}: {
     }
 });
 const BookBorrowingDrawer: React.FC = () => {
+    const theme = useTheme();
     dayjs.locale("vi");
     const dispatch = useAppDispatch();
     const selectedBookBorrowing = useSelector(state => state.loanState.currenBookBorrowing, shallowEqual);
@@ -78,32 +82,32 @@ const BookBorrowingDrawer: React.FC = () => {
                 </Box>
                 <Grid container width={"100%"} spacing={2}>
                     <Grid size={6} container spacing={1}>
-                        <TextField
+                        <NeumorphicTextField
                             label={appStrings.CODE}
                             value={selectedBookBorrowing?.id ?? ""}
                             size={"small"}
                             fullWidth disabled
                         />
-                        <TextField
+                        <NeumorphicTextField
                             label={appStrings.book.CODE}
                             value={selectedBookBorrowing?.bookInstance?.code ?? ""}
                             size={"small"}
                             fullWidth disabled
                         />
-                        <TextField
+                        <NeumorphicTextField
                             label={appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
                             value={selectedBookBorrowing?.noteBeforeBorrow ?? ""}
                             multiline
                             size={"small"}
                             fullWidth disabled
                         />
-                        <TextField
+                        <NeumorphicTextField
                             label={appStrings.borrow.BORROW_DATE}
                             value={dayjs(selectedBookBorrowing?.borrowDate ?? "").format(constants.dateFormat)}
                             size={"small"}
                             fullWidth disabled
                         />
-                        <TextField
+                        <NeumorphicTextField
                             multiline
                             label={appStrings.borrow.RETURN_DATE}
                             value={selectedBookBorrowing?.returnDates.map(d => dayjs(d ?? "").format(constants.dateFormat)).join(",\n")}
@@ -113,13 +117,13 @@ const BookBorrowingDrawer: React.FC = () => {
                     </Grid>
                     {selectedBookBorrowing?.borrowingStatus === "returned" ?
                         <Grid size={6} spacing={1}>
-                            <TextField
+                            <NeumorphicTextField
                                 label={appStrings.borrow.FINE_TYPE}
                                 value={selectedBookBorrowing?.fineType ?? ""}
                                 size={"small"}
                                 fullWidth disabled
                             />
-                            <TextField
+                            <NeumorphicTextField
                                 sx={{mt: 1}}
                                 multiline
                                 label={appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
@@ -132,7 +136,7 @@ const BookBorrowingDrawer: React.FC = () => {
                     }
                     <Grid size={12}>
                         {selectedBookBorrowing && <Grid>
-                                    <Typography variant={"h5"} sx={{color: color.PRIMARY}}
+                                    <Typography variant={"h5"} sx={{color: theme.palette.primary.main}}
                                                 fontWeight={"bold"}>{appStrings.borrow.BORROW_DATE_RANGE_ANALYTIC}</Typography>
                                     <LineChart
                                         tooltip={{trigger: 'none'}}
@@ -147,18 +151,21 @@ const BookBorrowingDrawer: React.FC = () => {
                         </Grid>}
                     </Grid>
                     <Grid size={12}>
-                        {(selectedBookBorrowing?.overdueDays ?? 0) > 0 && <Typography sx={{color: color.SERIOUS}}><strong>Quá
-                                    hạn</strong>{` ${selectedBookBorrowing?.overdueDays} `}{appStrings.unit.DAY}
-                        </Typography>}
+                        {(selectedBookBorrowing?.overdueDays ?? 0) > 0 &&
+                            <Typography sx={{color: color.SERIOUS}}><strong>Quá
+                                        hạn</strong>{` ${selectedBookBorrowing?.overdueDays} `}{appStrings.unit.DAY}
+                            </Typography>}
                     </Grid>
                     <Grid size={6}>
-                        <Typography variant={"h4"} fontWeight={"bold"} sx={{color: color.PRIMARY, mt: 5, mb: 3}}>
+                        <Typography variant={"h4"} fontWeight={"bold"}
+                                    sx={{color: theme.palette.primary.main, mt: 5, mb: 3}}>
                             {appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
                         </Typography>
                         <QuiltedImageList itemData={selectedBookBorrowing?.bookImageUrlsBeforeBorrow ?? []}/>
                     </Grid>
                     <Grid size={6}>
-                        <Typography variant={"h4"} fontWeight={"bold"} sx={{color: color.PRIMARY, mt: 5, mb: 3}}>
+                        <Typography variant={"h4"} fontWeight={"bold"}
+                                    sx={{color: theme.palette.primary.main, mt: 5, mb: 3}}>
                             {appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
                         </Typography>
                         {selectedBookBorrowing?.borrowingStatus === "returned" ?
@@ -252,6 +259,7 @@ const QuiltedImageList = memo(({itemData}: { itemData: string[] }) => {
     );
 });
 const ImagesPreview = memo(() => {
+    const theme = useTheme();
     const images = useSelector((state: RootState) => state.loanState.currenBookBorrowing?.bookImagesAfterBorrow, shallowEqual);
     const dispatch = useDispatch();
     return (
@@ -277,7 +285,7 @@ const ImagesPreview = memo(() => {
                                 top: 0,
                                 right: 0,
                                 position: "absolute",
-                                color: color.WHITE,
+                                color: theme.palette.text.secondary,
                                 "&:hover": {
                                     color: color.SERIOUS,
                                 },
@@ -325,10 +333,10 @@ const ExtendButton = memo(() => {
         }
     }, [error]);
     return (
-        <Button loading={isLoading} onClick={onExtend} variant="outlined"
-                sx={{borderColor: color.COMFORT, color: color.COMFORT}}>
+        <NeumorphicButton loading={isLoading} onClick={onExtend} variant_2={"secondary"}
+                          sx={{borderColor: color.COMFORT, color: color.COMFORT}}>
             {appStrings.borrow.EXTEND}
-        </Button>);
+        </NeumorphicButton>);
 });
 const ConfirmReturnButton = memo(() => {
     const store = useAppStore();
@@ -359,10 +367,10 @@ const ConfirmReturnButton = memo(() => {
         }
     }, [error]);
     return (
-        <Button fullWidth loading={isLoading} variant="contained"
+        <NeumorphicButton fullWidth loading={isLoading} variant="contained"
                 sx={{bgcolor: color.COMFORT, color: color.LIGHT_TEXT, mt: 3}} onClick={onConfirmReturn}>
             {appStrings.borrow.RETURN_CONFIRM}
-        </Button>
+        </NeumorphicButton>
     );
 });
 export default memo(BookBorrowingDrawer);

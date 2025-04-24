@@ -1,18 +1,12 @@
-import {color} from "@/helpers/resources";
 import {DashboardLayoutSlotProps} from "@toolpad/core/DashboardLayout";
 import React from "react";
 import {Box, Stack,} from "@mui/material";
-import MenuDashboard from "@/components/primary/MenuDashboard";
-import {NAVIGATION} from "@/configs/navigation.config";
-import NotificationProvider from "@/components/provider/NotificationProvider";
 import AppNavigation from "@/app/(private)/(in-dash-board)/navigation";
+import ClientBackground from "@/app/(private)/(in-dash-board)/ClientBackground";
 
 interface IProps {
     children?: React.ReactNode;
 }
-
-const slotProps: DashboardLayoutSlotProps | undefined = {};
-
 function DashboardLayoutBasic(props: IProps) {
 
 
@@ -34,15 +28,15 @@ function DashboardLayoutBasic(props: IProps) {
                     <AppNavigation/>
                     {/*<MenuDashboard items={NAVIGATION}/>*/}
                 </Box>
-                <Box sx={{
-                    background: `linear-gradient(to bottom, ${color.WHITE},${color.PAGE_BACKGROUND}, ${color.PAGE_BACKGROUND})`,
+
+                <ClientBackground sx={{
                     flexGrow: 0,
                     overflowY: 'auto',
                     width: "100%",
                     height: "100%",
                 }}>
                     {props.children}
-                </Box>
+                </ClientBackground>
             </Stack>
         </>
     );

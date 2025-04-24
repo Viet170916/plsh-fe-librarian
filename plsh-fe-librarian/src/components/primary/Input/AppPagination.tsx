@@ -4,6 +4,7 @@ import {Chip, Pagination, PaginationProps, Tooltip, Typography} from "@mui/mater
 import {color} from "@/helpers/resources";
 import AppButton from "@/components/primary/Input/AppButton";
 import appStrings from "@/helpers/appStrings";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 type AppPaginationProps = { pageLabel?: string, hideNavButton?: boolean } & PaginationProps
 
@@ -17,11 +18,11 @@ function AppPagination({pageLabel, hideNavButton, ...paginationProps}: AppPagina
                 if (hideNavButton && (item.type === 'previous' || item.type === 'next')) {
                     return <></>;
                 } else if (!hideNavButton && item.type === 'previous') {
-                    return (<AppButton disabled={item.disabled} onClick={item.onClick} variant={"outlined"}
-                                       sx={{borderRadius: 12}}>{appStrings.PREV_PAGE}</AppButton>)
+                    return (<NeumorphicButton disabled={item.disabled} onClick={item.onClick} variant={"outlined"}
+                                       sx={{borderRadius: 12}}>{appStrings.PREV_PAGE}</NeumorphicButton>)
                 } else if (!hideNavButton && item.type === 'next') {
-                    return (<AppButton disabled={item.disabled} onClick={item.onClick} variant={"outlined"}
-                                       sx={{borderRadius: 12}}>{appStrings.NEXT_PAGE}</AppButton>)
+                    return (<NeumorphicButton disabled={item.disabled} onClick={item.onClick} variant={"outlined"}
+                                       sx={{borderRadius: 12}}>{appStrings.NEXT_PAGE}</NeumorphicButton>)
                 }
                 if (item.type === 'page') {
                     return (

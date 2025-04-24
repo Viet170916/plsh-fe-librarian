@@ -7,6 +7,8 @@ import {usePathname} from "next/navigation";
 import Link from "next/link";
 import {color} from "@/helpers/resources";
 import {motion} from "framer-motion";
+import {useTheme} from "@mui/material/styles";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 
 export const TabBar = memo(({tabs, left, bgcolor, right}: {
@@ -15,6 +17,7 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
         tabs?: { label: string, href: string, index: number }[],
         bgcolor?: string;
     }) => {
+        const theme = useTheme();
         const indicatorRef = useRef<HTMLDivElement>(null);
         const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
         const path = usePathname();
@@ -28,9 +31,9 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
                     indicator.style.left = `${offsetLeft - 12}px`;
                     indicator.style.top = `${offsetTop}px`;
                     indicator.style.width = `${clientWidth + 24}px`;
-                    if (!left) {
-                        indicator.style.height = `${clientHeight + 12}px`;
-                    }
+                    // if (!left) {
+                    //     indicator.style.height = `${clientHeight + 12}px`;
+                    // }
                 }
             }
         }, [tabs, path, left]);
@@ -38,20 +41,33 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
         return (
             <Grid container width={"100%"} alignItems={"center"}
                   sx={{
-                      bgcolor: color.PRIMARY, pt: 1,
+                      bgcolor: theme.palette.primary.main, pt: 1,
                       alignItems: "stretch"
                   }}>
                 {left &&
                     <Grid justifySelf={"start"}
-                          sx={{px: .5, mb: 1, bgcolor: color.WHITE, borderRadius: 12}}>{left}
+                          boxShadow={NEUMORPHIC_SHADOW.INNER_SHADOW()}
+                          sx={{
+                              px: 1,
+                              py: .5,
+                              mb: 1,
+                              bgcolor: theme.palette.background.default,
+                              borderRadius: 12,
+                              overflow: "hidden"
+                          }}>{left}
                     </Grid>}
                 {tabs &&
                     <Grid
                         sx={{
-                            bgcolor: color.PRIMARY,
+                            bgcolor: theme.palette.primary.main,
                             ml: 3,
                             px: 3,
-                            pb: left ? 0 : 1.5,
+                            // pb: left ? 0 : 1.5,
+                            // pb: 1.5,
+                            // maxWidth: 500,
+                            // overflowX: "auto",
+                            mb: 1,
+                            textAlign: "center",
                             position: "relative",
                             width: "fit-content",
                         }}>
@@ -63,31 +79,40 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
 
                                             <Grid
                                                 ref={indicatorRef}
+                                                boxShadow={NEUMORPHIC_SHADOW.INNER_SHADOW()}
                                                 sx={{
+                                                    borderRadius: 2,
                                                     position: "absolute",
-                                                    bgcolor: "white",
+                                                    bgcolor: theme.palette.background.default,
                                                     transition: "all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
                                                     zIndex: 1,
                                                     height: "100%"
                                                 }}
                                                 container
                                             >
-                                                        <Box width={20} height={"100%"}
-                                                             sx={{
-                                                                 bgcolor: color.PRIMARY,
-                                                                 borderBottomRightRadius: 12
-                                                             }}/>
-                                                        <Box height={20} width={"100%"}
-                                                             sx={{bgcolor: color.PRIMARY, position: "absolute"}}/>
-                                                        <Grid size={"grow"}
-                                                              sx={{
-                                                                  bgcolor: color.WHITE,
-                                                                  borderTopRightRadius: 12,
-                                                                  borderTopLeftRadius: 12,
-                                                                  zIndex: 3
-                                                              }}/>
-                                                        <Box width={20} height={"100%"}
-                                                             sx={{bgcolor: color.PRIMARY, borderBottomLeftRadius: 12}}/>
+
+                                                {/*<Box width={20} height={"100%"}*/}
+                                                {/*     sx={{*/}
+                                                {/*         bgcolor: theme.palette.primary.main,*/}
+                                                {/*         borderBottomRightRadius: 12*/}
+                                                {/*     }}/>*/}
+                                                {/*<Box height={20} width={"100%"}*/}
+                                                {/*     sx={{*/}
+                                                {/*         bgcolor: theme.palette.primary.main,*/}
+                                                {/*         position: "absolute"*/}
+                                                {/*     }}/>*/}
+                                                {/*<Grid size={"grow"}*/}
+                                                {/*      sx={{*/}
+                                                {/*          bgcolor: theme.palette.background.default,*/}
+                                                {/*          borderTopRightRadius: 12,*/}
+                                                {/*          borderTopLeftRadius: 12,*/}
+                                                {/*          zIndex: 3*/}
+                                                {/*      }}/>*/}
+                                                {/*<Box width={20} height={"100%"}*/}
+                                                {/*     sx={{*/}
+                                                {/*         bgcolor: theme.palette.primary.main,*/}
+                                                {/*         borderBottomLeftRadius: 12*/}
+                                                {/*     }}/>*/}
                                             </Grid>
                                             <Box sx={{display: "flex", gap: 3, position: "relative", zIndex: 2}}>
                                                 {tabs.map((tab, index) => {
@@ -106,10 +131,12 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
                                                                     flexDirection: "column",
                                                                     alignItems: "center",
                                                                     px: 2,
-                                                                    color: isActive ? color.PRIMARY : color.LIGHT_TEXT,
+                                                                    color: isActive ? theme.palette.primary.main : color.LIGHT_TEXT,
                                                                 }}
                                                             >
-                                                                <Typography variant="body2" sx={{mt: 0.5}}>
+                                                                <Typography variant="body2" sx={{
+                                                                    // mt: 0.5
+                                                                }}>
                                                                     {tab.label}
                                                                 </Typography>
                                                             </Box>
@@ -124,11 +151,19 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
                     <Grid justifySelf={"end"}
                           container
                           alignItems={"center"}
-                          sx={{px: .5, mb: 1, mr: 5, ml: 2, bgcolor: color.WHITE, borderRadius: 12}}>{right}
+                          sx={{
+                              px: .5,
+                              mb: 1,
+                              mr: 5,
+                              ml: 2,
+                              bgcolor: theme.palette.background.default,
+                              borderRadius: 12,
+                              overflow: "hidden"
+                          }}>{right}
                     </Grid>}
                 {bgcolor ? <motion.div
                         animate={{
-                            backgroundColor: bgcolor ?? color.WHITE,
+                            backgroundColor: bgcolor ?? theme.palette.background.default,
                         }}
                         transition={{duration: 0.4}}
                         style={{
@@ -144,7 +179,8 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
                         size={12}
                         sx={{
                             // borderRadius: "50px 0 0 0",
-                            bgcolor: color.WHITE,
+                            boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW_TOP_LEFT,
+                            bgcolor: theme.palette.background.default,
                             zIndex: 2,
                             height: 20,
                             width: "100%",

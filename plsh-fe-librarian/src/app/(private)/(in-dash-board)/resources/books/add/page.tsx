@@ -23,9 +23,10 @@ export const metadata = {
 
 function AddBookPage() {
     return (
-        <>
+        <Grid container width={"100%"} sx={{p: 2}}>
             <BottomMenu>
-                <Grid sx={{bgcolor: color.WHITE, height: "100%", p: 2, width:"100%"}} spacing={2} position={"relative"}>
+                <Grid sx={{bgcolor: color.WHITE, height: "100%", p: 2, width: "100%"}} spacing={2}
+                      position={"relative"}>
                     <Box sx={{position: "absolute"}}>
                         <Bot/>
                     </Box>
@@ -48,7 +49,7 @@ function AddBookPage() {
                     <Add_EditBookOverviewTabs/>
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     );
 }
 

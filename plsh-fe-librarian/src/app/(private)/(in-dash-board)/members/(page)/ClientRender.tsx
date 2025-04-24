@@ -5,7 +5,7 @@ import {Member} from "@/helpers/appType";
 import {parsErrorToBaseResponse} from "@/helpers/error";
 import {useSelector} from "@/hooks/useSelector";
 import {useLazyGetMembersQuery} from "@/stores/slices/api/member.api.slice";
-import {Box, Button, Drawer, LinearProgress, MenuItem, Select, TextField} from "@mui/material";
+import {Box, Drawer, LinearProgress, MenuItem, Select} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import React, {JSX, memo, useEffect, useState} from "react";
@@ -14,8 +14,9 @@ import {shallowEqual} from "react-redux";
 import {toast} from "sonner";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {setStateToMemberState} from "@/stores/slices/member-states/member.slice";
-import AppButton from "@/components/primary/Input/AppButton";
 import AppPagination from "@/components/primary/Input/AppPagination";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 
 type ClientRenderProps = {
@@ -111,7 +112,8 @@ export const FilterForm = memo(() => {
 
     return (
         <Grid>
-            <AppButton variant={"outlined"} sx={{borderRadius: 12}} onClick={onOpen}>{appStrings.FILTER}</AppButton>
+            <NeumorphicButton variant={"outlined"} sx={{borderRadius: 12}}
+                              onClick={onOpen}>{appStrings.FILTER}</NeumorphicButton>
             <Drawer anchor="right" open={open} onClose={onClose}>
                 <Box p={3} width={300}>
 
@@ -121,7 +123,7 @@ export const FilterForm = memo(() => {
                                 name="keyword"
                                 control={control}
                                 render={({field}) => (
-                                    <TextField
+                                    <NeumorphicTextField
                                         fullWidth
                                         label="Tìm kiếm"
                                         margin="normal"
@@ -181,10 +183,11 @@ export const FilterForm = memo(() => {
                             />
                         </Grid>
                         <Box display="flex" justifyContent="space-between" mt={2}>
-                            <Button type="submit" variant="contained" color="primary" onClick={handleSubmit(onSubmit)}>
+                            <NeumorphicButton type="submit" variant_2="primary" color="primary"
+                                              onClick={handleSubmit(onSubmit)}>
                                 {appStrings.APPLY}
-                            </Button>
-                            <Button type="button" variant="outlined" onClick={() => reset({
+                            </NeumorphicButton>
+                            <NeumorphicButton onClick={() => reset({
                                 ...membersFilter,
                                 keyword: "",
                                 role: "",
@@ -193,7 +196,7 @@ export const FilterForm = memo(() => {
                                 orderBy: "fullName",
                             })}>
                                 {appStrings.RESET}
-                            </Button>
+                            </NeumorphicButton>
                         </Box>
                     </form>
                 </Box>

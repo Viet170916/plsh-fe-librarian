@@ -53,8 +53,8 @@ function ClientRender(): JSX.Element {
                     } as BorrowedBookData))
                 }));
 
-            } else
-                dispatch(setPropToLoanState({key: "currentLoan", value: data.data}));
+            }
+            dispatch(setPropToLoanState({key: "currentLoan", value: data.data}));
         }
     }, [data, dispatch]);
     useEffect(() => {
@@ -63,11 +63,16 @@ function ClientRender(): JSX.Element {
             throw new Error(appStrings.error.LOAN_NOT_FOUND);
         }
     }, [error]);
+
+    // useEffect(() => {
+    //     if ((data?.data.aprovalStatus === "pending" || data?.data.aprovalStatus === "approved") &&
+    //         (path !== `/borrow/${code}/edit` && path !== `/borrow/${code}/edit/borrower` && path !== `/borrow/${code}/edit/confirmation`)) {
+    //         router.push(`/borrow/${code}/edit`);
+    //     }
+    // }, [data, path, code]);
+
     if (isFetching)
         return (<LinearProgress/>);
-    else if ((data?.data.aprovalStatus === "pending" || data?.data.aprovalStatus === "approved") && (path !== `/borrow/${code}/edit` && path !== `/borrow/${code}/edit/borrower` && path !== `/borrow/${code}/edit/confirmation`)) {
-        router.push(`/borrow/${code}/edit`);
-    }
     return <></>
 
 

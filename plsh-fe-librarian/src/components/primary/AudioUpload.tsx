@@ -7,6 +7,7 @@ import {formatFileSize} from "@/helpers/text";
 import {color} from "@/helpers/resources";
 import {FaHeadphones} from "react-icons/fa6";
 import {Resource} from "@/helpers/appType";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 interface IProps {
     children?: React.ReactNode;
@@ -87,9 +88,9 @@ function AudioUpload(props: IProps) {
             <input type="file" accept="audio/*" onChange={handleFileUpload} style={{display: 'none'}}
                    id="audio-upload"/>
             <label htmlFor="audio-upload">
-                <Button variant="contained" component="span" startIcon={<CloudUpload/>}>
+                <NeumorphicButton variant="contained" component="span" startIcon={<CloudUpload/>}>
                     Upload Audio
-                </Button>
+                </NeumorphicButton>
             </label>
 
             {file && (

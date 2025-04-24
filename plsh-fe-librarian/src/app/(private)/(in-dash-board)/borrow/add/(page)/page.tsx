@@ -12,11 +12,11 @@ async function AddBorrowPage() {
         <Grid spacing={2} container sx={{p: 4, width: "100%"}}>
             <AddEditBorrowForm/>
             <Grid size={4.5} sx={{p: 3, bgcolor: color.WHITE, borderRadius: 2}} minHeight={400}>
-                <Typography variant="h4" gutterBottom>{appStrings.SEARCH}</Typography>
+                <Typography color={"text.primary"} variant="h4" gutterBottom>{appStrings.SEARCH}</Typography>
                 <SearchedList/>
             </Grid>
             <Grid size={"grow"}>
-                <Typography variant="h4" fontWeight="bold">
+                <Typography color={"text.primary"} variant="h4" fontWeight="bold">
                     Sách <span style={{color: color.PRIMARY}}>đã chọn</span>
                 </Typography>
                 <SelectedBooks/>

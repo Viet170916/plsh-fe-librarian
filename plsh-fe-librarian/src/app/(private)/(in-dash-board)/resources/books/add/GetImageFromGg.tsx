@@ -16,6 +16,8 @@ import {setPropToAddEditBook} from "@/stores/slices/book-states/book.add-edit.sl
 import {appToaster} from "@/components/primary/toaster";
 import {TbCameraSearch} from "react-icons/tb";
 import {IoClose} from "react-icons/io5";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 
 function GetImageFromGg(): JSX.Element {
@@ -28,9 +30,9 @@ function GetImageFromGg(): JSX.Element {
     }, [dispatch])
     return (
         <Grid>
-            <AppButton onClick={() => {
+            <NeumorphicButton onClick={() => {
                 setOpen((prevState) => !prevState)
-            }} sx={{p: 1, fontSize: 26}} variant={"outlined"}><TbCameraSearch/></AppButton>
+            }} sx={{p: 1, fontSize: 26}} variant={"outlined"}><TbCameraSearch/></NeumorphicButton>
             <AnimatedMenu open={open} initHeight={65}>
                 <Tooltip title={appStrings.CLOSE}>
                     <IconButton sx={{position: "absolute", bottom: 0, right: 0}}
@@ -81,14 +83,14 @@ const SearchImageBook = memo(({onSelect}: { onSelect: (url: string) => void }) =
                         <Grid size={"grow"}>
                             <Controller render={({field}) => {
                                 return (
-                                    <TextField {...field} variant={"outlined"} label={appStrings.SEARCH} size={"small"}
+                                    <NeumorphicTextField {...field} variant={"outlined"} label={appStrings.SEARCH} size={"small"}
                                                fullWidth/>
                                 )
                             }} control={control} name={"query"}/>
                         </Grid>
-                        <AppButton type={"submit"} variant={"outlined"} size={"small"} loading={isFetching}>
+                        <NeumorphicButton type={"submit"} variant={"outlined"} size={"small"} loading={isFetching}>
                             {appStrings.SEARCH}
-                        </AppButton>
+                        </NeumorphicButton>
                     </Grid>
                 </form>
             </Box>

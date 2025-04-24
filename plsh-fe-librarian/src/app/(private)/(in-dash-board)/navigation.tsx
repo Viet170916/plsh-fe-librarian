@@ -3,7 +3,7 @@ import React, {memo} from 'react'
 import {Box, Typography, useMediaQuery} from '@mui/material'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import {color, theme} from "@/helpers/resources";
+import {color} from "@/helpers/resources";
 import {TbLayoutDashboardFilled} from "react-icons/tb";
 import appStrings from "@/helpers/appStrings";
 import {FaBookBookmark} from "react-icons/fa6";
@@ -13,6 +13,8 @@ import {IoLogOut, IoSettings} from "react-icons/io5";
 import {motion} from 'framer-motion';
 import {HiOutlineLibrary} from "react-icons/hi";
 import Book from "@/components/Animation/lotties/Book";
+import {useTheme} from "@mui/material/styles";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 const navItems = [
     {label: appStrings.DASHBOARD, icon: <TbLayoutDashboardFilled size={24}/>, href: '/dashboard'},
@@ -22,13 +24,14 @@ const navItems = [
     {
         href: "/resources/library-room",
         label: appStrings.LIBRARY_ROOM,
-        icon: <HiOutlineLibrary color={color.PRIMARY} size={24}/>,
+        icon: <HiOutlineLibrary size={24}/>,
     },
     {label: appStrings.SETTING, icon: <IoSettings size={24}/>, href: '/setting'},
     {label: appStrings.LOGOUT, icon: <IoLogOut size={24}/>, href: '/logout'},
 ]
 
 export const AppNavigation = () => {
+    const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('md'))
     const pathname = usePathname();
     const expanded = isLargeScreen
@@ -38,7 +41,8 @@ export const AppNavigation = () => {
             sx={{
                 height: '100%',
                 width: expanded ? 240 : 80,
-                bgcolor: color.PRIMARY,
+                bgcolor: theme.palette.primary.main,
+                boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
                 p: 2,
                 pt: 0,
                 display: 'flex',
@@ -72,7 +76,7 @@ export const AppNavigation = () => {
                     >
                         <motion.div
                             initial={{y: 0}}
-                            animate={{y: isActive ? 10 : 0}} // Dùng giá trị y để di chuyển lên/xuống
+                            animate={{y: isActive ? 10 : 0}}
                             transition={{type: 'spring', stiffness: 300}}
                         >
                             <Box
@@ -83,11 +87,12 @@ export const AppNavigation = () => {
                                     px: 2,
                                     py: 1.5,
                                     borderRadius: '999px',
-                                    bgcolor: isActive ? color.LIGHT_TEXT : 'transparent',
-                                    color: isActive ? color.PRIMARY : color.LIGHT_TEXT,
+                                    boxShadow: isActive? NEUMORPHIC_SHADOW.INNER_SHADOW():"none",
+                                    bgcolor: isActive ? theme.palette.background.default : 'transparent',
+                                    color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
                                     transition: 'all 0.3s ease',
                                     '&:hover': {
-                                        bgcolor: isActive ? color.LIGHT_TEXT : color.PRIMARY,
+                                        bgcolor: isActive ? theme.palette.text.secondary : theme.palette.primary.main,
                                     },
                                 }}
                             >

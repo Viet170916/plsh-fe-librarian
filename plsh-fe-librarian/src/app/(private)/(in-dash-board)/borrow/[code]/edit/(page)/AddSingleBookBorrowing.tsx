@@ -1,5 +1,5 @@
 "use client"
-import React, {JSX, memo, useEffect} from "react";
+import React, {JSX, memo, useCallback, useEffect, useRef} from "react";
 import AppButton from "@/components/primary/Input/AppButton";
 import Grid from "@mui/material/Grid2";
 import {useModifySingleBookBorrowingMutation} from "@/stores/slices/api/borrow.api.slice";
@@ -8,17 +8,23 @@ import Helper from "@/components/primary/display/Helper";
 import {Typography} from "@mui/material";
 import {color} from "@/helpers/resources";
 import useFetchingToast from "@/hooks/useFetchingToast";
-import {RootState, useAppStore} from "@/stores/store";
-import {shallowEqual, useSelector} from "react-redux";
-import {selectCurrentBookBorrowed} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
+import {useAppStore} from "@/stores/store";
+import {BorrowedBookData, selectCurrentBookBorrowed} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
 import {compressImage, urlToFile} from "@/helpers/convert";
+import {deepEqual} from "@/helpers/comparation";
+import {appToaster} from "@/components/primary/toaster";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function ModifySingleBookBorrowing(): JSX.Element {
-    const selectedBook = useSelector((state: RootState) => selectCurrentBookBorrowed(state), shallowEqual);
+    const store = useAppStore();
+    // const selectedBook = useSelector((state: RootState) => selectCurrentBookBorrowed(state), shallowEqual);
+    const getSelectedBook = useCallback(() => {
+        return selectCurrentBookBorrowed(store.getState());
+    }, [store]);
     const [modify, {data, error, isLoading}] = useModifySingleBookBorrowingMutation();
     useFetchingToast(data, error);
-
     const onSave = async () => {
+        const selectedBook = getSelectedBook();
         if (selectedBook?.id && selectedBook.borrowDateRange.start && selectedBook.borrowDateRange.end) {
 
             const files = await Promise.all(
@@ -39,15 +45,15 @@ function ModifySingleBookBorrowing(): JSX.Element {
         }
     }
     useEffect(() => {
-        return()=>{
+        return () => {
             // onSave();
         }
     }, []);
     return (
         <Grid>
-            <AppButton variant={"outlined"} loading={isLoading} onClick={onSave}>
+            <NeumorphicButton loading={isLoading} onClick={onSave}>
                 {appStrings.borrow.SAVE_THIS_BOOK_BORROWING}
-            </AppButton>
+            </NeumorphicButton>
             <Helper title={<Grid>
                 <Typography>{appStrings.guide.SAVE_THIS_BOOK_BORROWING}</Typography>
                 <Typography sx={{color: color.WARNING}}>

@@ -17,7 +17,7 @@ function Helper({title, helpModalOption}: HelperProps): JSX.Element {
     return (
         <>
             <Tooltip title={title}>
-                <IconButton onClick={helpModalOption && (()=>setOpen(true))}>
+                <IconButton onClick={helpModalOption && (() => setOpen(true))}>
                     <IoHelpCircleOutline color={color.DARK_TEXT}/>
                 </IconButton>
             </Tooltip>

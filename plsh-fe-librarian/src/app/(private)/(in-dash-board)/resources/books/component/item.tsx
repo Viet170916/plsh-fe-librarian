@@ -9,6 +9,9 @@ import React, {memo} from "react";
 import {Zoom} from "@/components/Animation/animation";
 import {BsMenuButton} from "react-icons/bs";
 import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import {truncateTextStyle} from "@/style/text.style";
 
 export const BookSkeleton = ({newBook, index}: { newBook?: boolean, index: number }) => (
     <Zoom index={index}>
@@ -35,7 +38,9 @@ export const BookCard = memo(({book, newBook, onMenuSelect}: {
     } | null)) | { id: number | null; anchorEl: HTMLElement | null } | null)) => void
 }) => {
     return (
-        <Grid sx={{p: 2, bgcolor: color.WHITE, borderRadius: 3, position: "relative"}} spacing={1} width={"100%"}
+        <Grid component={NeumorphicButton} boxShadow={NEUMORPHIC_SHADOW.SHADOW()}
+              sx={{p: 2, borderRadius: 3, position: "relative"}} spacing={1}
+              width={"100%"}
               container height={"100%"}>
             <Tooltip title={appStrings.MENU}>
 
@@ -52,21 +57,21 @@ export const BookCard = memo(({book, newBook, onMenuSelect}: {
                     <BsMenuButton color={color.DARK}/>
                 </IconButton>
             </Tooltip>
-            <ImageWithBgCover src={book.coverImageUrl ?? book.thumbnail} sx={{height: 172}}/>
+            <ImageWithBgCover src={book.coverImageUrl ?? book.thumbnail}
+                              sx={{height: 172, boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW()}}/>
             {
                 newBook ? <></>
                     : <>
                         <Grid size={12}>
                             <Tooltip title={book.title}>
-                                <Typography variant="body2" fontWeight="bold" noWrap sx={{color: color.DARK_TEXT}}>
+                                <Typography variant="body2" color="textPrimary" fontWeight="bold" noWrap sx={{color: color.DARK_TEXT}}>
                                     {book.title ?? "--"}
                                 </Typography>
                             </Tooltip>
                         </Grid>
                         <Grid size={12}>
-
                             <Tooltip title={book.authors?.map((author) => author.fullName).join(", ")}>
-                                <Typography variant="caption" color="textSecondary" noWrap>
+                                <Typography variant="caption" color="textPrimary" noWrap sx={truncateTextStyle}>
                                     {appStrings.AUTHOR_NAME}: {book.authors?.map((author) => author.fullName).join(", ")}
                                 </Typography>
                             </Tooltip>

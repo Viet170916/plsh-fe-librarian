@@ -18,6 +18,7 @@ import {FaRegWindowClose} from "react-icons/fa";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {toast} from "sonner";
 import {correctTime, formatTime} from "@/helpers/time";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 interface DateRangeProps {
     bookInstanceId: number;
@@ -72,7 +73,7 @@ const BorrowNote = memo(({bookInstanceId}: DateRangeProps) => {
     const value = useSelector((state: RootState) => selectCurrentBookBorrowed(state)?.beforeBorrow.note);
     const dispatch = useAppDispatch();
     return (
-        <TextField
+        <NeumorphicTextField
             value={value ?? ""}
             onChange={e =>
                 dispatch(
@@ -96,7 +97,7 @@ const BorrowStatus = memo(({bookInstanceId}: DateRangeProps) => {
     const value = useSelector((state: RootState) => selectCurrentBookBorrowed(state)?.afterBorrow.status);
     const dispatch = useAppDispatch();
     return (
-        <TextField
+        <NeumorphicTextField
             value={value ?? ""}
             onChange={e =>
                 dispatch(

@@ -11,11 +11,11 @@ import {
     ListItemText, Theme,
 } from "@mui/material";
 import {ChevronLeft, ChevronRight, Inbox, Label, Mail, Menu, StarBorder} from "@mui/icons-material";
-import {styled} from "@mui/material/styles";
+import {styled, useTheme} from "@mui/material/styles";
 import {BoxOwnProps} from "@mui/system";
 import {Navigation} from "@toolpad/core/AppProvider";
 import Typography from "@/components/primary/typography";
-import {color, theme} from "@/helpers/resources";
+import {color} from "@/helpers/resources";
 import {usePathname} from "next/navigation";
 import Link from 'next/link';
 import {FaCaretDown, FaCaretUp} from "react-icons/fa6";
@@ -90,6 +90,7 @@ const Drawer = styled(Box, {shouldForwardProp: (prop) => prop !== 'open'})<Drawe
 function MenuDashBoard(props: IProps) {
     const [open, setOpen] = React.useState(true);
     const pathname = usePathname();
+    const theme = useTheme();
     useEffect(() => {
     }, [pathname]);
 
@@ -151,6 +152,7 @@ function NavList({items, open, pathname, segment}: {
     pathname: string,
     segment?: string
 }) {
+    const theme = useTheme();
     return (
         <List>
             {items.map((item, index) => {

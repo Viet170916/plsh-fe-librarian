@@ -44,11 +44,11 @@ function AnalysisComponent(props: IProps) {
                             />}>
                             <Grid container height={"100%"} justifyContent={"start"}>
                                 <Link href={`/resources/books`}>
-                                    <Typography variant="h5" fontWeight={"bold"} mb={1} sx={{color: color.DARK_TEXT}}>
+                                    <Typography color={"text.primary"} variant="h5" fontWeight={"bold"} mb={1} sx={{color: color.DARK_TEXT}}>
                                         {appStrings.BOOK}
                                     </Typography>
                                 </Link>
-                                <Typography variant="h6" fontWeight={"lighter"} mb={1}
+                                <Typography color={"text.primary"} variant="h6" fontWeight={"lighter"} mb={1}
                                             sx={{color: color.DARK_TEXT}}>
                                     Thư viện của chúng tôi mang đến cho bạn không gian đọc lý tưởng, nội dung phong phú
                                     từ
@@ -58,13 +58,13 @@ function AnalysisComponent(props: IProps) {
                                 </Typography>
                                 <Grid size={12} container spacing={1}>
                                     <Link href={`/resources/books/add`}>
-                                        <Typography variant="h6" fontWeight={"lighter"} mb={1}
+                                        <Typography color={"text.primary"} variant="h6" fontWeight={"lighter"} mb={1}
                                                     sx={{color: color.DARK_TEXT, textDecoration: "underline"}}>
                                             {appStrings.book.ADD_BOOK}
                                         </Typography>
                                     </Link>
                                     <Link href={`/resources/books/add/lazy`}>
-                                        <Typography variant="h6" fontWeight={"lighter"} mb={1}
+                                        <Typography color={"text.primary"} variant="h6" fontWeight={"lighter"} mb={1}
                                                     sx={{color: color.DARK_TEXT, textDecoration: "underline"}}>
                                             {appStrings.book.ADD_BOOK_LAZY}
                                         </Typography>

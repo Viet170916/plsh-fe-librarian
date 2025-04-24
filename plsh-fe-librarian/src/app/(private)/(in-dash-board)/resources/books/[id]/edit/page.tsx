@@ -17,7 +17,7 @@ async function EditBookPage(props: IProps) {
     const bookResponse = await getBooks(id);
     if (bookResponse.data.id)
         return (
-            <Grid direction="row" container spacing={2}>
+            <Grid direction="row" container spacing={2} sx={{m: 2}}>
                 <Grid>
                     <Add_EditBookImage src={""}/>
                 </Grid>

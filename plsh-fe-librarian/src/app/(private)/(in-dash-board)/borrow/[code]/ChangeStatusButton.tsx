@@ -1,7 +1,7 @@
 "use client"
 import React, {JSX, memo, useCallback, useMemo} from "react";
 import {LoanStatus} from "@/helpers/dataTransfer";
-import {Button, Chip} from "@mui/material";
+import {Chip} from "@mui/material";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {shallowEqual, useSelector} from "react-redux";
 import {RootState} from "@/stores/store";
@@ -10,6 +10,10 @@ import {setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import useFetchingToast from "@/hooks/useFetchingToast";
+import Link from "next/link";
+import appStrings from "@/helpers/appStrings";
+import {useParams} from "next/navigation";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 export function renderLoanStatusChip(status: LoanStatus) {
     switch (status) {
@@ -40,6 +44,7 @@ export function renderLoanStatusChip(status: LoanStatus) {
 }
 
 function ChangeStatusButton(): JSX.Element {
+    const {code} = useParams();
     const dispatch = useAppDispatch();
     const loan = useSelector((state: RootState) => state.loanState.currentLoan, shallowEqual);
     const [updateLoanStatus, {error, data, isLoading}] = useUpdateLoanStatusMutation();
@@ -59,81 +64,102 @@ function ChangeStatusButton(): JSX.Element {
         switch (loan?.aprovalStatus) {
             case "pending":
                 return (<>
-                    <Button
+                    <NeumorphicButton
                         loading={isLoading}
-                        variant="contained"
+                        variant_2="primary"
                         sx={{bgcolor: color.PRIMARY, color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("approved")}
                     >
                         Duyệt
-                    </Button>
-                    <Button
+                    </NeumorphicButton>
+                    <NeumorphicButton
                         loading={isLoading}
 
-                        variant="contained"
-                        sx={{bgcolor: color.SERIOUS, color: color.LIGHT_TEXT}}
+                        variant_2="primary"
+                        color={"error"}
+                        sx={{color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("rejected")}
                     >
                         Từ chối
-                    </Button>
-                    <Button
+                    </NeumorphicButton>
+                    <NeumorphicButton
                         loading={isLoading}
 
-                        variant="contained"
-                        sx={{bgcolor: color.FOUR, color: color.LIGHT_TEXT}}
+
+                        variant_2="primary"
+                        color={"error"}
+                        sx={{color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("cancel")}
                     >
                         Huỷ
-                    </Button>
+                    </NeumorphicButton>
                 </>);
             case "taken":
                 return (
-                    <Button
+                    <NeumorphicButton
                         loading={isLoading}
-                        variant="contained"
-                        sx={{bgcolor: color.COMFORT, color: color.LIGHT_TEXT}}
+
+                        variant_2="primary"
+                        color={"success"}
+                        sx={{color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("return-all")}
                     >
                         Xác nhận trả sách
-                    </Button>);
+                    </NeumorphicButton>);
             case "approved":
                 return (
                     <>
-                        <Button
+                        <NeumorphicButton
                             loading={isLoading}
-                            variant="contained"
-                            sx={{bgcolor: color.COMFORT, color: color.LIGHT_TEXT}}
+                            variant_2="primary"
+                            color={"success"}
+                            sx={{color: color.LIGHT_TEXT}}
                             onClick={() => handleUpdateStatus("taken")}
                         >
                             Xác nhận lấy sách
-                        </Button>
-                        <Button
+                        </NeumorphicButton>
+                        <NeumorphicButton
+                            href={`/borrow/${code}/edit`}
+                            component={Link}
                             loading={isLoading}
-                            variant="contained"
-                            sx={{bgcolor: color.FOUR, color: color.LIGHT_TEXT}}
+                            variant_2="primary"
+
+                            color={"warning"}
+                            sx={{bgcolor: color.WARNING, color: color.LIGHT_TEXT}}
+                            onClick={() => handleUpdateStatus("taken")}
+                        >
+                            {appStrings.EDIT}
+                        </NeumorphicButton>
+
+                        <NeumorphicButton
+                            loading={isLoading}
+                            variant_2="primary"
+                            color={"error"}
+                            sx={{color: color.LIGHT_TEXT}}
                             onClick={() => handleUpdateStatus("cancel")}
                         >
                             Huỷ
-                        </Button>
+                        </NeumorphicButton>
                     </>
 
                 );
             case "rejected":
                 return (
-                    <Button
+                    <NeumorphicButton
                         loading={isLoading}
-                        variant="contained"
-                        sx={{bgcolor: color.COMFORT, color: color.LIGHT_TEXT}}
+                        variant_2="primary"
+                        color={"success"}
+                        sx={{color: color.LIGHT_TEXT}}
                         onClick={() => handleUpdateStatus("approved")}
                     >
                         Phê duyệt lại
-                    </Button>
+                    </NeumorphicButton>
                 );
             default:
                 break;
 
         }
-    }, [loan?.aprovalStatus, handleUpdateStatus, isLoading])
+    }, [loan?.aprovalStatus, handleUpdateStatus, isLoading, code])
 
     return (
         <>

@@ -9,7 +9,6 @@ import AddAuthor from "@/app/(private)/(in-dash-board)/resources/books/add/autho
 import AudioBookAvailability from "@/app/(private)/(in-dash-board)/resources/books/add/availability/AudioBookAvai";
 import EBookAvailability from "@/app/(private)/(in-dash-board)/resources/books/add/availability/EBookAvai";
 import PhysicBookAvailability from "@/app/(private)/(in-dash-board)/resources/books/add/availability/HardBookAvai";
-import {TextFieldNoBorder} from "@/components/primary/Input/TextFieldNoBorder";
 import appStrings from "@/helpers/appStrings";
 import {color} from "@/helpers/resources";
 import {setValueInBookBaseInfo} from "@/stores/slices/book-states/book.add-edit.slice";
@@ -18,6 +17,7 @@ import {Box, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {JSX, memo} from "react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 function Add_EditBookDetails(): JSX.Element {
     const bookAuthors = useSelector((state: RootState) => state.addEditBookData.authors);
@@ -37,7 +37,8 @@ function Add_EditBookDetails(): JSX.Element {
                             </Box>
                         </Grid>
                         <AddAuthor>
-                            <span style={{textDecoration: "underline"}}>{appStrings.ADD_AN_AUTHOR}</span>
+                            <Typography color={"primary"}
+                                        sx={{textDecoration: "underline"}}>{appStrings.ADD_AN_AUTHOR}</Typography>
                         </AddAuthor>
                     </Grid>
                 </Grid>
@@ -88,8 +89,22 @@ const TitleEdit = memo(() => {
     const dispatch = useDispatch();
     const title = useSelector((state: RootState) => state.addEditBookData.baseInfo.title, shallowEqual);
     return (
-        <TextFieldNoBorder
-            placeholder={appStrings.TITLE}
+        <NeumorphicTextField
+            label={appStrings.TITLE}
+            sx={{
+                mt: 3,
+                '& .MuiInputLabel-root': {
+                    fontSize: 35,
+                },
+                '& .MuiInputLabel-shrink': {
+                    fontSize: 15,
+                },
+                '& .MuiInputBase-input': {
+                    p: 0,
+                    fontSize: 35,
+                    lineHeight: '1.75',
+                },
+            }}
             value={title ?? ""}
             onChange={(e) => {
                 dispatch(setValueInBookBaseInfo({key: "title", value: e.target.value}));
@@ -97,9 +112,6 @@ const TitleEdit = memo(() => {
             multiline
             maxRows={2}
             fullWidth
-            fontSize={35}
-            padding={0}
-            textColor={color.DARK_TEXT}
         />
     );
 });
@@ -107,14 +119,20 @@ const VersionEdit = memo(() => {
     const dispatch = useDispatch();
     const version = useSelector((state: RootState) => state.addEditBookData.baseInfo.version, shallowEqual);
     return (
-        <TextFieldNoBorder
-            placeholder={appStrings.VERSION}
+        <NeumorphicTextField
+            size={"small"}
+            sx={{
+                mt: 3,
+                '& .MuiInputBase-input': {
+                    // p: 0,
+                    fontSize: 16,
+                },
+            }}
+            label={appStrings.VERSION}
             value={version ?? ""}
             onChange={(e) => {
                 dispatch(setValueInBookBaseInfo({key: "version", value: e.target.value}));
             }}
-            padding={0}
-            textColor={color.DARK_LIGHTER_TEXT}
         />
     );
 });

@@ -12,7 +12,10 @@ export const loanApi = createApi({
         baseQuery: baseQueryWithReAuth,
         tagTypes: ["loanTag"],
         endpoints: (builder) => ({
-            getLoans: builder.query<BaseResponse<LoanDto[]>, FilterParams<LoanDto> & { approveStatus?: LoanStatus }>({
+            getLoans: builder.query<BaseResponse<LoanDto[]>, FilterParams<LoanDto> & {
+                approveStatus?: LoanStatus,
+                userId?: number
+            }>({
                 query: (params) => ({
                     url: 'loan',
                     params,

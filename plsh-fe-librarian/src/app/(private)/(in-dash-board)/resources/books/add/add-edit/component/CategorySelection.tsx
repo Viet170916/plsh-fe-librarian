@@ -3,11 +3,12 @@ import {useAppDispatch} from "@/hooks/useDispatch";
 import {useGetCategoriesQuery} from "@/stores/slices/api/book.api.slice";
 import {Category, setValueInBookBaseInfo} from "@/stores/slices/book-states/book.add-edit.slice";
 import {RootState} from "@/stores/store";
-import {Autocomplete, Checkbox, TextField, Tooltip} from "@mui/material";
+import {Autocomplete, Checkbox, Tooltip} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {debounce} from "@mui/material/utils";
 import React, {memo, useCallback, useMemo, useState} from "react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 export const NewCategoryEdit = memo(() => {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ export const NewCategoryEdit = memo(() => {
     return (
         <Grid container direction="row" spacing={2}>
             <Grid size={"grow"}>
-                <TextField
+                <NeumorphicTextField
                     fullWidth sx={{mt: 1}}
                     value={newCategory?.name ?? ""}
                     onChange={(e) => {
@@ -75,7 +76,7 @@ export const CategoryEdit = memo(() => {
             onInputChange={(_, value) => onInputChange(value)}
             options={data ?? []}
             sx={{mt: 1}}
-            renderInput={(params) => <TextField {...params}
+            renderInput={(params) => <NeumorphicTextField {...params}
                                                 label={appStrings.book.CATEGORY}
             />}
         />

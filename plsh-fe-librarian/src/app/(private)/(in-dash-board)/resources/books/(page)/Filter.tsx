@@ -7,11 +7,11 @@ import StarRating from "@/components/primary/StarRating";
 import Grid from "@mui/material/Grid2";
 import {Category} from "@/stores/slices/book-states/book.add-edit.slice";
 import appStrings from "@/helpers/appStrings";
-import AppTextField from "@/components/primary/Input/TextField";
 import AppChip from "@/components/primary/display/AppChip";
 import {color} from "@/helpers/resources";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {setPropToBookState} from "@/stores/slices/book-states/book.slice";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 const Gens = memo(({category, onSelect}: { category: Category[], onSelect: (selected: Category[]) => void }) => {
     const [getCategories, {data, error, isFetching}] = useLazyGetCategoriesQuery();
@@ -53,9 +53,9 @@ const Gens = memo(({category, onSelect}: { category: Category[], onSelect: (sele
             onInputChange={(_, value) => onInputChange(value)}
             options={data?.map(c => c) ?? []}
             sx={{minWidth: 200, maxWidth: 400}}
-            renderInput={(params) => <AppTextField {...params}
-                                                   maxRows={1}
-                                                   label={appStrings.book.CATEGORY}
+            renderInput={(params) => <NeumorphicTextField {...params}
+                                                          maxRows={1}
+                                                          label={appStrings.book.CATEGORY}
             />}
         />)
 })
@@ -97,7 +97,7 @@ function Filter(): JSX.Element {
             alignItems="center"
             sx={{my: .3}}
         >
-            <AppTextField
+            <NeumorphicTextField
                 label="Tìm kiếm"
                 variant="outlined"
                 onChange={(e) => onInputChange(e.target.value)}
@@ -115,7 +115,7 @@ function Filter(): JSX.Element {
                         <StarRating value={option} readOnly size="small"/>
                     </Box>
                 )}
-                renderInput={(params) => <AppTextField {...params} label="Đánh giá" size="small"/>}
+                renderInput={(params) => <NeumorphicTextField {...params} label="Đánh giá" size="small"/>}
                 isOptionEqualToValue={(option, value) => option === value}
                 sx={{minWidth: 200}}
             />

@@ -55,7 +55,7 @@ const ShelfTreeView = memo( ( { shelf, onSelect }: { shelf: Shelf, onSelect?: ( 
 } );
 function ShelfSelection( { onSelect }: ShelfSelectionProps ): JSX.Element{
 				const dispatch = useAppDispatch();
-				const { data: rowShelves } = useGetShelvesQuery();
+				const { data: rowShelves } = useGetShelvesQuery({});
 				const rowShelfSelections = rowShelves?.map( ( shelf ) => (<ShelfTreeView key = { shelf.id } shelf = { shelf } />) );
 				useEffect( () => {
 								dispatch( setShelves( rowShelves ?? [] ) );

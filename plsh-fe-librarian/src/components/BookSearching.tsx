@@ -1,7 +1,7 @@
 "use client";
 
 import React, {ChangeEvent, memo, useCallback, useEffect, useMemo, useState} from "react";
-import {Box, Button, Dialog, DialogContent, DialogTitle, LinearProgress, TextField} from "@mui/material";
+import {Box, Dialog, DialogContent, DialogTitle, LinearProgress} from "@mui/material";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -20,6 +20,9 @@ import appStrings from "@/helpers/appStrings";
 import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
 import {appToaster} from "@/components/primary/toaster";
 import AiSupport from "@/app/(private)/(in-dash-board)/resources/books/add/AiSupport";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void }) {
     const [getBooks, {data, error, isFetching}] = useLazyGetBooksWithIsbnQuery();
@@ -50,15 +53,14 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
     }, [open]);
 
     return (
-        <Grid container spacing={1} width={"100%"} size={12} height={"fit-content"}>
+        <Grid container spacing={3} width={"100%"} size={12} height={"fit-content"}>
             <AiSupport open={openAiSupport} setOpen={setOpenAiSupport}/>
             <BarcodeScanner onScanDone={onScanDone}/>
             <Grid size={12} height={"fit-content"}>
-                <Button loading={isFetching} fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)}
-                        variant="contained"
-                        sx={{color: color.LIGHT_TEXT}}>
+                <NeumorphicButton loading={isFetching} fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)}
+                                  sx={{color: color.LIGHT_TEXT}}>
                     {appStrings.SCAN_BAR_CODE}
-                </Button>
+                </NeumorphicButton>
             </Grid>
             <Grid size={12}>
                 <BookListHint onSelect={onResult}/>
@@ -80,7 +82,7 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
         if (query) {
             getBooks({keyword: query})
         }
-    }, [query,getBooks]);
+    }, [query, getBooks]);
 
 
     const debouncedSetInputChange = useMemo(
@@ -150,9 +152,8 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
     }, [data, onSelected]);
     return (
         <Grid container spacing={2} size={12} justifyContent={"start"}>
-
             <Grid size={12}>
-                <TextField
+                <NeumorphicTextField
                     onChange={onInputChange}
                     label="Nhập tìm kiếm hoặc quét mã..."
                     size="small"
@@ -161,12 +162,12 @@ const BookListHint = memo(({onSelect}: { onSelect?: (book: BookData) => void }) 
                     autoComplete={"off"}
                 />
             </Grid>
-            <Grid size={12}>
+            <Grid size={12} boxShadow={NEUMORPHIC_SHADOW.INNER_SHADOW()} borderRadius={2}>
                 {
                     isFetching ? <LinearProgress/> : <></>
                 }
                 <List
-                    sx={{width: '100%', maxHeight: 300, overflowY: 'auto'}}>
+                    sx={{width: '100%', height: 300, overflowY: 'auto'}}>
                     {listBook}
                 </List>
 

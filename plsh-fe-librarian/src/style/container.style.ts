@@ -1,16 +1,17 @@
 import {color} from "@/helpers/resources";
 import {SxProps, Theme} from "@mui/material";
+import {NEUMORPHIC_COLORS, NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 export const signInContainerStyle: SxProps<Theme> = {
-    background: "white",
+    bgcolor: NEUMORPHIC_COLORS.GREY_LIGHT_1,
     borderRadius: 2,
     padding: "71px 71px !important",
-    boxShadow: `1px 1px 20px 1px ${color.SHADOW}`,
+    boxShadow: NEUMORPHIC_SHADOW.SHADOW({light: NEUMORPHIC_COLORS.PRIMARY_LIGHT, dark: NEUMORPHIC_COLORS.PRIMARY_DARK}),
 };
 export const primaryContainerStyle: SxProps<Theme> = {
     background: "white",
     position: "relative",
-    color: color.DARK_TEXT,
+    color: NEUMORPHIC_COLORS.TEXT_PRIMARY,
     overflow: "hidden",
     borderRadius: 2,
     padding: "0 !important",

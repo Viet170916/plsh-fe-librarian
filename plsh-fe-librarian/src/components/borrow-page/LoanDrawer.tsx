@@ -13,6 +13,7 @@ import {shallowEqual, useSelector} from "react-redux";
 import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
 import Link from "next/link";
 import AppButton from "@/components/primary/Input/AppButton";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 const LoanDrawer = () => {
     const dispatch = useAppDispatch();
@@ -41,9 +42,9 @@ const LoanDrawer = () => {
                         </Stack>
                     )}
                     <Link href={`/borrow/${loan?.id}`}>
-                        <AppButton fullWidth variant={"outlined"}>
+                        <NeumorphicButton fullWidth variant={"outlined"}>
                             {appStrings.SEE_DETAIL}
-                        </AppButton>
+                        </NeumorphicButton>
                     </Link>
                 </Stack>
             </Drawer>

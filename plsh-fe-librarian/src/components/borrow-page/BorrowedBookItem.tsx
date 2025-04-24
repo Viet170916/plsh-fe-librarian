@@ -1,7 +1,7 @@
 "use client";
 import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
 import appStrings from "@/helpers/appStrings";
-import {BookBorrowingDto} from "@/helpers/dataTransfer";
+import {BookBorrowingDto, LoanStatus} from "@/helpers/dataTransfer";
 import {color} from "@/helpers/resources";
 import {truncateTextStyle} from "@/style/text.style";
 import {Box, Button, ButtonGroup, Card, CardContent, Typography} from "@mui/material";
@@ -10,14 +10,16 @@ import Link from "next/link";
 import React, {memo, useMemo} from "react";
 import {formatTime} from "@/helpers/time";
 import dayjs from "dayjs";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 // import { FaBook, FaBookAtlas, FaHeadphones } from "react-icons/fa6";
 interface IProps {
-    borrowedBook: BookBorrowingDto;
-    onSelected?: (borrowedBook: BookBorrowingDto) => void;
+    borrowedBook: BookBorrowingDto,
+    onSelected?: (borrowedBook: BookBorrowingDto) => void,
+    approvalStatus: LoanStatus
 }
 
-function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
+function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
     // dayjs.extend(utc)
     // dayjs.extend(timezone)
     // dayjs.locale("vi")
@@ -86,40 +88,50 @@ function BorrowedBookItem({borrowedBook, onSelected}: IProps) {
                             }
                         </Box>
                         <Grid container spacing={2}>
-                            {
+                            {approvalStatus === "pending" || approvalStatus === "approved" ?
+                                <Grid>
+                                    <NeumorphicButton
+                                        variant="contained"
+                                        sx={{backgroundColor: color.WARNING, color: color.LIGHT_TEXT}}
+                                        fullWidth
+                                    >
+                                        {appStrings.borrow.NOT_TAKEN_YET}
+                                    </NeumorphicButton>
+                                </Grid> :
                                 (() => {
                                     switch (borrowedBook.borrowingStatus) {
                                         case "on-loan":
                                             return (
-                                                <Button
+                                                <NeumorphicButton
                                                     variant="contained"
                                                     sx={{backgroundColor: color.WARNING, color: color.LIGHT_TEXT}}
                                                     fullWidth
                                                 >
-                                                    {borrowedBook.borrowingStatus}
-                                                </Button>);
+                                                    {appStrings.borrow.ONLOAN}
+                                                </NeumorphicButton>);
                                         case "returned":
                                             return (
-                                                <Button
+                                                <NeumorphicButton
                                                     variant="contained"
                                                     sx={{background: color.COMFORT, color: color.LIGHT_TEXT}}
                                                     fullWidth
                                                 >
-                                                    {borrowedBook.borrowingStatus}
-                                                </Button>);
+                                                    {appStrings.borrow.RETURNED}
+                                                </NeumorphicButton>);
                                         case "overdue":
                                             return (
-                                                <Button
+                                                <NeumorphicButton
                                                     variant="contained"
                                                     sx={{background: color.SERIOUS, color: color.LIGHT_TEXT}}
                                                     fullWidth
                                                 >
-                                                    {borrowedBook.borrowingStatus}
+                                                    {appStrings.borrow.OVERDUE}
+
                                                     <Typography
                                                         fontSize={9}
                                                     > ({borrowedBook.overdueDays ?? 0} {appStrings.unit.DAY})
                                                     </Typography>
-                                                </Button>);
+                                                </NeumorphicButton>);
                                     }
                                 })()
                             }

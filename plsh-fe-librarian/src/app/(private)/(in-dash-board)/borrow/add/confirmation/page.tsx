@@ -1,4 +1,3 @@
-"use client";
 import BookBorrowingListPreview from "@/app/(private)/(in-dash-board)/borrow/add/confirmation/BookBorrowingListPreview";
 import BorrowingInformationPreview from "@/app/(private)/(in-dash-board)/borrow/add/confirmation/BorrowingInformationPreview";
 import Grid from "@mui/material/Grid2";

@@ -1,4 +1,3 @@
-"use client";
 import BorrowerForm from "@/app/(private)/(in-dash-board)/borrow/add/borrower/BorrowerForm";
 import MemberSelection from "@/app/(private)/(in-dash-board)/borrow/add/borrower/MemberSelection";
 import Grid from "@mui/material/Grid2";
@@ -17,5 +16,5 @@ function page(): JSX.Element {
     );
 }
 
-export default memo(page);
+export default page;
 

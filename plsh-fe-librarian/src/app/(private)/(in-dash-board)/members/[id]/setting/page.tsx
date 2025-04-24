@@ -4,11 +4,13 @@ interface IProps {
     children?: React.ReactNode;
 }
 
-import {Avatar, Box, Button, Tab, Tabs, TextField, Typography} from "@mui/material";
+import {Avatar, Box, Button, Tab, Tabs, Typography} from "@mui/material";
 
 import Grid from "@mui/material/Grid2";
 import {color} from "@/helpers/resources";
 import appStrings from "@/helpers/appStrings";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 const Card = () => {
     // const [tabIndex, setTabIndex] = useState(0);
@@ -27,7 +29,7 @@ const Card = () => {
                         <Avatar sx={{width: 80, height: 80}} src="/profile.jpg"/>
                     </Grid>
                     <Grid>
-                        <Button variant="text" sx={{textTransform: "none"}}>Upload New photo</Button>
+                        <NeumorphicButton variant="text" sx={{textTransform: "none"}}>Upload New photo</NeumorphicButton>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} sx={{mt: 2}}>
@@ -46,25 +48,25 @@ const Card = () => {
                 </Grid>
                 <Grid container spacing={2} sx={{mt: 2}}>
                     <Grid size={6}>
-                        <TextField fullWidth label="Full fullName" defaultValue="Reinhard Kenson" disabled/>
+                        <NeumorphicTextField fullWidth label="Full fullName" defaultValue="Reinhard Kenson" disabled/>
                     </Grid>
                     <Grid size={6}>
-                        <TextField fullWidth label="College Email ID" defaultValue="Kensoncs.official@college.com"
+                        <NeumorphicTextField fullWidth label="College Email ID" defaultValue="Kensoncs.official@college.com"
                                    disabled/>
                     </Grid>
                     <Grid size={6}>
-                        <TextField fullWidth label="Register Number" defaultValue="6022020" disabled/>
+                        <NeumorphicTextField fullWidth label="Register Number" defaultValue="6022020" disabled/>
                     </Grid>
                     <Grid size={6}>
-                        <TextField fullWidth label="Phone number" defaultValue="+91 9952508995" disabled/>
+                        <NeumorphicTextField fullWidth label="Phone number" defaultValue="+91 9952508995" disabled/>
                     </Grid>
                     <Grid size={12}>
-                        <TextField fullWidth label="Bio" defaultValue="I'm a Student" multiline rows={3}/>
+                        <NeumorphicTextField fullWidth label="Bio" defaultValue="I'm a Student" multiline rows={3}/>
                     </Grid>
                 </Grid>
                 <Box sx={{mt: 3, display: "flex", gap: 2}}>
-                    <Button variant="contained" color="primary">Update Profile</Button>
-                    <Button variant="text">Reset</Button>
+                    <NeumorphicButton variant="contained" color="primary">Update Profile</NeumorphicButton>
+                    <NeumorphicButton variant="text">Reset</NeumorphicButton>
                 </Box>
             </Box>
         </Box>

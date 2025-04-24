@@ -7,7 +7,7 @@ interface IProps {
 
 function ResourceLayout(props: IProps) {
     return (
-        <Box sx={{minHeight: "100%", maxWidth: "100%", display: "flex"}}>
+        <Box sx={{height: "100%", width: "100%", display: "flex"}}>
             {props.children}
         </Box>);
 }

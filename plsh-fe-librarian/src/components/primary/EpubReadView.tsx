@@ -1,12 +1,13 @@
 import appStrings from "@/helpers/appStrings";
 import {color} from "@/helpers/resources";
-import {Box, Button, Paper, Slider, Typography} from '@mui/material';
+import {Box, Paper, Slider, Typography} from '@mui/material';
 import Grid from "@mui/material/Grid2";
 import ePub, {Book, Rendition} from 'epubjs';
 import Section from "epubjs/types/section";
 import Spine from "epubjs/types/spine";
 import React, {useEffect, useRef, useState} from 'react';
 import AppPagination from "@/components/primary/Input/AppPagination";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 type EpubReaderProps = {
     file: File | null;
@@ -73,9 +74,9 @@ const EpubReader: React.FC<EpubReaderProps> = ({file}) => {
                 </Paper>
             </Grid>
             <Grid sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2}}>
-                <Button variant="outlined" onClick={goToPreviousPage} disabled={currentChapter === 1}>
+                <NeumorphicButton variant="outlined" onClick={goToPreviousPage} disabled={currentChapter === 1}>
                     Previous Page
-                </Button>
+                </NeumorphicButton>
                 <Slider
                     value={currentChapter}
                     min={1}
@@ -84,9 +85,9 @@ const EpubReader: React.FC<EpubReaderProps> = ({file}) => {
                     aria-labelledby="continuous-slider"
                     sx={{width: '50%'}}
                 />
-                <Button variant="outlined" onClick={goToNextPage} disabled={currentChapter === totalChapters}>
+                <NeumorphicButton variant="outlined" onClick={goToNextPage} disabled={currentChapter === totalChapters}>
                     Next Page
-                </Button>
+                </NeumorphicButton>
             </Grid>
             <AppPagination
                 hideNavButton

@@ -1,3 +1,4 @@
+"use client"
 import {Language, LanguageCode, LanguageCodeKey} from "@/helpers/appType";
 import {createTheme} from "@mui/material/styles";
 import {viVN} from '@mui/x-date-pickers/locales';
@@ -39,6 +40,9 @@ export const color = {
     CONCAVE_HIGHLIGHT: "#FFFFFF",
     CONCAVE_BACKGROUND: "#E4EBF5",
 };
+
+
+
 const languagesInVietnamese: LanguageCodeKey = {
     undefined: "undefined",
     en: "Tiếng Anh",
@@ -208,35 +212,7 @@ export const languages: Language[] = Object.entries(language).map(([code, name])
     name,
     langInVn: languagesInVietnamese[code as LanguageCode],
 } as Language));
-export const theme = createTheme({
-    palette: {
-        primary: {
-            main: color.PRIMARY,
-        },
-        secondary: {
-            main: color.SECONDARY,
-        },
-    },
-    // colorSchemes: { light: true, dark: false },
-    cssVariables: {
-        colorSchemeSelector: 'data-toolpad-color-scheme',
-    },
-    typography: {
-        subtitle1: {fontSize: 13, fontWeight: 'lighter'},
-        h1: {fontSize: 35},
-        h2: {fontSize: 30},
-        h3: {fontSize: 25},
-        h4: {fontSize: 20},
-        h5: {fontSize: 14},
-        h6: {fontSize: 12},
-    },
-    breakpoints: {
-        values: {
-            xs: 400,
-            sm: 600,
-            md: 900,
-            lg: 1200,
-            xl: 1536,
-        },
-    },
-}, viVN);
+
+
+
+

@@ -1,31 +1,17 @@
 "use client"
-import React, {ChangeEvent, memo, SyntheticEvent, useCallback, useEffect, useMemo, useState} from "react";
-import {
-    Autocomplete,
-    AutocompleteInputChangeReason,
-    Box,
-    ListItemAvatar,
-    Chip,
-    List,
-    ListItem,
-    Stack,
-    LinearProgress,
-    TextField, Divider, ListItemText, Checkbox
-} from "@mui/material";
+import React, {ChangeEvent, memo, useCallback, useMemo, useState} from "react";
+import {Box, Checkbox, Chip, Divider, LinearProgress, List, ListItem, ListItemAvatar, Stack} from "@mui/material";
 import {debounce} from '@mui/material/utils';
 import {useGetAuthorQuery} from "@/stores/slices/api/author.api.slice";
 import Grid from "@mui/material/Grid2";
 import Typography from "@/components/primary/typography";
-import appStrings from "@/helpers/appStrings";
 import {Author} from "@/helpers/appType";
-import ImageWithBgCover from "@/components/primary/ImageWithBgCover";
 import {RootState, useAppStore} from "@/stores/store";
 import {useDispatch, useSelector} from "react-redux";
 import Avatar from "@mui/material/Avatar";
-import {ProgressBar} from "@react-pdf-viewer/core";
 import {truncateTextStyle} from "@/style/text.style";
-import {color} from "@/helpers/resources";
-import {addAuthor, deleteAuthor, toggleAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
+import {deleteAuthor, toggleAuthor} from "@/stores/slices/book-states/book.add-edit.slice";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 interface IProps {
     children?: React.ReactNode;
@@ -94,17 +80,19 @@ const SelectList = memo(() => {
                           }
                 >
                     <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={author.avatarUrl}/>
+                        <Avatar alt={author.fullName} src={author.avatarUrl}/>
                     </ListItemAvatar>
                     <Typography
+                        color={"text.primary"}
                         variant="h6"
-                        sx={{color: color.DARK_TEXT, fontWeight: "bold", display: 'inline', ...truncateTextStyle}}
+                        sx={{fontWeight: "bold", display: 'inline', ...truncateTextStyle}}
                     >
                         {author.fullName}
                     </Typography>
                     <Typography
+                        color={"text.primary"}
                         variant="h6"
-                        sx={{color: color.DARK_TEXT, display: 'inline', ...truncateTextStyle}}
+                        sx={{display: 'inline', ...truncateTextStyle}}
                     >
                         {author.birthYear ? `${", " + author.birthYear}` : ""}
                     </Typography>
@@ -115,7 +103,7 @@ const SelectList = memo(() => {
     }, [data, store, handleToggle]);
     return (
         <Box width={"100%"}>
-            <TextField fullWidth onChange={onInputChange}/>
+            <NeumorphicTextField fullWidth onChange={onInputChange}/>
             {isLoading ? <LinearProgress/> : <></>}
             <List sx={{width: '100%', maxWidth: 360, overflowY: "auto", height: 500}}>
                 {listAuthor}

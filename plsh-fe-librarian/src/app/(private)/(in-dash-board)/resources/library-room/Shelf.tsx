@@ -1,6 +1,6 @@
 "use client"
 import React, {memo, useCallback, useState} from "react";
-import {Button, Card, IconButton, MenuItem, TextField, Tooltip, Menu, Typography, Modal, Dialog} from "@mui/material";
+import {Card, Dialog, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import {Shelf} from "@/app/(private)/(in-dash-board)/resources/library-room/RoomMap";
 import {motion} from "framer-motion";
@@ -8,17 +8,16 @@ import {useDraggable} from "@dnd-kit/core";
 import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import {useDispatch} from "react-redux";
-import ModalPanel from "@/components/primary/ModalPanel";
 import {useForm} from "react-hook-form";
 import appStrings from "@/helpers/appStrings";
 import {truncateTextStyle} from "@/style/text.style";
-import Link from "next/link";
 import {modifyShelf, removeShelf} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {useAppStore} from "@/stores/store";
-import {redirect, useRouter} from "next/navigation";
-import axios from "axios";
+import {useRouter} from "next/navigation";
 import {apiIsShelfExisted} from "@/request/library-room.api";
 import {toast} from "sonner";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 interface DraggableShelfProps {
     shelf: Shelf;
@@ -129,7 +128,7 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: number }) {
               onPointerDown={(e) => {
                   e.stopPropagation();
               }}>
-            <Button
+            <NeumorphicButton
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
                 aria-haspopup="true"
@@ -141,7 +140,7 @@ const Menu2 = memo(function Menu2({shelfId}: { shelfId: number }) {
                 <Typography sx={{color: color.PRIMARY, fontSize: 9}}>
                     {appStrings.ACTION}
                 </Typography>
-            </Button>
+            </NeumorphicButton>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -187,14 +186,14 @@ const AddEditShelf = memo(function AddEditShelf({shelfId, onClose}: {
         <form onSubmit={handleSubmit(saveShelf)} style={{width: 400, height: 300, borderRadius: 10}}>
             <Grid container spacing={2} justifyContent={"center"} alignItems={"center"}>
                 <Grid size={12} spacing={2} container padding={4}>
-                    <TextField fullWidth defaultValue={shelf?.name}
-                               label={appStrings.shelf.SHELF_NAME} {...register("name")}/>
-                    <TextField fullWidth defaultValue={shelf?.label}
-                               label={appStrings.shelf.SHELF_LABEL} {...register("label")}/>
-                    <Button type="submit" variant="contained" sx={{color: color.LIGHT_TEXT}}>
+                    <NeumorphicTextField fullWidth defaultValue={shelf?.name}
+                                         label={appStrings.shelf.SHELF_NAME} {...register("name")}/>
+                    <NeumorphicTextField fullWidth defaultValue={shelf?.label}
+                                         label={appStrings.shelf.SHELF_LABEL} {...register("label")}/>
+                    <NeumorphicButton type="submit" variant="contained" sx={{color: color.LIGHT_TEXT}}>
                         {appStrings.SAVE}
-                    </Button>
-                    <Button onPointerUp={onClose}>{appStrings.CLOSE}</Button>
+                    </NeumorphicButton>
+                    <NeumorphicButton onPointerUp={onClose}>{appStrings.CLOSE}</NeumorphicButton>
                 </Grid>
             </Grid>
 
