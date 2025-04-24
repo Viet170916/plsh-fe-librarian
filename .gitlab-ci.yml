@@ -1,5 +1,5 @@
 stages:
-  - trigger_jenkins
+  # - trigger_jenkins
   - build
   - deploy
 
