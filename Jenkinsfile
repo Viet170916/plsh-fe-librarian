@@ -68,7 +68,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Build Image') {
             steps {
@@ -112,7 +112,7 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
 
 
         stage('Deploy to Staging') {
