@@ -8,11 +8,9 @@ import React, {JSX, memo, useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import BarcodeScanner from "@/components/primary/Input/BarcodeScanner";
 import {setPropToBookInstanceState} from "@/stores/slices/book-states/book-instance.book.slice";
-import AppButton from "@/components/primary/Input/AppButton";
-import AppTextField from "@/components/primary/Input/TextField";
-import {color} from "@/helpers/resources";
 import {PiBarcodeBold} from "react-icons/pi";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 
 function BookSearch(): JSX.Element {
     const [open, setOpen] = useState<boolean>(false);
@@ -55,11 +53,11 @@ function BookSearch(): JSX.Element {
 
     return (
         <Grid container size={12} width={"100%"} spacing={4} justifyItems={"center"}>
-            <form onSubmit={handleSubmit(submitSearch)}>
+            <Grid component={"form"} onSubmit={handleSubmit(submitSearch)} container alignItems={"center"} spacing={1}>
                 <Controller
                     control={control} name={"isbnOrBookCode"}
                     render={({field}) => (
-                        <AppTextField
+                        <NeumorphicTextField
                             size={"small"}
                             value={field.value ?? ""}
                             onChange={(e) => field.onChange(e.target.value)}
@@ -67,12 +65,13 @@ function BookSearch(): JSX.Element {
                         />)}
                 />
                 <NeumorphicButton sx={{borderRadius: 12, ml: 1}} variant={"outlined"}
-                           type={"submit"}>{appStrings.SEARCH}</NeumorphicButton>
-            </form>
+                                  type={"submit"}>{appStrings.SEARCH}</NeumorphicButton>
+            </Grid>
             <Tooltip title={appStrings.guide.CAMERA_SCANNER}>
+
                 <NeumorphicButton startIcon={<PiBarcodeBold size={17}/>} variant={"contained"}
-                           sx={{borderRadius: 12, color: color.LIGHT_TEXT,}}
-                           onClick={() => setOpen(true)}>{appStrings.SCAN_BAR_CODE}</NeumorphicButton>
+                                  sx={{borderRadius: 12}}
+                                  onClick={() => setOpen(true)}>{appStrings.SCAN_BAR_CODE}</NeumorphicButton>
 
             </Tooltip>
 

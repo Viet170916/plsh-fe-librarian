@@ -4,35 +4,45 @@ import {AnyObject, BaseResponse, Member} from "@/helpers/appType";
 import {constants} from "@/helpers/constants";
 import {useSelector} from "@/hooks/useSelector";
 import {useUpdateMemberMutation} from "@/stores/slices/api/member.api.slice";
-import {Autocomplete, Avatar, Box, LinearProgress} from "@mui/material";
+import {Autocomplete, Avatar, Box, LinearProgress, MenuItem, Select} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import React, {memo, useEffect} from "react";
 import {Controller, useForm} from "react-hook-form";
-import {toast} from "sonner";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {appToaster} from "@/components/primary/toaster";
 
 export const AfterLoad_Member = memo(({member}: { member: Member }) => {
-    const [updateMemberPut, {error}] = useUpdateMemberMutation();
-    const {handleSubmit, control, reset} = useForm<Member>({
+    const [updateMemberPut, {error, data, isLoading}] = useUpdateMemberMutation();
+    const {handleSubmit, control, reset, formState} = useForm<Member>({
         defaultValues: member,
     });
     useEffect(() => {
         reset(member);
     }, [member, reset]);
     const onSubmit = async (data: Member) => {
+        if (!data.id) return;
         const updateResponse = await updateMemberPut(data);
-        if (updateResponse.data) {
-            toast.success(updateResponse.data.message);
-        }
+
     };
     useEffect(() => {
+        if (data) {
+            appToaster.success(data.message);
+        }
+    }, [data]);
+    useEffect(() => {
         if (error) {
-            toast.error((error as { data: BaseResponse<AnyObject> }).data.message);
+            appToaster.error((error as { data: BaseResponse<AnyObject> }).data.message);
         }
     }, [error]);
+    const statusOptions = [
+        {value: -1, label: "Chọn trạng thái", color: "text.disabled", disabled: true},
+        {value: 0, label: "Ngừng hoạt động", color: "error.main"},
+        {value: 1, label: "Hoạt động", color: "success.main"},
+    ];
+
     return (
         <Box
             sx={{
@@ -49,7 +59,7 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                 <Box sx={{mt: 3}}>
                     <Grid container spacing={3} alignItems="center">
                         <Grid>
-                            <Avatar sx={{width: 80, height: 80}} src="/profile.jpg"/>
+                            <Avatar sx={{width: 80, height: 80}} src={member.avatarUrl} alt={member.fullName}/>
                         </Grid>
                         <Grid>
                             <NeumorphicButton disabled variant="text" sx={{textTransform: "none"}}>
@@ -62,7 +72,9 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="fullName"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => <NeumorphicTextField
+
                                     fullWidth label={appStrings.member.FULLNAME} {...field}
                                     value={field.value ?? ""}
                                     onChange={(e) => field.onChange(e.target.value)}
@@ -73,6 +85,7 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="email"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => <NeumorphicTextField
                                     fullWidth label={appStrings.member.EMAIL} {...field} disabled
                                     value={field.value ?? ""}
@@ -82,6 +95,7 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                         </Grid>
                         <Grid size={6}>
                             <Controller
+                                rules={{required: false}}
                                 name="phoneNumber"
                                 control={control}
                                 render={({field}) => <NeumorphicTextField
@@ -93,13 +107,15 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                         </Grid>
                         <Grid size={6}>
                             <Controller
+                                rules={{required: false}}
                                 name="birthdate"
                                 control={control}
                                 render={({field}) => (
                                     <DatePicker
+
                                         sx={{width: "100%"}}
                                         label={appStrings.member.BIRTH}
-                                        value={dayjs(field.value)}
+                                        value={field.value ? dayjs(field.value) : null}
                                         onChange={(value) => field.onChange(value?.toDate().toISOString())}
                                     />
                                 )}
@@ -109,6 +125,7 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="address"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => <NeumorphicTextField
                                     fullWidth label={appStrings.member.ADDRESS} {...field}
                                     value={field.value ?? ""}
@@ -116,29 +133,49 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                                 />}
                             />
                         </Grid>
+                        <Grid size={4}>
+
+                        </Grid>
+
                         <Grid size={8}>
                             <Controller
                                 name="role"
                                 control={control}
                                 defaultValue={"student"}
+                                rules={{required: false}}
                                 render={({field}) => (
                                     <Autocomplete
                                         {...field}
                                         options={constants.roles}
                                         renderInput={(params) => <NeumorphicTextField {...params}
+
                                                                                       label={appStrings.member.ROLE}
                                                                                       fullWidth
-                                                                                      margin="normal" required
                                         />}
                                         onChange={(_, value) => field.onChange(value)}
                                     />
                                 )}
                             />
                         </Grid>
+                        {member.role === "student" ?
+                            <Grid size={4}>
+                                <Controller
+                                    name="classRoom"
+                                    control={control}
+                                    rules={{required: false}}
+                                    render={({field}) => <NeumorphicTextField
+                                        fullWidth label={appStrings.member.CLASSNAME} {...field}
+                                        value={field.value ?? ""}
+                                        onChange={(e) => field.onChange(e.target.value)}
+                                    />}
+                                />
+                            </Grid> : <></>
+                        }
                         <Grid size={6}>
                             <Controller
                                 name="identityCardNumber"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => <NeumorphicTextField
                                     fullWidth
                                     label={appStrings.member.IDENTITY_CARD_NUMBER}
@@ -151,6 +188,7 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="cardMemberNumber"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => <NeumorphicTextField
                                     fullWidth label={appStrings.member.CARD_NUMBER}
                                     type="number"
@@ -163,14 +201,24 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="cardMemberStatus"
                                 control={control}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth
+                                rules={{required: false}}
+                                render={({field}) => <Select
+                                    value={field.value ?? -1}
                                     label={appStrings.member.CARD_STATUS}
-                                    type="number"
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
+                                    onChange={(event) => field.onChange(event.target.value)}
+                                    renderValue={(selected) => {
+                                        const option = statusOptions.find(opt => opt.value === selected) ?? statusOptions[0];
+                                        return <Box sx={{color: option.color}}>{option.label}</Box>;
+                                    }}
+                                >
+                                    {statusOptions.map((option) => (
+                                        <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
+                                            <Box sx={{color: option.color}}>{option.label}</Box>
+                                        </MenuItem>
+                                    ))}
+                                </Select>}
                             />
+
                         </Grid>
                         <Grid
                             size={6}
@@ -178,11 +226,12 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                             <Controller
                                 name="cardMemberExpiredDate"
                                 control={control}
+                                rules={{required: false}}
                                 render={({field}) => (
                                     <DatePicker
                                         sx={{width: "100%"}}
                                         label={appStrings.member.CARD_EXPIRED_DATE}
-                                        value={dayjs(field.value)}
+                                        value={field.value ? dayjs(field.value) : null}
                                         onChange={(value) => field.onChange(value?.toDate().toISOString())}
                                     />
                                 )}
@@ -190,7 +239,8 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
                         </Grid>
                     </Grid>
                     <Box sx={{mt: 3, display: "flex", gap: 2}}>
-                        <NeumorphicButton type="submit" variant_2="primary" color="primary">
+                        <NeumorphicButton loading={isLoading} type="submit" variant_2="primary" color="primary"
+                                          disabled={!member.id}>
                             {appStrings.SAVE}
                         </NeumorphicButton>
                     </Box>

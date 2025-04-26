@@ -62,6 +62,7 @@ const AudioBookAvailability =
             <Grid container spacing={1}>
                 <ModalPanel
                     close={triggerCloseModal}
+                    buttonStyle={{boxShadow: "none", p: 0}}
                     containerProps={{
                         sx: {
                             borderRadius: 2,

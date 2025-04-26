@@ -4,13 +4,15 @@ import appStrings from "@/helpers/appStrings";
 import {BookBorrowingDto, LoanStatus} from "@/helpers/dataTransfer";
 import {color} from "@/helpers/resources";
 import {truncateTextStyle} from "@/style/text.style";
-import {Box, Button, ButtonGroup, Card, CardContent, Typography} from "@mui/material";
+import {Box, ButtonGroup, Card, CardContent, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
 import React, {memo, useMemo} from "react";
 import {formatTime} from "@/helpers/time";
 import dayjs from "dayjs";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
+import {useTheme} from "@mui/material/styles";
 
 // import { FaBook, FaBookAtlas, FaHeadphones } from "react-icons/fa6";
 interface IProps {
@@ -29,8 +31,20 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
     const avaiButtons = useMemo(() => {
         return (<></>);
     }, []);
+    const theme = useTheme();
     return (
-        <Card sx={{maxWidth: 400, p: 2, borderRadius: 3, boxShadow: 3, cursor: "pointer"}} onClick={handleSelected}>
+        <Card
+            component={NeumorphicButton}
+            sx={{
+                maxWidth: 400,
+                p: 2,
+                borderRadius: 3,
+                boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
+                bgcolor: theme.palette.background.default,
+                cursor: "pointer",
+                textAlign: "start"
+
+            }} onClick={handleSelected}>
             <Grid container spacing={2}>
                 <Grid size={5.5} container spacing={1}>
                     <ImageWithBgCover sx={{height: 200, with: "100%"}} src={borrowedBook.bookInstance?.bookThumbnail}/>
@@ -41,7 +55,7 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                         >
                             {borrowedBook.bookInstance?.bookName}
                         </Typography>
-                        <Typography variant="h6" fontWeight={"lighter"} color="text.secondary">
+                        <Typography variant="h6" fontWeight={"lighter"} color="text.primary">
                             {`${borrowedBook.bookInstance?.bookAuthor}`
                             }
                         </Typography>
@@ -61,7 +75,7 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                             <Typography variant="body2" fontWeight="normal">
                                 {appStrings.book.CODE}
                             </Typography>
-                            <Typography variant="body2" fontWeight={"lighter"} color="text.secondary">
+                            <Typography variant="body2" fontWeight={"lighter"} color="text.primary">
                                 {borrowedBook.bookInstance?.code}
                             </Typography>
                         </Box>
@@ -69,7 +83,7 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                             <Typography variant="body2" fontWeight="normal">
                                 {appStrings.borrow.BORROW_DATE}
                             </Typography>
-                            <Typography variant="body2" fontWeight={"lighter"} color="text.secondary">
+                            <Typography variant="body2" fontWeight={"lighter"} color="text.primary">
                                 {formatTime(borrowedBook.borrowDate)}
                             </Typography>
                         </Box>
@@ -77,7 +91,7 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                             <Typography variant="body2" fontWeight="normal">
                                 {appStrings.borrow.DUE_DATE}
                             </Typography>
-                            <Typography variant="body2" fontWeight={"lighter"} color="text.secondary">
+                            <Typography variant="body2" fontWeight={"lighter"} color="text.primary">
                                 {formatTime(borrowedBook.returnDates?.[borrowedBook.returnDates.length - 1])}
                             </Typography>
                             {
@@ -91,8 +105,8 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                             {approvalStatus === "pending" || approvalStatus === "approved" ?
                                 <Grid>
                                     <NeumorphicButton
-                                        variant="contained"
-                                        sx={{backgroundColor: color.WARNING, color: color.LIGHT_TEXT}}
+                                        variant_2="primary"
+                                        color={"warning"}
                                         fullWidth
                                     >
                                         {appStrings.borrow.NOT_TAKEN_YET}
@@ -103,8 +117,8 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                                         case "on-loan":
                                             return (
                                                 <NeumorphicButton
-                                                    variant="contained"
-                                                    sx={{backgroundColor: color.WARNING, color: color.LIGHT_TEXT}}
+                                                    variant_2="primary"
+                                                    color={"warning"}
                                                     fullWidth
                                                 >
                                                     {appStrings.borrow.ONLOAN}
@@ -112,8 +126,8 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                                         case "returned":
                                             return (
                                                 <NeumorphicButton
-                                                    variant="contained"
-                                                    sx={{background: color.COMFORT, color: color.LIGHT_TEXT}}
+                                                    variant_2="primary"
+                                                    color={"success"}
                                                     fullWidth
                                                 >
                                                     {appStrings.borrow.RETURNED}
@@ -121,8 +135,8 @@ function BorrowedBookItem({borrowedBook, onSelected, approvalStatus}: IProps) {
                                         case "overdue":
                                             return (
                                                 <NeumorphicButton
-                                                    variant="contained"
-                                                    sx={{background: color.SERIOUS, color: color.LIGHT_TEXT}}
+                                                    variant_2="primary"
+                                                    color={"error"}
                                                     fullWidth
                                                 >
                                                     {appStrings.borrow.OVERDUE}

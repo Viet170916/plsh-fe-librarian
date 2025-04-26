@@ -25,7 +25,7 @@ function layout({children}: layoutProps): JSX.Element {
                     </Grid>}
                         right={<BarcodeHelper/>}/>
             </Grid>
-            <Grid size={"grow"} width={"100%"} sx={{overflowY: "auto"}}>
+            <Grid size={"grow"} width={"100%"} sx={{overflowY: "auto", px: 2}}>
                 {children}
             </Grid>
         </Grid>

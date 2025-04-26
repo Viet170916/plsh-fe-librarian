@@ -10,7 +10,7 @@ import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
 import React, {memo} from "react";
 import {shallowEqual, useSelector} from "react-redux";
-import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
+import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/ChangeStatusButton";
 import Link from "next/link";
 import AppButton from "@/components/primary/Input/AppButton";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";

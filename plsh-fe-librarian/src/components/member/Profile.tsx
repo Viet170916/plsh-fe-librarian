@@ -2,7 +2,6 @@
 import appStrings from "@/helpers/appStrings";
 import {getRoleTitle, Member} from "@/helpers/appType";
 import {color} from "@/helpers/resources";
-import {shadowContainerStyle} from "@/style/container.style";
 import {Avatar, Box, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import Link from "next/link";
@@ -11,6 +10,7 @@ import {CgEreader} from "react-icons/cg";
 import {PiPlantBold} from "react-icons/pi";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 interface IProps {
     children?: React.ReactNode;
@@ -21,12 +21,13 @@ const Profile = (props: IProps) => {
     return (
         <Box
             sx={{
-                ...shadowContainerStyle,
+                // ...shadowContainerStyle,
                 mx: "auto",
                 maxWidth: 800,
                 borderRadius: 2,
-                bgcolor: color.WHITE,
+                // bgcolor: color.WHITE,
                 padding: 5,
+                boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
             }}
         >
             <Box sx={{mt: 3}}>
@@ -66,7 +67,8 @@ const Profile = (props: IProps) => {
                                         >{props.profile?.analytics?.bookReading?.count ?? 0}</Typography>
                                     </Grid>
                                     <Grid size={12}>
-                                        <Typography color={"text.primary"} textAlign={"start"}>{appStrings.READING}</Typography>
+                                        <Typography color={"text.primary"}
+                                                    textAlign={"start"}>{appStrings.READING}</Typography>
                                     </Grid>
                                 </Grid>
                             </Box>
@@ -101,8 +103,9 @@ const Profile = (props: IProps) => {
                         </Grid>
                     </Grid>
                     <Grid size={6} alignSelf={"end"}>
-                        <NeumorphicTextField fullWidth label={appStrings.FULL_NAME} value={props.profile?.fullName ?? ""}
-                                   disabled/>
+                        <NeumorphicTextField fullWidth label={appStrings.FULL_NAME}
+                                             value={props.profile?.fullName ?? ""}
+                                             disabled/>
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} sx={{mt: 2}}>
@@ -147,7 +150,7 @@ const Profile = (props: IProps) => {
                 </Grid>
                 <Box sx={{mt: 3, display: "flex", gap: 2}}>
                     <Link href={`/members/${props.profile?.id}`}>
-                        <NeumorphicButton variant="contained"
+                        <NeumorphicButton variant_2={"primary"}
                                           color="primary">{appStrings.SEE_PROFILE}</NeumorphicButton>
                     </Link>
                     {/*<Button variant="text">Reset</Button>*/}

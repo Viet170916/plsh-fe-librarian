@@ -49,11 +49,7 @@ function ChangeStatusButton(): JSX.Element {
     const loan = useSelector((state: RootState) => state.loanState.currentLoan, shallowEqual);
     const [updateLoanStatus, {error, data, isLoading}] = useUpdateLoanStatusMutation();
 
-    useFetchingToast(data, error, [dispatch], [], {
-        handleSuccess() {
-            dispatch(setPropToLoanState({key: "currentLoan", value: undefined}));
-        }
-    });
+    useFetchingToast(data, error);
 
     const handleUpdateStatus = useCallback(async (status: LoanStatus) => {
         if (loan?.id) {
@@ -119,14 +115,12 @@ function ChangeStatusButton(): JSX.Element {
                             Xác nhận lấy sách
                         </NeumorphicButton>
                         <NeumorphicButton
-                            href={`/borrow/${code}/edit`}
+                            href={`/borrow/${code ?? loan.id}/edit`}
                             component={Link}
                             loading={isLoading}
                             variant_2="primary"
-
                             color={"warning"}
                             sx={{bgcolor: color.WARNING, color: color.LIGHT_TEXT}}
-                            onClick={() => handleUpdateStatus("taken")}
                         >
                             {appStrings.EDIT}
                         </NeumorphicButton>
@@ -159,7 +153,7 @@ function ChangeStatusButton(): JSX.Element {
                 break;
 
         }
-    }, [loan?.aprovalStatus, handleUpdateStatus, isLoading, code])
+    }, [loan?.aprovalStatus, loan?.id, handleUpdateStatus, isLoading, code])
 
     return (
         <>

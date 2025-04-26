@@ -8,14 +8,15 @@ import {useSelector} from "@/hooks/useSelector";
 import {useGetBooksOnShelfQuery, useRemoveBooksOutOffShelfMutation} from "@/stores/slices/api/library-room.api.slice";
 import {selectRowByIdInLibStore, setBookToRow} from "@/stores/slices/lib-room-state/lib-room.slice";
 import {RowShelf} from "@/stores/slices/lib-room-state/shelf.slice";
-import {Button} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {skipToken} from "@reduxjs/toolkit/query";
 import React, {JSX, memo, useCallback, useEffect, useRef} from "react";
 import {shallowEqual} from "react-redux";
-import {toast} from "sonner";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import {appToaster} from "@/components/primary/toaster";
+import {LinearProgress, Typography} from "@mui/material";
+import Link from "next/link";
+import {objectToQueryParams} from "@/helpers/convert";
 
 type BookInstanceInStoreListProps = {
     bookId: number;
@@ -25,11 +26,11 @@ type BookInstanceInStoreListProps = {
 
 function BookInstanceInStoreList({bookId, rowShelfId, shelfId}: BookInstanceInStoreListProps): JSX.Element {
     const bookInstanceRef = useRef<BookInstance[]>([]);
-    const {data: booksResponse, error: booksError} = useGetBooksOnShelfQuery(rowShelfId ? {
+    const {data: booksResponse, error: booksError, isFetching} = useGetBooksOnShelfQuery(rowShelfId ? {
         rowShelfId,
         bookId
     } : skipToken, {refetchOnFocus: true});
-    const [removeBooksOutOfShelf] = useRemoveBooksOutOffShelfMutation();
+    const [removeBooksOutOfShelf, {isLoading}] = useRemoveBooksOutOffShelfMutation();
     const dispatch = useAppDispatch();
     const row: RowShelf | undefined = useSelector(state => selectRowByIdInLibStore(state, {
         rowId: rowShelfId,
@@ -74,10 +75,24 @@ function BookInstanceInStoreList({bookId, rowShelfId, shelfId}: BookInstanceInSt
         }
     };
     return (
-        <Grid>
-            <NeumorphicButton variant={"outlined"} onClick={onRemove} disabled={!row && true}>{appStrings.REMOVE}</NeumorphicButton>
+        <Grid container spacing={2}>
+            {(isFetching || isLoading) && <LinearProgress/>}
+            <Grid size={12}>
+                <Typography>{row?.name ?? "--"}</Typography>
+            </Grid>
+            <NeumorphicButton loading={isLoading || isFetching} variant_2={"primary"} color={"error"} onClick={onRemove}
+                              disabled={!row && true}>{appStrings.REMOVE}</NeumorphicButton>
+            <NeumorphicButton component={Link}
+                              href={`/resources/library-room/shelf/${row?.shelfId}${objectToQueryParams({rowId: row?.id})}`}
+                              onClick={onRemove}
+                              disabled={!row && true}>{appStrings.shelf.GO}</NeumorphicButton>
             {rowShelfId &&
-                <ListTransfer noDisable items={row?.bookInstances ?? []} disableItems={[]} onChange={onChange}/>}
+                <Grid size={12}>
+
+                            <ListTransfer noDisable items={row?.bookInstances ?? []} disableItems={[]}
+                                          onChange={onChange}/>
+                </Grid>
+            }
         </Grid>
     );
 }

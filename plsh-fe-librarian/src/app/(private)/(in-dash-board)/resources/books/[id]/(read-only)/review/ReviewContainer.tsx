@@ -1,6 +1,6 @@
 "use client";
 import {ChatBox} from "@/app/(private)/(in-dash-board)/resources/books/[id]/(read-only)/review/review.input";
-import {ZoomInAnimation} from "@/components/Animation/animation";
+import {Zoom} from "@/components/Animation/animation";
 import StarRating from "@/components/primary/StarRating";
 import appStrings from "@/helpers/appStrings";
 import {MessageDto, ReviewDto} from "@/helpers/appType";
@@ -17,12 +17,13 @@ import {
 } from "@/stores/slices/book-states/book.slice";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import {CircularProgress, Typography} from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid2";
 import {SimpleTreeView} from "@mui/x-tree-view/SimpleTreeView";
 import React, {JSX, memo, useCallback, useEffect, useMemo} from "react";
 import {shallowEqual} from "react-redux";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 declare module "react" {
     interface CSSProperties {
@@ -42,7 +43,7 @@ function ReviewContainer(): JSX.Element {
     );
     const reviewsList = useMemo(() => {
         return reviews
-            ? reviews.map((review) => <ReviewItem key={review.id} review={review}/>)
+            ? reviews.map((review, index) => <ReviewItem key={review.id} review={review} index={index}/>)
             : [];
     }, [reviews]);
     return (
@@ -58,7 +59,7 @@ function ReviewContainer(): JSX.Element {
     );
 }
 
-const ReviewItem = memo(({review}: { review: ReviewDto }) => {
+const ReviewItem = memo(({review, index}: { review: ReviewDto, index: number }) => {
     const [getMessages, {data, error, isLoading}] = useLazyGetMessagesQuery();
     const currentMessage = useSelector((state) => state.bookState.currentMessage);
     const messagesInReview = useSelector((state) =>
@@ -77,10 +78,10 @@ const ReviewItem = memo(({review}: { review: ReviewDto }) => {
     }, [data, dispatch, review.id]);
     const messages = useMemo(() => {
         if (messagesInReview) {
-            return messagesInReview.map((message) => {
+            return messagesInReview.map((message, index) => {
                 return (
                     <Grid key={message.id} size={12}>
-                        <MessageItem message={message} review={review}/>
+                        <MessageItem message={message} review={review} index={index}/>
                         {currentMessage?.repliedId === message.id && (
                             <ChatBox review={review} repliedId={message.senderId}/>
                         )}
@@ -96,28 +97,35 @@ const ReviewItem = memo(({review}: { review: ReviewDto }) => {
         onSeeMoreMessage();
     }, [onSeeMoreMessage]);
     return (
-        <Grid size={12}>
-            <ReviewItemPreview review={review}/>
+        <Grid size={12} sx={{
+            boxShadow: NEUMORPHIC_SHADOW.SHADOW(), borderRadius: 2, pb: .2,
+            mb: 2,
+        }}>
+            <ReviewItemPreview review={review} index={index}/>
             <Grid size={12}>
-                {currentMessage?.reviewId === review.id && <ChatBox review={review}/>}
+                {currentMessage?.reviewId === review.id &&
+                    <ChatBox review={review} repliedId={review.accountSenderId}/>}
             </Grid>
-            {messages}
-            {isLoading && <CircularProgress size="10px"/>}
-            <Typography
-                onClick={onSeeMoreMessage}
-                variant={"h6"}
-                sx={{
-                    fontWeight: "bold",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                }}
-            >
-                {appStrings.review.SEE_REPLY}
-            </Typography>
+            <Grid sx={{m: 1, boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(), borderRadius: 2, p: 1}}>
+                {messages}
+                {isLoading && <CircularProgress size="10px"/>}
+                {/*<Typography*/}
+                {/*    onClick={onSeeMoreMessage}*/}
+                {/*    variant={"h6"}*/}
+                {/*    sx={{*/}
+                {/*        fontWeight: "bold",*/}
+                {/*        textDecoration: "underline",*/}
+                {/*        cursor: "pointer",*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    {appStrings.review.SEE_REPLY}*/}
+                {/*</Typography>*/}
+            </Grid>
+
         </Grid>
     );
 });
-const ReviewItemPreview = memo(({review}: { review: ReviewDto }) => {
+const ReviewItemPreview = memo(({review, index}: { review: ReviewDto, index: number }) => {
     const dispatch = useAppDispatch();
     const ME = useSelector((state) => state.global.me);
     const onReply = () => {
@@ -127,30 +135,28 @@ const ReviewItemPreview = memo(({review}: { review: ReviewDto }) => {
         dispatch(clearPropInBookState("currentMessage.repliedId"));
     };
     return (
-        <ZoomInAnimation>
+        <Zoom index={index}>
             <Grid
-                mt={6}
                 container
                 width={"100%"}
                 sx={{
                     color: color.DARK_TEXT,
-                    bgcolor:
-                        review.accountSenderId === ME?.id
-                            ? color.PRIMARY_20
-                            : color.WARNING_10,
-                    borderRadius: 3,
-                    p: 2,
-                    boxShadow: `0.3rem 0.3rem 0.6rem ${color.LIGHTER_SHADOW}, -0.2rem -0.2rem 0.5rem ${color.WHITE}`,
+                    borderRadius: 2,
+                    p: 1.5,
+                    boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
                 }}
                 spacing={1}
             >
                 <Grid>
-                    <Avatar/>
+                    <Box sx={{boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(), p: 1, borderRadius: "50%"}}>
+                        <Avatar/>
+                    </Box>
                 </Grid>
                 <Grid size={"grow"} container>
                     <Grid size={12}>
                         <Typography
                             variant={"h6"}
+                            color={review.accountSenderId === ME?.id ? "primary" : "textPrimary"}
                             sx={{fontWeight: "bold", textDecoration: "underline"}}
                         >
                             {review.accountSenderName}
@@ -159,7 +165,9 @@ const ReviewItemPreview = memo(({review}: { review: ReviewDto }) => {
                             <StarRating readOnly value={review.rating ?? 5} size="small"/>
                         </Grid>
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={12}
+                        // sx={{boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(), p: 1, borderRadius: 1}}
+                    >
                         <Typography>{review.content}</Typography>
                     </Grid>
                 </Grid>
@@ -186,11 +194,11 @@ const ReviewItemPreview = memo(({review}: { review: ReviewDto }) => {
                     </Typography>
                 </Grid>
             </Grid>
-        </ZoomInAnimation>
+        </Zoom>
     );
 });
 const MessageItem = memo(
-    ({message}: { message: MessageDto; review: ReviewDto }) => {
+    ({message, index}: { message: MessageDto; review: ReviewDto, index: number }) => {
         const dispatch = useAppDispatch();
         const ME = useSelector((state) => state.global.me);
         const onReplyMess = () => {
@@ -203,59 +211,71 @@ const MessageItem = memo(
             dispatch(clearPropInBookState("currentMessage.reviewId"));
         };
         return (
-            <ZoomInAnimation>
-                <Grid
-                    container
-                    sx={{
-                        color: color.DARK_TEXT,
-                        bgcolor:
-                            message.senderId === ME?.id ? color.PRIMARY_O10 : color.WHITE,
-                        borderRadius: 10,
-                        p: 2,
-                        ml: message.senderId === ME?.id ? 10 : 0,
-                        mr: message.senderId === ME?.id ? 0 : 10,
-                    }}
-                    spacing={1}
-                >
-                    <Grid>
-                        <Avatar src={message.senderAvatar}/>
-                    </Grid>
-                    <Grid size={"grow"} container>
-                        <Grid size={12}>
+            <Zoom index={index}
+                  style={{display: "flex", justifyContent: message.senderId === ME?.id ? "end" : "start"}}>
+                <Box sx={{
+                    // boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
+                    borderRadius: 2,
+                    my: .5,
+                    p: 1,
+                    width: "fit-content",
+                    justifySelf: "end",
+                }}>
+                    <Grid
+                        container
+                        sx={{
+                            boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
+                            // bgcolor:
+                            //     message.senderId === ME?.id ? color.PRIMARY_O10 : color.WHITE,
+                            borderRadius: 2,
+                            p: 2,
+
+                        }}
+                        spacing={1}
+                    >
+
+                        <Grid>
+                            <Avatar src={message.senderAvatar}/>
+                        </Grid>
+                        <Grid size={"grow"} container>
+                            <Grid size={12}>
+                                <Typography
+                                    color={message.senderId === ME?.id ? "primary" : "textPrimary"}
+                                    sx={{fontWeight: "bold", textDecoration: "underline"}}
+                                >
+                                    {message.senderName}
+                                </Typography>
+                            </Grid>
+                            <Grid size={12}>
+                                <Typography>{message.content}</Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid size={12} container>
                             <Typography
-                                sx={{fontWeight: "bold", textDecoration: "underline"}}
+                                onClick={onReplyMess}
+                                variant={"h6"}
+                                sx={{
+                                    fontWeight: "bold",
+                                    textDecoration: "underline",
+                                    cursor: "pointer",
+                                }}
                             >
-                                {message.senderName}
+                                {appStrings.review.REPLY}
+                            </Typography>
+                            <Typography
+                                variant={"h6"}
+                                sx={{
+                                    fontWeight: "lighter",
+                                    textDecoration: "underline",
+                                }}
+                            >
+                                {formatTimeAgo(message.createdDate)}
                             </Typography>
                         </Grid>
-                        <Grid size={12}>
-                            <Typography>{message.content}</Typography>
-                        </Grid>
                     </Grid>
-                    <Grid size={12} container>
-                        <Typography
-                            onClick={onReplyMess}
-                            variant={"h6"}
-                            sx={{
-                                fontWeight: "bold",
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                            }}
-                        >
-                            {appStrings.review.REPLY}
-                        </Typography>
-                        <Typography
-                            variant={"h6"}
-                            sx={{
-                                fontWeight: "lighter",
-                                textDecoration: "underline",
-                            }}
-                        >
-                            {formatTimeAgo(message.createdDate)}
-                        </Typography>
-                    </Grid>
-                </Grid>
-            </ZoomInAnimation>
+                </Box>
+
+            </Zoom>
         );
     },
 );

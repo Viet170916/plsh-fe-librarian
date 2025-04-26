@@ -20,7 +20,7 @@ function BookInstanceTableItem({instance, index}: BookInstanceTableItemProps): J
                 <Avatar src={instance.bookThumbnail} alt={instance.bookName}/>
             </TableCell>
             <TableCell>{instance.code}</TableCell>
-            <TableCell><Typography component={Link} href={`resources/books/instance/${instance.id}`}
+            <TableCell><Typography component={Link} href={`/resources/books/instance/${instance.id}`}
                                    color={"primary"}
                                    sx={{textDecoration: "underline"}}>{instance.bookName}</Typography></TableCell>
             <TableCell>{instance.bookName}</TableCell>

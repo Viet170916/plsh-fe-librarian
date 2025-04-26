@@ -3,13 +3,10 @@ import ModalPanel from "@/components/primary/ModalPanel";
 import appStrings from "@/helpers/appStrings";
 import {Resource} from "@/helpers/appType";
 import {urlToFile} from "@/helpers/convert";
-import {color} from "@/helpers/resources";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import {Button} from '@mui/material';
 import Grid from "@mui/material/Grid2";
 import React, {memo, useCallback, useEffect, useRef, useState} from "react";
 import {TbPhotoUp} from "react-icons/tb";
-import AppButton from "@/components/primary/Input/AppButton";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 const MAX_IMAGES = 5;
@@ -45,7 +42,7 @@ function UploadOrTakeImage({onImageChange, maxImages}: IProps) {
             <Grid size={6}>
                 <NeumorphicButton
                     fullWidth
-                    sx={{color: color.LIGHT_TEXT, width: "fit-content"}} component={"label"} variant={"contained"}
+                    sx={{width: "fit-content"}} component={"label"}
                     startIcon={<TbPhotoUp/>}
                 >
                     {appStrings.UPLOAD_IMAGE}
@@ -60,7 +57,7 @@ function UploadOrTakeImage({onImageChange, maxImages}: IProps) {
             </Grid>
             <Grid size={3} sx={{margin: "0!important"}}>
                 <ModalPanel close={triggerClose} buttonContent={<PhotoCameraIcon/>}
-                            buttonStyle={{borderColor: color.PRIMARY}}>
+                            buttonStyle={{}}>
                     <TakePicture
                         onImageChange={(preview) => {
                             if (preview) {
@@ -83,8 +80,7 @@ function UploadOrTakeImage({onImageChange, maxImages}: IProps) {
             <Grid size={12}>
             </Grid>
         </Grid>
-    )
-        ;
+    );
 }
 
 const TakePicture = memo(function TakePictureMemo(props: {

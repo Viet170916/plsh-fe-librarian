@@ -1,6 +1,5 @@
 "use client";
 import Container from "@/components/primary/Container";
-import {BasicButton} from "@/components/primary/Input/BasicButton";
 import {Box, ContainerProps, Modal, SxProps, Theme} from "@mui/material";
 import {
     CSSPseudoSelectorProps,
@@ -10,6 +9,7 @@ import {
 } from "@mui/system";
 import React, {memo, useEffect} from "react";
 import {useTheme} from "@mui/material/styles";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 interface IProps {
     children?: React.ReactNode,
@@ -51,9 +51,9 @@ function ModalPanel(props: IProps & ContainerProps) {
     style = {...style, ...props.containerProps?.sx};
     return (
         <Box>
-            <BasicButton onClick={handleOpen}>
+            <NeumorphicButton onClick={handleOpen} sx={props.buttonStyle}>
                 {props.buttonContent}
-            </BasicButton>
+            </NeumorphicButton>
             <Modal
                 open={open}
                 onClose={handleClose}

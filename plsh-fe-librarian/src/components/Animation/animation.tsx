@@ -3,19 +3,6 @@ import {motion, MotionStyle} from "framer-motion";
 import React, {memo, ReactNode} from "react";
 import {Box} from "@mui/material";
 
-export const ZoomInAnimation = memo(({children}: { children: ReactNode }) => {
-    return (
-        <motion.div
-            initial={{scale: 0.5, opacity: 0}}
-            animate={{scale: 1, opacity: 1}}
-            transition={{duration: 0.3}}
-            className="p-2 border-b"
-            style={{width: "100%"}}
-        >
-            {children}
-        </motion.div>
-    );
-})
 
 interface AnimationProps {
     ref?: unknown;
@@ -24,6 +11,19 @@ interface AnimationProps {
     style?: MotionStyle,
 
 }
+
+export const ZoomInAnimation = memo(({children, style}: AnimationProps) => {
+    return (
+        <motion.div
+            initial={{scale: 0.5, opacity: 0}}
+            animate={{scale: 1, opacity: 1}}
+            transition={{duration: 0.3}}
+            style={{width: "100%", ...style}}
+        >
+            {children}
+        </motion.div>
+    );
+})
 
 export const SlideInFromRight = memo(({
         children,

@@ -1,5 +1,5 @@
 "use client"
-import React, {memo, JSX} from "react";
+import React, {JSX, memo} from "react";
 import ClientRender from "@/app/(private)/(in-dash-board)/borrow/[code]/ClientRender";
 
 type layoutProps = {

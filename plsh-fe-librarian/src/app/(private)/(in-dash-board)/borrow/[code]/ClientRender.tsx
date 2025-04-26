@@ -2,28 +2,22 @@
 import {appToaster} from "@/components/primary/toaster";
 import appStrings from "@/helpers/appStrings";
 import {useAppDispatch} from "@/hooks/useDispatch";
-import {useLazyGetLoanByIdQuery} from "@/stores/slices/api/borrow.api.slice";
+import {useGetLoanByIdQuery} from "@/stores/slices/api/borrow.api.slice";
 import {setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
 import {LinearProgress} from "@mui/material";
 import React, {JSX, memo, useEffect} from "react";
 import {BorrowedBookData, setPropToBorrow} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
 import {BookInstance} from "@/helpers/appType";
-import {useParams, usePathname, useRouter} from "next/navigation";
-
+import {useParams} from "next/navigation";
 
 function ClientRender(): JSX.Element {
-    const router = useRouter();
-    const path = usePathname();
     const {code} = useParams();
-    const [getLoan, {data, isFetching, error}] = useLazyGetLoanByIdQuery();
+    const {data, isFetching, error} = useGetLoanByIdQuery(Number.parseInt(code as string));
     const dispatch = useAppDispatch();
     useEffect(() => {
-        if (code && typeof code == "string")
-            getLoan(Number.parseInt(code));
-    }, [code, getLoan]);
-    useEffect(() => {
-        if (data) {
-            if (data?.data.aprovalStatus === "pending" || data?.data.aprovalStatus === "approved") {
+        if (data?.data) {
+            dispatch(setPropToLoanState({key: "currentLoan", value: data.data}));
+            if (data.data?.aprovalStatus === "pending" || data.data?.aprovalStatus === "approved") {
                 const {
                     id,
                     note,
@@ -54,22 +48,14 @@ function ClientRender(): JSX.Element {
                 }));
 
             }
-            dispatch(setPropToLoanState({key: "currentLoan", value: data.data}));
         }
-    }, [data, dispatch]);
+    }, [data?.data, dispatch]);
     useEffect(() => {
         if (error) {
             appToaster.error(appStrings.error.REQUEST_ERROR);
             throw new Error(appStrings.error.LOAN_NOT_FOUND);
         }
     }, [error]);
-
-    // useEffect(() => {
-    //     if ((data?.data.aprovalStatus === "pending" || data?.data.aprovalStatus === "approved") &&
-    //         (path !== `/borrow/${code}/edit` && path !== `/borrow/${code}/edit/borrower` && path !== `/borrow/${code}/edit/confirmation`)) {
-    //         router.push(`/borrow/${code}/edit`);
-    //     }
-    // }, [data, path, code]);
 
     if (isFetching)
         return (<LinearProgress/>);

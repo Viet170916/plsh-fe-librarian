@@ -5,12 +5,13 @@ import {objectToFormData} from "@/helpers/convert";
 import {BookBorrowingDto, LoanDto, LoanStatus} from "@/helpers/dataTransfer";
 import {baseQueryWithReAuth} from "@/stores/slices/api/api.config";
 import {createApi} from "@reduxjs/toolkit/query/react";
+import {BorrowStatusData} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
 
 const httpMethods = constants.http.method;
 export const loanApi = createApi({
         reducerPath: 'loanApi',
         baseQuery: baseQueryWithReAuth,
-        tagTypes: ["loanTag"],
+        tagTypes: ["loanTag", "BookBorrowings"],
         endpoints: (builder) => ({
             getLoans: builder.query<BaseResponse<LoanDto[]>, FilterParams<LoanDto> & {
                 approveStatus?: LoanStatus,
@@ -22,6 +23,20 @@ export const loanApi = createApi({
                 }),
                 providesTags: ["loanTag"],
             }),
+            getBookBorrowings: builder.query<BaseResponse<BookBorrowingDto[]>, FilterParams<BookBorrowingDto> & {
+                bookId?: number,
+                bookInstanceId?: number,
+                borrowDateFrom?: number,
+                borrowerId?: number,
+                borrowDateTo?: string,
+                status?: BorrowStatusData,
+            }>({
+                query: (params) => ({
+                    url: 'loan/book-borrowing',
+                    params,
+                }),
+                providesTags: ["BookBorrowings"],
+            }),
             updateLoanStatus: builder.mutation<BaseResponse<LoanDto>, { loanId: number, status: LoanStatus }>({
                 query: ({loanId, status}) => ({
                     url: `loan/${loanId}/approve-status`,
@@ -32,7 +47,7 @@ export const loanApi = createApi({
             }),
             getLoanById: builder.query<BaseResponse<LoanDto>, number>({
                 query: (id) => `loan/${id}`,
-                providesTags: (result, error, id) => [{type: "loanTag"}],
+                providesTags: (result, error, id) => ["loanTag"],
             }),
             createLoan: builder.mutation<BaseResponse<LoanDto>, LoanDto>({
                 query: (loanData) => ({
@@ -140,7 +155,9 @@ export const loanApiMiddleware = loanApi.middleware;
 export const {
     useLazyGetLoansQuery,
     useExtendLoanMutation,
+    useGetBookBorrowingsQuery,
     useReturnLoanConfirmationMutation,
+    useGetLoanByIdQuery,
     useModifySingleBookBorrowingMutation,
     useLazyGetLoanByIdQuery,
     useDeleteBookBorrowingMutation,

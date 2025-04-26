@@ -1,6 +1,5 @@
 "use client";
 import BorrowStepper from "@/app/(private)/(in-dash-board)/borrow/add/BorrowStepper";
-import {color} from "@/helpers/resources";
 import Grid from "@mui/material/Grid2";
 import React, {JSX, memo} from "react";
 
@@ -14,7 +13,7 @@ function BorrowLayout({children}: layoutProps): JSX.Element {
             <Grid container size={"grow"} width={"100%"} sx={{overflowX: "auto"}}>
                 {children}
             </Grid>
-            <Grid sx={{bg: color.WHITE}}>
+            <Grid sx={{px: 2, pb: 2}}>
                 <BorrowStepper/>
             </Grid>
         </Grid>

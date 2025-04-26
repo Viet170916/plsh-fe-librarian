@@ -14,11 +14,12 @@ import {CardContent, IconButton, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {memo} from "react";
 import {shallowEqual} from "react-redux";
-import {shadowStyle} from "@/style/container.style";
 import {Zoom} from "@/components/Animation/animation";
 import {HiOutlineTrash} from "react-icons/hi";
 import {useDeleteBookBorrowingMutation} from "@/stores/slices/api/borrow.api.slice";
 import useFetchingToast from "@/hooks/useFetchingToast";
+import {useTheme} from "@mui/material/styles";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 function SelectedBook() {
     const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ function SelectedBook() {
     }
 
     useFetchingToast(data, error);
+    const theme = useTheme();
 
     return (
         <Grid container spacing={2}>
@@ -50,13 +52,14 @@ function SelectedBook() {
                     <Zoom index={index} style={{position: "relative", height: "100%"}}>
                         <Grid
                             sx={{
-                                ...shadowStyle,
+                                // ...shadowStyle,
                                 borderRadius: 2,
-                                bgcolor: bookSelectedId === book.bookInstance.id ? color.PRIMARY_O10 : color.WHITE,
+                                bgcolor: theme.palette.background.default,
                                 height: "100%",
                                 cursor: "pointer",
                                 p: 2,
-                                pb: 0
+                                pb: 0,
+                                boxShadow: bookSelectedId === book.bookInstance.id ? NEUMORPHIC_SHADOW.INNER_SHADOW() : NEUMORPHIC_SHADOW.SHADOW()
                             }}>
 
                             <IconButton loading={isLoading} sx={{
@@ -72,9 +75,10 @@ function SelectedBook() {
                             }}><HiOutlineTrash/></IconButton>
                             <ImageWithBgCover src={book.bookInstance.bookThumbnail} sx={{width: "100%", height: 200}}/>
                             <CardContent sx={{p: 0, pt: 1}}>
-                                <Typography  color={"text.primary"} variant="h5" fontWeight={"bold"}
+                                <Typography color={"text.primary"} variant="h5" fontWeight={"bold"}
                                             sx={{...truncateTextStyle}}>{book.bookInstance.bookName}</Typography>
-                                <Typography color={"text.primary"} variant="caption">{book.bookInstance.code}</Typography>
+                                <Typography color={"text.primary"}
+                                            variant="caption">{book.bookInstance.code}</Typography>
                                 <Typography color={"text.primary"} variant="h6"
                                             fontWeight={"lighter"}>{book.bookInstance.bookVersion}</Typography>
                                 <Typography color={"text.primary"} variant="h6"

@@ -1,6 +1,5 @@
 "use client"
 import React, {JSX, memo} from "react";
-import Grid from "@mui/material/Grid2";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -8,7 +7,8 @@ import {TabItem} from "@/helpers/appType";
 
 interface IProps {
     children?: React.ReactNode,
-    tabs: TabItem[]
+    tabs: TabItem[],
+    defaultValue?: number,
 }
 
 // function TabBar(props: IProps) {
@@ -44,7 +44,7 @@ function a11yProps(index: number) {
 }
 
 function TabBar(props: IProps): JSX.Element {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(props.defaultValue ?? 0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);

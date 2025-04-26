@@ -75,6 +75,8 @@ const EBookAvailability =
                             isChecked={availabilities.find(a => a.kind === "epub")?.isChecked}
                         />
                     }
+                    buttonStyle={{boxShadow: "none", p: 0}}
+
                 >
                     <Grid container spacing={1}>
                         <Grid size={12}>

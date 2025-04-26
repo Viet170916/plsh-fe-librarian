@@ -10,9 +10,6 @@ import {createApi} from "@reduxjs/toolkit/query/react";
 import {int} from "@zxing/library/es2015/customTypings";
 import {Item} from "@/app/(private)/(in-dash-board)/resources/library-room/(page)/item";
 
-export type CheckShelfResponse = {
-    data?: Shelf,
-}
 const httpMethods = constants.http.method;
 const API = createApi({
     reducerPath: "libraryRoomApi",
@@ -29,6 +26,18 @@ const API = createApi({
         getShelf: builder.query<Shelf, number>({
             query: (id) => ({
                 url: `/library-room/shelf/${id}`
+            })
+        }),
+        getShelvesSelection: builder.query<BaseResponse<Shelf[]>, {name?: string }>({
+            query: (params) => ({
+                url: `/library-room/shelves/selection`,
+                params
+            })
+        }),
+        getRowsSelection: builder.query<BaseResponse<RowShelf[]>, { shelfId?: number, name?: string }>({
+            query: (params) => ({
+                url: `/library-room/shelf/rows/selection`,
+                params
             })
         }),
         removeItem: builder.mutation<BaseResponse<Item>, { id: number, force?: boolean }>({
@@ -143,6 +152,8 @@ export const libraryApiMiddleware = API.middleware;
 export const {
     useCheckShelfExistedQuery,
     useLazyGetShelvesQuery,
+    useLazyGetShelvesSelectionQuery,
+    useLazyGetRowsSelectionQuery,
     useGetItemsQuery,
     useGetShelfQuery,
     useRemoveItemMutation,

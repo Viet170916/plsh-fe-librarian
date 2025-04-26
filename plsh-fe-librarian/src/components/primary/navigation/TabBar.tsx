@@ -151,6 +151,7 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
                     <Grid justifySelf={"end"}
                           container
                           alignItems={"center"}
+                          boxShadow={NEUMORPHIC_SHADOW.INNER_SHADOW()}
                           sx={{
                               px: .5,
                               mb: 1,

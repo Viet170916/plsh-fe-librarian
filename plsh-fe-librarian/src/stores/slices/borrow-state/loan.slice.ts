@@ -44,9 +44,9 @@ const loanStateSlice: LoanStateSlice = createSlice({
 ;
 //export
 export const {
+    clearData,
     setPropToLoanState,
     clearPropInLoanState,
-    clearData,
 } = loanStateSlice.actions;
 const loanStateReducer = loanStateSlice.reducer;
 export default loanStateReducer;

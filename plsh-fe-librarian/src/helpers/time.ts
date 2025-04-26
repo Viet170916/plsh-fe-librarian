@@ -64,6 +64,6 @@ export function formatTime(ioString: string) {
 }
 
 export function correctTime(ioString: string) {
-    const term = (ioString?.endsWith("z") || ioString?.endsWith("Z")) ? ioString : `${ioString}Z`;
+    const term = (ioString?.endsWith("z") || ioString?.includes("+") || ioString?.endsWith("Z")) ? ioString : `${ioString}Z`;
     return term;
 }

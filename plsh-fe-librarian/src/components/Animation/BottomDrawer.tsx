@@ -1,7 +1,7 @@
 "use client"
 import React, {memo} from "react";
 import {Box, Drawer, IconButton} from "@mui/material";
-import {styled} from "@mui/material/styles";
+import {styled, useTheme} from "@mui/material/styles";
 import {AnimatePresence, motion} from "framer-motion";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -18,11 +18,12 @@ const StyledDrawerPaper = styled("div")(({theme}) => ({
     borderTopRightRadius: 16,
     padding: theme.spacing(2),
     paddingBottom: theme.spacing(12),
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.default,
     overflow: "hidden",
 }));
 
 const BottomDrawer: React.FC<BottomDrawerProps> = ({open, onClose, children}) => {
+   const theme = useTheme();
     return (
         <Drawer
             anchor="bottom"
@@ -32,6 +33,7 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({open, onClose, children}) =>
             slotProps={{
                 paper: {
                     sx: {
+
                         background: "transparent",
                         boxShadow: "none",
                         overflow: "visible"

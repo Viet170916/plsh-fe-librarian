@@ -10,7 +10,7 @@ const httpMethods = constants.http.method;
 export const bookApi = createApi({
     reducerPath: "bookApi",
     baseQuery: baseQueryWithReAuth,
-    tagTypes: ["BookInstances", "Book", "Books"],
+    tagTypes: ["BookInstances", "Book", "Books", "BookInstance"],
     endpoints: (builder) => ({
 
         getFieldGenerate: builder.mutation<BaseResponse<{
@@ -26,6 +26,44 @@ export const bookApi = createApi({
                     }
                 );
             }
+        }),
+        addBookInstances: builder.mutation<BaseResponse<string>, { quantity?: number, bookId: number }>({
+            query({bookId, ...other}) {
+                return (
+                    {
+                        url: `book/${bookId}/instance/add`,
+                        method: httpMethods.POST,
+                        body: other
+                    }
+                );
+            },
+            invalidatesTags: ["BookInstances"]
+        }),
+        modifyBookInstances: builder.mutation<BaseResponse<string>, {
+            id: number,
+            position: number,
+            rowShelfId: number
+        }>({
+            query({id, ...other}) {
+                return (
+                    {
+                        url: `book/book-instances/${id}/update-position`,
+                        method: httpMethods.PUT,
+                        body: other
+                    }
+                );
+            },
+            invalidatesTags: ["BookInstance"]
+        }),
+        getBookInstance: builder.query<BaseResponse<BookInstance>, number | string>({
+            query(id) {
+                return (
+                    {
+                        url: `book/book-instances/${id}`,
+                    }
+                );
+            },
+            providesTags: ["BookInstance"]
         }),
         getTextChapter: builder.query<BaseResponse<{
             text: string,
@@ -123,13 +161,17 @@ export const bookApiReducerPath = bookApi.reducerPath;
 export const bookApiMiddleware = bookApi.middleware;
 export const {
     useAddUpdateBookMutation,
+    useModifyBookInstancesMutation,
     useLazyGetBookInstancesQuery,
     useLazyGetBooksQuery,
     useGetFieldGenerateMutation,
+    useGetBookInstanceQuery,
     useLazyGetBookQuery,
+    useGetBookQuery,
     useGetBookAiSearchMutation,
     useLazyGetTextChapterQuery,
     useLazyGetBookImageFromGgsQuery,
+    useAddBookInstancesMutation,
     useLazyGetCategoriesQuery,
     useDeleteBookInstancesMutation,
     useGetBookInstancesQuery,

@@ -56,6 +56,13 @@ export type LoanDto = {
     bookBorrowings: BookBorrowingDto[];
 };
 export type BookBorrowingDto = {
+    borrowerId?: number;
+    borrowerAvatar?: string;
+    borrowerFullName?: string;
+    borrowerEmail?: string;
+    borrowerPhone?: string;
+    borrowerClass?: string;
+    borrowerRole?: string;
     actualReturnDate?: string;
     overdueDateCount?: number;
     overdueDays?: number;

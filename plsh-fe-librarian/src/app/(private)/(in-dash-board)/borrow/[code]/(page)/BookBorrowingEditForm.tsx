@@ -14,7 +14,18 @@ import {useExtendLoanMutation, useReturnLoanConfirmationMutation} from "@/stores
 import {LoanState, setPropToLoanState} from "@/stores/slices/borrow-state/loan.slice";
 import {RootState, useAppStore} from "@/stores/store";
 import CloseIcon from "@mui/icons-material/Close";
-import {Box, Button, Drawer, IconButton, ImageList, ImageListItem, Stack, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Drawer,
+    IconButton,
+    ImageList,
+    ImageListItem,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Stack,
+    Typography
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {LineChart} from '@mui/x-charts/LineChart';
 import {DateTimePicker} from "@mui/x-date-pickers";
@@ -27,6 +38,8 @@ import {toast} from "sonner";
 import {useTheme} from "@mui/material/styles";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import {correctTime} from "@/helpers/time";
+import {daysOptions} from "@/app/(private)/(in-dash-board)/borrow/add/(page)/AddEditBorrowForm";
 
 const AfterBorrowField = memo(<K extends Path<LoanState>>({name, label, type}: {
     name: K,
@@ -38,39 +51,34 @@ const AfterBorrowField = memo(<K extends Path<LoanState>>({name, label, type}: {
     switch (type) {
         case "date-time":
             return (
-                <DateTimePicker
-                    slotProps={{textField: {size: 'small', fullWidth: true}}}
-                    label={label}
-                    value={value ? dayjs(value) : null}
-                    views={["year", "month", "day", "hours", "minutes"]}
-                    onChange={datePicked => {
-                        dispatch(setPropToLoanState({key: name, value: datePicked?.toISOString()}));
-                    }
-                    }
-                />);
+                <DateTimePicker slotProps={{textField: {size: 'small', fullWidth: true}}} label={label}
+                                value={value ? dayjs(correctTime(value)) : null}
+                                views={["year", "month", "day", "hours", "minutes"]} onChange={datePicked => {
+                    dispatch(setPropToLoanState({key: name, value: datePicked?.toISOString()}));
+                }}/>);
         default:
             return (
-                <NeumorphicTextField
-                    label={label}
-                    value={value ?? ""}
-                    size={"small"}
-                    fullWidth
-                    onChange={(e) => dispatch(setPropToLoanState({key: name, value: e.target.value}))}
-                />);
+                <NeumorphicTextField label={label} value={value ?? ""} size={"small"} fullWidth
+                                     onChange={(e) => dispatch(setPropToLoanState({
+                                         key: name,
+                                         value: e.target.value
+                                     }))}/>);
     }
 });
 const BookBorrowingDrawer: React.FC = () => {
     const theme = useTheme();
     dayjs.locale("vi");
     const dispatch = useAppDispatch();
-    const selectedBookBorrowing = useSelector(state => state.loanState.currenBookBorrowing, shallowEqual);
+    const selectedBookBorrowing = useSelector(state => state.loanState.currenBookBorrowing);
+    const currentLoan = useSelector(state => state.loanState.currentLoan);
     const onClose = () => {
         dispatch(setPropToLoanState({key: "currenBookBorrowing", value: undefined}));
     };
-    const borrowRangeAnalytic = useMemo(() => getOnLoanPeriods(dayjs(selectedBookBorrowing?.borrowDate),
-        selectedBookBorrowing?.returnDates.map(d => dayjs(d)) ?? [],
-        selectedBookBorrowing?.extendDates.map(d => dayjs(d)) ?? [],
-        dayjs(selectedBookBorrowing?.actualReturnDate ?? dayjs())), [selectedBookBorrowing?.borrowDate, selectedBookBorrowing?.extendDates, selectedBookBorrowing?.returnDates, selectedBookBorrowing?.actualReturnDate])
+    const borrowRangeAnalytic = useMemo(() => getOnLoanPeriods(dayjs(correctTime(selectedBookBorrowing?.borrowDate ?? "")),
+            selectedBookBorrowing?.returnDates.map(d => dayjs(correctTime(d))) ?? [],
+            selectedBookBorrowing?.extendDates.map(d => dayjs(correctTime(d))) ?? [],
+            selectedBookBorrowing?.actualReturnDate ? dayjs(correctTime(selectedBookBorrowing?.actualReturnDate ?? "")) : dayjs()),
+        [selectedBookBorrowing?.borrowDate, selectedBookBorrowing?.extendDates, selectedBookBorrowing?.returnDates, selectedBookBorrowing?.actualReturnDate])
     return (
         <Drawer anchor="right" open={selectedBookBorrowing && true} onClose={onClose}>
             <Box width={"50vw"} p={3}>
@@ -81,99 +89,78 @@ const BookBorrowingDrawer: React.FC = () => {
                     </IconButton>
                 </Box>
                 <Grid container width={"100%"} spacing={2}>
-                    <Grid size={6} container spacing={1}>
-                        <NeumorphicTextField
-                            label={appStrings.CODE}
-                            value={selectedBookBorrowing?.id ?? ""}
-                            size={"small"}
-                            fullWidth disabled
-                        />
-                        <NeumorphicTextField
-                            label={appStrings.book.CODE}
-                            value={selectedBookBorrowing?.bookInstance?.code ?? ""}
-                            size={"small"}
-                            fullWidth disabled
-                        />
-                        <NeumorphicTextField
-                            label={appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
-                            value={selectedBookBorrowing?.noteBeforeBorrow ?? ""}
-                            multiline
-                            size={"small"}
-                            fullWidth disabled
-                        />
-                        <NeumorphicTextField
-                            label={appStrings.borrow.BORROW_DATE}
-                            value={dayjs(selectedBookBorrowing?.borrowDate ?? "").format(constants.dateFormat)}
-                            size={"small"}
-                            fullWidth disabled
-                        />
-                        <NeumorphicTextField
-                            multiline
-                            label={appStrings.borrow.RETURN_DATE}
-                            value={selectedBookBorrowing?.returnDates.map(d => dayjs(d ?? "").format(constants.dateFormat)).join(",\n")}
-                            size={"small"}
-                            fullWidth disabled
-                        />
+                    <Grid size={6} container spacing={3}>
+                        <NeumorphicTextField label={appStrings.CODE} value={selectedBookBorrowing?.id ?? ""}
+                                             size={"small"} fullWidth disabled/>
+                        <NeumorphicTextField label={appStrings.book.CODE}
+                                             value={selectedBookBorrowing?.bookInstance?.code ?? ""} size={"small"}
+                                             fullWidth disabled/>
+                        <NeumorphicTextField label={appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
+                                             value={selectedBookBorrowing?.noteBeforeBorrow ?? ""} multiline
+                                             size={"small"} fullWidth disabled/>
+                        <NeumorphicTextField label={appStrings.borrow.BORROW_DATE}
+                                             value={selectedBookBorrowing?.borrowDate ? dayjs(correctTime(selectedBookBorrowing?.borrowDate)).format(constants.dateFormat) : ""}
+                                             size={"small"} fullWidth disabled/>
+                        <NeumorphicTextField multiline label={appStrings.borrow.RETURN_DATE}
+                                             value={selectedBookBorrowing?.returnDates.map(d => d ? dayjs(correctTime(d)).format(constants.dateFormat) : "").join(",\n")}
+                                             size={"small"} fullWidth disabled/>
                     </Grid>
                     {selectedBookBorrowing?.borrowingStatus === "returned" ?
                         <Grid size={6} spacing={1}>
-                            <NeumorphicTextField
-                                label={appStrings.borrow.FINE_TYPE}
-                                value={selectedBookBorrowing?.fineType ?? ""}
-                                size={"small"}
-                                fullWidth disabled
-                            />
-                            <NeumorphicTextField
-                                sx={{mt: 1}}
-                                multiline
-                                label={appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
-                                value={selectedBookBorrowing?.noteAfterBorrow}
-                                size={"small"}
-                                fullWidth disabled
-                            />
-                        </Grid> :
+                            <NeumorphicTextField label={appStrings.borrow.FINE_TYPE}
+                                                 value={selectedBookBorrowing?.fineType ?? ""} size={"small"} fullWidth
+                                                 disabled/>
+                            <NeumorphicTextField sx={{mt: 1}} multiline
+                                                 label={appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
+                                                 value={selectedBookBorrowing?.noteAfterBorrow} size={"small"} fullWidth
+                                                 disabled/>
+                        </Grid> : (currentLoan?.aprovalStatus !== "pending" && currentLoan?.aprovalStatus !== "approved") &&
                         <EditableFields/>
                     }
                     <Grid size={12}>
-                        {selectedBookBorrowing && <Grid>
-                                    <Typography variant={"h5"} sx={{color: theme.palette.primary.main}}
-                                                fontWeight={"bold"}>{appStrings.borrow.BORROW_DATE_RANGE_ANALYTIC}</Typography>
-                                    <LineChart
-                                        tooltip={{trigger: 'none'}}
-                                        xAxis={[{
-                                            scaleType: 'point',
-                                            data: borrowRangeAnalytic.labels
-                                        }]}
-                                        series={borrowRangeAnalytic.chartData}
-                                        height={100}
-                                        margin={{top: 50, bottom: 20}}
-                                    />
-                        </Grid>}
+                        {(selectedBookBorrowing && currentLoan?.aprovalStatus !== "pending" && currentLoan?.aprovalStatus !== "approved") &&
+                            <Grid>
+                                        <Typography variant={"h5"} sx={{color: theme.palette.primary.main}}
+                                                    fontWeight={"bold"}>{appStrings.borrow.BORROW_DATE_RANGE_ANALYTIC}</Typography>
+                                        <LineChart
+                                            tooltip={{trigger: 'none'}}
+                                            xAxis={[{scaleType: 'point', data: borrowRangeAnalytic.labels}]}
+                                            series={borrowRangeAnalytic.chartData}
+                                            height={100}
+                                            margin={{top: 50, bottom: 20}}
+                                        />
+                            </Grid>}
                     </Grid>
                     <Grid size={12}>
                         {(selectedBookBorrowing?.overdueDays ?? 0) > 0 &&
+                            (currentLoan?.aprovalStatus !== "pending" && currentLoan?.aprovalStatus !== "approved") &&
                             <Typography sx={{color: color.SERIOUS}}><strong>Quá
                                         hạn</strong>{` ${selectedBookBorrowing?.overdueDays} `}{appStrings.unit.DAY}
                             </Typography>}
                     </Grid>
                     <Grid size={6}>
-                        <Typography variant={"h4"} fontWeight={"bold"}
-                                    sx={{color: theme.palette.primary.main, mt: 5, mb: 3}}>
-                            {appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}
-                        </Typography>
+                        <Typography variant={"h4"} fontWeight={"bold"} sx={{
+                            color: theme.palette.primary.main,
+                            mt: 5,
+                            mb: 3
+                        }}>{appStrings.borrow.BOOK_DAMAGE_BEFORE_BORROW}</Typography>
                         <QuiltedImageList itemData={selectedBookBorrowing?.bookImageUrlsBeforeBorrow ?? []}/>
                     </Grid>
                     <Grid size={6}>
-                        <Typography variant={"h4"} fontWeight={"bold"}
-                                    sx={{color: theme.palette.primary.main, mt: 5, mb: 3}}>
-                            {appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
+                        <Typography variant={"h4"} fontWeight={"bold"} sx={{
+                            color: theme.palette.primary.main,
+                            mt: 5,
+                            mb: 3
+                        }}>{appStrings.borrow.BOOK_DAMAGE_AFTER_BORROW}
                         </Typography>
                         {selectedBookBorrowing?.borrowingStatus === "returned" ?
                             <QuiltedImageList itemData={selectedBookBorrowing?.bookImageUrlsAfterBorrow ?? []}/> :
+                            (currentLoan?.aprovalStatus !== "pending" && currentLoan?.aprovalStatus !== "approved") &&
                             <>
-                                <ImageSelected selectedBookId={selectedBookBorrowing?.bookInstance?.id as number}/>
-                                <ImagesPreview/>
-                                <ConfirmReturnButton/>
+                                        <ImageSelected
+                                            selectedBookId={selectedBookBorrowing?.bookInstance?.id as number}/>
+                                        <ImagesPreview/>
+                                        <ConfirmReturnButton/>
                             </>
                         }
                     </Grid>
@@ -182,6 +169,77 @@ const BookBorrowingDrawer: React.FC = () => {
         </Drawer>
     );
 };
+
+
+const SelectAddDays = memo(() => {
+    const [value, setValue] = React.useState("");
+
+    const start = useSelector(state => state.loanState.currenBookBorrowing?.extendDate, shallowEqual);
+    const selectedBook = useSelector(state => state.loanState.currenBookBorrowing, shallowEqual);
+
+    const dispatch = useAppDispatch();
+
+    const handleChange = (event: SelectChangeEvent) => {
+        const selectedValue = event.target.value;
+        setValue(selectedValue);
+        const daysToAdd = parseInt(selectedValue);
+        const newDate = dayjs(start).add(daysToAdd, "day");
+        if (selectedBook?.bookInstance?.id) {
+            dispatch(
+                setPropToLoanState({
+                    key: "currenBookBorrowing.returnDate",
+                    value: newDate.toISOString(),
+                }),
+            )
+        }
+
+    };
+
+    return (
+        <>
+            <Select
+                value={value}
+                onChange={handleChange}
+                displayEmpty
+                fullWidth
+                size="small"
+                sx={{borderRadius: 12, p: 0}}
+            >
+                <MenuItem disabled value="">
+                    Chọn số ngày mượn
+                </MenuItem>
+                {daysOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value.toString()}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </Select>
+        </>
+    );
+})
+const GetTodayButton = memo(() => {
+    const selectedBook = useSelector(state => state.loanState.currenBookBorrowing, shallowEqual);
+    const dispatch = useAppDispatch();
+
+    function onGetToday() {
+        if (selectedBook?.bookInstance?.id)
+            dispatch(
+                setPropToLoanState({
+                    key: "currenBookBorrowing.extendDate",
+                    value: dayjs().toISOString(),
+                }),
+            );
+    }
+
+    return (
+        <NeumorphicButton
+            fullWidth
+            sx={{borderColor: color.FOUR, color: color.FOUR, borderRadius: 12, height: "fit-content"}}
+            variant={"outlined"}
+            onClick={onGetToday}
+        >{appStrings.GET_NOW}</NeumorphicButton>
+    );
+});
 const ImageSelected = memo(({selectedBookId}: { selectedBookId: number }) => {
     const maxImage = 5;
     const dispatch = useDispatch();
@@ -301,11 +359,23 @@ const ImagesPreview = memo(() => {
 });
 const EditableFields = memo(() => {
     return (
-        <Grid size={6} justifyContent={"end"} container spacing={1}>
-            <AfterBorrowField name={"currenBookBorrowing.extendDate"} type={"date-time"}
-                              label={appStrings.borrow.EXTEND_DATE}/>
-            <AfterBorrowField name={"currenBookBorrowing.returnDate"} type={"date-time"}
-                              label={appStrings.borrow.NEXT_RETURN_DATE}/>
+        <Grid size={6} justifyContent={"end"} container spacing={3}>
+
+            <Grid size={8}>
+                <AfterBorrowField name={"currenBookBorrowing.extendDate"} type={"date-time"}
+                                  label={appStrings.borrow.EXTEND_DATE}/>
+            </Grid>
+            <Grid size={4}>
+                <GetTodayButton/>
+            </Grid>
+            <Grid size={8}>
+                <AfterBorrowField name={"currenBookBorrowing.returnDate"} type={"date-time"}
+                                  label={appStrings.borrow.NEXT_RETURN_DATE}/>
+            </Grid>
+            <Grid size={4}>
+                <SelectAddDays/>
+            </Grid>
+
             <ExtendButton/>
             <AfterBorrowField name={"currenBookBorrowing.fineType"} label={appStrings.borrow.FINE_TYPE}/>
             <AfterBorrowField name={"currenBookBorrowing.noteAfterBorrow"}
@@ -367,10 +437,12 @@ const ConfirmReturnButton = memo(() => {
         }
     }, [error]);
     return (
-        <NeumorphicButton fullWidth loading={isLoading} variant="contained"
-                sx={{bgcolor: color.COMFORT, color: color.LIGHT_TEXT, mt: 3}} onClick={onConfirmReturn}>
+        <NeumorphicButton fullWidth loading={isLoading} variant_2={"primary"} color={"success"}
+                          sx={{mt: 3}}
+                          onClick={onConfirmReturn}>
             {appStrings.borrow.RETURN_CONFIRM}
         </NeumorphicButton>
     );
 });
 export default memo(BookBorrowingDrawer);
+

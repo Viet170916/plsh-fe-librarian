@@ -107,7 +107,7 @@ function ChatBoxC({review, repliedId}: { review: ReviewDto, repliedId?: number }
                             loading={isLoading}
                             type={"submit"}
                             sx={{textTransform: "none", height: "fit-content"}}
-                            variant={"outlined"}
+                            variant_2={"primary"}
                         >
                             {appStrings.SEND}
                         </NeumorphicButton>

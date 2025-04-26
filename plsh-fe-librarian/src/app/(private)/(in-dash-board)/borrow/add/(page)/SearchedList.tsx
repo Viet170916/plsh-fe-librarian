@@ -10,7 +10,6 @@ import Grid from "@mui/material/Grid2";
 import {color} from "@/helpers/resources";
 import {truncateMaxLineTextStyle, truncateTextStyle} from "@/style/text.style";
 import appStrings from "@/helpers/appStrings";
-import Divider from "@mui/material/Divider";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import List from "@mui/material/List";
 import {setPropToBookInstanceState} from "@/stores/slices/book-states/book-instance.book.slice";
@@ -20,6 +19,8 @@ import {useAddBookBorrowingMutation} from "@/stores/slices/api/borrow.api.slice"
 import {useAppStore} from "@/stores/store";
 import {appToaster} from "@/components/primary/toaster";
 import {parsErrorToBaseResponse} from "@/helpers/error";
+import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
+import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
 function SearchedList(): JSX.Element {
     const store = useAppStore();
@@ -64,59 +65,72 @@ function SearchedList(): JSX.Element {
                     sx={{
                         cursor: instance.isInBorrowing ? "not-allowed" : "pointer",
                         opacity: instance.isInBorrowing ? .6 : 1,
+                        borderRadius: 2,
+                        boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
+                        my: .5
                     }}
                 >
                     <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={instance.bookThumbnail}/>
+                        <Box sx={{borderRadius: "50%", boxShadow: NEUMORPHIC_SHADOW.SHADOW(), p: .4}}>
+                            <Box sx={{
+                                borderRadius: "50%",
+                                boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
+                                p: .8,
+                            }}>
+                                <Avatar alt="Remy Sharp" src={instance.bookThumbnail}/>
+                            </Box>
+                        </Box>
                     </ListItemAvatar>
-                    <Grid width="100%" container>
-                        <Grid size={12} container>
-                            <Grid size={"grow"}>
-                                <Typography
-                                    component="span"
-                                    variant="h6"
-                                    sx={{
-                                        color: color.DARK_TEXT,
-                                        fontWeight: "bold",
-                                        display: 'inline', ...truncateTextStyle,
-                                    }}
+                    <Grid width="100%" container sx={{ml: 1}}>
+                        <Grid size={12} container spacing={1}>
+                            <Grid size={"grow"} sx={{boxShadow: NEUMORPHIC_SHADOW.SHADOW(), borderRadius: 1, px: 1}}>
+                                <Typography color={"textPrimary"}
+                                            component="span"
+                                            variant="h6"
+                                            sx={{
+                                                fontWeight: "bold",
+                                                display: 'inline', ...truncateTextStyle,
+                                            }}
                                 >
                                     {instance.bookName}
                                 </Typography>
                             </Grid>
                             <Grid>
                                 {instance.isInBorrowing ?
-                                    <Typography
-                                        sx={{color: color.SERIOUS}}>{appStrings.CHECKED_OUT__UNAVAILABLE}</Typography> :
-                                    <Typography sx={{color: color.COMFORT}}>{appStrings.AVAILABLE}</Typography>}
+                                    <Typography color={"textPrimary"} component={NeumorphicButton} variant_2={"primary"}
+                                                sx={{
+                                                    color: color.SERIOUS,
+                                                    p: 0
+                                                }}>{appStrings.CHECKED_OUT__UNAVAILABLE}</Typography> :
+                                    <NeumorphicButton variant_2={"primary"} color={"success"}
+                                                sx={{p: 0}}>{appStrings.AVAILABLE}</NeumorphicButton>}
                             </Grid>
                         </Grid>
                         <Grid size={9}>
-                            <Typography
-                                component="span"
-                                variant="h6"
-                                sx={{color: color.DARK_TEXT, display: 'inline'}}
+                            <Typography color={"textPrimary"}
+                                        component="span"
+                                        variant="h6"
+                                        sx={{color: color.DARK_TEXT, display: 'inline'}}
                             >
                                 {instance.code}
                             </Typography>
                         </Grid>
                         <Grid size={5}>
-                            <Typography sx={{fontSize: 12, color: color.DARK_LIGHTER_TEXT}}>
+                            <Typography color={"textPrimary"} sx={{fontSize: 12, color: color.DARK_LIGHTER_TEXT}}>
                                 {instance.bookVersion}
                             </Typography>
                         </Grid>
                         <Grid container size={"grow"} justifyContent={"end"}>
-                            <Typography variant="h6"
+                            <Typography color={"textPrimary"} variant="h6"
                                         fontWeight={"lighter"}>{appStrings.shelf.POSITION}: {instance.shelfPosition}</Typography>
                         </Grid>
                         <Grid size={12}>
-                            <Typography sx={{fontSize: 10, ...truncateMaxLineTextStyle(2)}}>
+                            <Typography color={"textPrimary"} sx={{fontSize: 10, ...truncateMaxLineTextStyle(2)}}>
                                 {instance.bookCategory}
                             </Typography>
                         </Grid>
                     </Grid>
                 </ListItem>
-                <Divider variant="inset" component="li"/>
             </Box>
         ));
     }, [InstancesData, onSelected]);
@@ -124,7 +138,7 @@ function SearchedList(): JSX.Element {
     return (
         <>
             {isFetching && <LinearProgress/>}
-            {error && <Typography>{appStrings.error.GET_BOOK_FAIL}</Typography>}
+            {error && <Typography color={"textPrimary"}>{appStrings.error.GET_BOOK_FAIL}</Typography>}
             <List sx={{overflowY: "auto"}}>
                 {bookList}
             </List>

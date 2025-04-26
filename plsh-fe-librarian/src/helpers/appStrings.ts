@@ -61,7 +61,9 @@ const appStrings =
             SAVE_THIS_BOOK_BORROWING: "Lưu thông tin sách mượn",
             ONLOAN: "Đang mượn",
             NOT_TAKEN_YET: "Chưa lấy sách",
-            CODE: "Mã phiên mượn"
+            CODE: "Mã phiên mượn",
+            LOAN_CODE: "Phiên mượn",
+            GO: "Đi đến phiên mượn"
 
         },
         BORROWED_BOOK: "Sách được mượn",
@@ -231,7 +233,8 @@ const appStrings =
             TITLE: "Tiêu đề sách",
             THUMBNAIL: "Ảnh bìa",
             STATUS: "Tình trạng sách",
-            INSTANCE: "Sách cứng"
+            INSTANCE: "Sách cứng",
+            HAS_NO_BORROW_YET: "Chưa có lượt mượn nào với cuốn này "
 
 
         },
@@ -290,7 +293,9 @@ const appStrings =
             ADD_ROW_ON_SHELF: "Thêm hàng sách",
             SHELF_EMPTY: "Kệ sách đang trống",
             POSITION: "Vị trí trên kệ", NAME: "Kệ sách",
-            SEE: "Xem chi tiết kệ"
+            SEE: "Xem chi tiết kệ",
+            SHELF_EMPTY_WITH_BOOK: "Kệ sách đang không chứa cuốn nào của loại sách này",
+            GO: "Đi đến kệ sách"
 
         },
         ACTION: "Hành động",
@@ -406,7 +411,8 @@ const appStrings =
         PREV_PAGE: "Trang trước",
         NEXT_PAGE: "Trang sau", APPLY_SUCCESS: "Áp dụng thành công",
         APPLY_FOR_ALL: "Áp dụng cho tất cả",
-        GET_NOW: "Lấy thời gian hiện tại"
+        GET_NOW: "Hiện giờ",
+        ADD_ONSHELF: "Chuyển lên kệ"
 
 
     };

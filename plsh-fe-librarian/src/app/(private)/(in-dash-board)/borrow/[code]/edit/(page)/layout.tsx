@@ -8,6 +8,7 @@ import appStrings from "@/helpers/appStrings";
 import {Typography} from "@mui/material";
 import {color} from "@/helpers/resources";
 import BarcodeHelper from "@/components/primary/Input/BarcodeHelper";
+import Breadcrumbs from "@/app/(private)/(in-dash-board)/borrow/[code]/edit/(page)/breadcrumbs";
 
 type layoutProps = {
     children?: React.ReactNode;
@@ -33,10 +34,14 @@ function layout({children}: layoutProps): JSX.Element {
                                 }}/>
                                 <BarcodeHelper/>
                             </Grid>
-
                         }/>
             </Grid>
-            {children}
+            <Grid width={"100%"} sx={{pl: 2}}>
+                <Breadcrumbs/>
+            </Grid>
+            <Grid size={"grow"} sx={{overflowY: "auto"}}>
+                {children}
+            </Grid>
         </Grid>
     );
 }

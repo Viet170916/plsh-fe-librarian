@@ -9,12 +9,12 @@ import SearchedList from "@/app/(private)/(in-dash-board)/borrow/add/(page)/Sear
 
 async function AddBorrowPage() {
     return (
-        <Grid spacing={2} container sx={{p: 4, width: "100%"}}>
-            <AddEditBorrowForm/>
-            <Grid size={4.5} sx={{p: 3, bgcolor: color.WHITE, borderRadius: 2}} minHeight={400}>
+        <Grid spacing={1} container sx={{p: 4, width: "100%"}}>
+            <Grid size={4.5} sx={{borderRadius: 2}} minHeight={400}>
                 <Typography variant="h4" gutterBottom>{appStrings.SEARCH}</Typography>
                 <SearchedList/>
             </Grid>
+            <AddEditBorrowForm/>
             <Grid size={"grow"}>
                 <Typography variant="h4" fontWeight="bold">
                     Sách <span style={{color: color.PRIMARY}}>đã chọn</span>

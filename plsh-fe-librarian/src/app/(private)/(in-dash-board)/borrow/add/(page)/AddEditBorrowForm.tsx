@@ -91,7 +91,7 @@ const Form = memo(({selectedBook}: { selectedBook?: BorrowedBookData }) => {
     );
 });
 
-const options = [
+export const daysOptions = [
     {label: "7 ngày", value: 7},
     {label: "14 ngày", value: 14},
     {label: "21 ngày", value: 21},
@@ -133,7 +133,7 @@ const SelectAddDays = memo(() => {
                 <MenuItem disabled value="">
                     Chọn số ngày mượn
                 </MenuItem>
-                {options.map((option) => (
+                {daysOptions.map((option) => (
                     <MenuItem key={option.value} value={option.value.toString()}>
                         {option.label}
                     </MenuItem>

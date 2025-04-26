@@ -24,10 +24,6 @@ async function EditBookPage(props: IProps) {
                 <Grid size={{sm: "grow"}}>
                     <Add_EditBookDetails/>
                 </Grid>
-                {/*<Grid size = { { xs: 12, sm: 12, md: 12, lg: 3, xl: 4 } } container spacing = { 2 }>*/}
-                {/*<ISBNScanner />*/}
-                {/*<BookCoverImageScanner/>*/}
-                {/*</Grid>*/}
                 <Grid size={12}>
                     <Add_EditBookOverviewTabs bookId={bookResponse.data.id}/>
                 </Grid>

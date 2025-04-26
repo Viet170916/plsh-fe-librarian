@@ -205,6 +205,7 @@ export type BookData = {
     bookStatus?: BookAvailability;
 }
 export type BookInstance = {
+    shelfId?: number,
     shelfPosition?: string;
     isInBorrowing?: boolean;
     bookName?: string;

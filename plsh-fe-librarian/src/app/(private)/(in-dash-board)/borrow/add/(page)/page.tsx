@@ -11,7 +11,7 @@ async function AddBorrowPage() {
     return (
         <Grid spacing={2} container sx={{p: 4, width: "100%"}}>
             <AddEditBorrowForm/>
-            <Grid size={4.5} sx={{p: 3, bgcolor: color.WHITE, borderRadius: 2}} minHeight={400}>
+            <Grid size={4.5} sx={{borderRadius: 2}} minHeight={400}>
                 <Typography color={"text.primary"} variant="h4" gutterBottom>{appStrings.SEARCH}</Typography>
                 <SearchedList/>
             </Grid>

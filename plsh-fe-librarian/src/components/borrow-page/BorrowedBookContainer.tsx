@@ -1,4 +1,4 @@
-import BookBorrowingDrawer from "@/app/(private)/(in-dash-board)/borrow/[code]/BookBorrowingEditForm";
+import BookBorrowingDrawer from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/BookBorrowingEditForm";
 import BorrowedBookItem from "@/components/borrow-page/BorrowedBookItem";
 import {BookBorrowingDto, LoanStatus} from "@/helpers/dataTransfer";
 import {color} from "@/helpers/resources";
@@ -19,7 +19,7 @@ function BorrowedBookContainer(props: IProps) {
         dispatch(setPropToLoanState({key: "currenBookBorrowing", value: bookSelected}));
     }, [dispatch]);
     return (
-        <Container>
+        <Container sx={{mb: 4}}>
             <BookBorrowingDrawer/>
             <Typography variant="h5" fontWeight="bold" mt={3} mb={2}>
                 Sách đ<span style={{color: color.PRIMARY}}>ã mượn</span>

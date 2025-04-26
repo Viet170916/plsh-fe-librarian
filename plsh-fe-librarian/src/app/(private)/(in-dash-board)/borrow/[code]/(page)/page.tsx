@@ -1,9 +1,9 @@
-import ClientRender from "@/app/(private)/(in-dash-board)/borrow/[code]/ClientRender";
 import React from "react";
 import Grid from "@mui/material/Grid2";
-import Borrower from "@/app/(private)/(in-dash-board)/borrow/[code]/Borrower";
-import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
-import LoanInfo from "@/app/(private)/(in-dash-board)/borrow/[code]/LoanInfo";
+import Borrower from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/Borrower";
+import ChangeStatusButton from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/ChangeStatusButton";
+import LoanInfo from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/LoanInfo";
+import BorrowCodeBreadcrumbs from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/breadcrumbs";
 
 interface IProps {
     children?: React.ReactNode;

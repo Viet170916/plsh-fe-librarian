@@ -1,7 +1,7 @@
 "use client";
 import appStrings from "@/helpers/appStrings";
 import {useAppDispatch} from "@/hooks/useDispatch";
-import {useLazyGetBookQuery} from "@/stores/slices/api/book.api.slice";
+import {useGetBookQuery} from "@/stores/slices/api/book.api.slice";
 import {setPropToBookState} from "@/stores/slices/book-states/book.slice";
 import React, {JSX, memo, useEffect} from "react";
 import {Fab} from "@mui/material";
@@ -12,13 +12,8 @@ import {useParams} from "next/navigation";
 
 function ClientRender(): JSX.Element {
     const dispatch = useAppDispatch();
-    const {id} = useParams();
-    const [getBook, {data, error}] = useLazyGetBookQuery();
-    useEffect(() => {
-        if (id) {
-            getBook(Number.parseInt(id as string));
-        }
-    }, [id, getBook]);
+    const {id} = useParams<{ id: string }>();
+    const {data, error} = useGetBookQuery(Number.parseInt(id as string));
     useEffect(() => {
         if (data) {
             dispatch(setPropToBookState({key: "currentBook", value: data}));

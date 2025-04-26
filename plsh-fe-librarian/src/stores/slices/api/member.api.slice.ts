@@ -12,12 +12,20 @@ export type AccountEdited = {
     className: string;
     role: "student" | "teacher" | "librarian";
 }
+export type AccountValidationStatus = 'valid' | 'invalid' | 'expired';
 const httpMethods = constants.http.method;
 const API = createApi({
         reducerPath: "memberApi",
         baseQuery: baseQueryWithReAuth,
         tagTypes: ["GetMembers", "GetMember"],
         endpoints: (builder) => ({
+            validateMember: builder.query<BaseResponse<AccountValidationStatus>, number>({
+                query: (id) => {
+                    return ({
+                        url: `/account/member/${id}/validate`,
+                    });
+                },
+            }),
             createMember: builder.mutation<BaseResponse<Member>, AccountEdited>({
                 query: (params) => {
                     return ({
@@ -45,7 +53,7 @@ const API = createApi({
                         body: param,
                     });
                 },
-                invalidatesTags: (_, error) => error ? [] : [{type: "GetMember"}],
+                invalidatesTags: (_, error) => error ? [] : [{type: "GetMember"},{type: "GetMembers"}],
             }),
             getMember: builder.query<BaseResponse<Member>, { id: number }>({
                 query: (param) => {
@@ -63,6 +71,7 @@ export const memberApiReducerPath = API.reducerPath;
 export const memberApiMiddleware = API.middleware;
 export const {
     useCreateMemberMutation,
+    useLazyValidateMemberQuery,
     useLazyGetMembersQuery,
     useGetMemberQuery,
     useUpdateMemberMutation,

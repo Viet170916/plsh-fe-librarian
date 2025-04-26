@@ -5,7 +5,9 @@ import {BookInstance} from "@/helpers/appType";
 import {Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 import appStrings from "@/helpers/appStrings";
-import BookInstanceTableItem, {SkeletonRow} from "@/app/(private)/(in-dash-board)/resources/books/[id]/(read-only)/instances/item";
+import BookInstanceTableItem, {
+    SkeletonRow
+} from "@/app/(private)/(in-dash-board)/resources/books/[id]/(read-only)/instances/item";
 
 type BookInstanceTableProps = {
     bookInstances?: BookInstance[];
@@ -23,9 +25,9 @@ const BookInstanceTable = ({bookInstances, isFetching}: BookInstanceTableProps) 
                         <TableHead sx={{overflow: "visible"}}>
                             <TableRow
                                 sx={{boxShadow: NEUMORPHIC_SHADOW.SHADOW(), borderRadius: 3, overflow: "visible"}}>
-                                <TableCell>{appStrings.book.TITLE}</TableCell>
-                                <TableCell>{appStrings.book.CODE}</TableCell>
                                 <TableCell>{appStrings.book.THUMBNAIL}</TableCell>
+                                <TableCell>{appStrings.book.CODE}</TableCell>
+                                <TableCell>{appStrings.book.TITLE}</TableCell>
                                 <TableCell>{appStrings.book.POSITION}l</TableCell>
                                 <TableCell>{appStrings.book.ON_SHELF}</TableCell>
                                 <TableCell>{appStrings.book.STATUS}</TableCell>

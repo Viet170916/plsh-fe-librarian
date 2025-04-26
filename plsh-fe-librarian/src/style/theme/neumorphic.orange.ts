@@ -50,11 +50,19 @@ export const NEUMORPHIC_SHADOW = {
         light: string,
         dark: string
     }) => `inset .2rem .2rem .5rem ${theme?.dark ?? NEUMORPHIC_COLORS.GREY_LIGHT_2}, inset -.2rem -.2rem .5rem ${theme?.light ?? NEUMORPHIC_COLORS.WHITE}`,
+    TEXT_INNER_SHADOW: (theme?: {
+        light: string,
+        dark: string
+    }) => `inset .1rem .1rem .2rem ${theme?.dark ?? NEUMORPHIC_COLORS.GREY_LIGHT_2}, inset -.1rem -.1rem .2rem ${theme?.light ?? NEUMORPHIC_COLORS.WHITE}`,
     INNER_SHADOW_TOP_LEFT: `inset 0.4rem 0.4rem 0.6rem ${NEUMORPHIC_COLORS.GREY_LIGHT_2}`,
     SHADOW: (theme?: {
         light: string,
         dark: string
-    }) => `.3rem .3rem .6rem ${theme?.dark ?? NEUMORPHIC_COLORS.GREY_LIGHT_2}, -.2rem -.2rem .5rem ${theme?.light ?? NEUMORPHIC_COLORS.WHITE}`
+    }) => `.3rem .3rem .6rem ${theme?.dark ?? NEUMORPHIC_COLORS.GREY_LIGHT_2}, -.2rem -.2rem .5rem ${theme?.light ?? NEUMORPHIC_COLORS.WHITE}`,
+    TEXT_SHADOW: (theme?: {
+        light: string,
+        dark: string
+    }) => `.1rem .1rem .2rem ${theme?.dark ?? NEUMORPHIC_COLORS.GREY_LIGHT_2}, -.1rem -.1rem .2rem ${theme?.light ?? NEUMORPHIC_COLORS.WHITE}`,
 }
 
 
@@ -108,25 +116,22 @@ export const neumorphicTheme = createTheme(
             borderRadius: 12,
         },
         components: {
+            MuiSkeleton: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: NEUMORPHIC_COLORS.TEXT_SECONDARY,
+                    },
+                },
+            },
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        backgroundColor: '#E4EBF5',
-                        color: '#6d5dfc',
+                        // backgroundColor: '#E4EBF5',
+                        // color: '#6d5dfc',
                         borderRadius: '1rem',
-                        boxShadow: `
-            .3rem .3rem .6rem #c8d0e7, 
-            -.2rem -.2rem .5rem #ffffff`,
+                        boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
                         '&:active': {
-                            boxShadow: `
-              inset .2rem .2rem .5rem #c8d0e7, 
-              inset -.2rem -.2rem .5rem #ffffff`,
-                        },
-                        '&:hover': {
-                            backgroundColor: '#c8d0e7',
-                            boxShadow: `
-              .3rem .3rem .6rem #c8d0e7, 
-              -.2rem -.2rem .5rem #ffffff`,
+                            boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
                         },
                     },
                 },
@@ -143,7 +148,7 @@ export const neumorphicTheme = createTheme(
                 styleOverrides: {
                     track: {
                         backgroundColor: NEUMORPHIC_COLORS.SHADOW_LIGHT,
-                        boxShadow: 'inset 0.2rem 0.2rem 0.4rem #c8d0e7, inset -0.2rem -0.2rem 0.4rem #ffffff',
+                        boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
                     },
                     thumb: {
                         backgroundColor: NEUMORPHIC_COLORS.TEXT_PRIMARY,
@@ -153,17 +158,74 @@ export const neumorphicTheme = createTheme(
             MuiCheckbox: {
                 styleOverrides: {
                     root: {
-                        backgroundColor: NEUMORPHIC_COLORS.BACKGROUND,
+                        backgroundColor: NEUMORPHIC_COLORS.GREY_LIGHT_1,
                         borderRadius: 8,
-                        boxShadow: '0.3rem 0.3rem 0.6rem #c8d0e7, -0.2rem -0.2rem 0.5rem #ffffff',
+                        boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
                         '&.Mui-checked': {
                             color: NEUMORPHIC_COLORS.PRIMARY,
-                            boxShadow: 'inset 0.2rem 0.2rem 0.5rem #c8d0e7, inset -0.2rem -0.2rem 0.5rem #ffffff',
+                            boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
                         },
                     },
                 },
             },
+            MuiTextField: {
+                styleOverrides: {
+                    root: ({theme}) => ({
+                        borderRadius: '1rem',
+                        background: theme.palette.background.default,
+                        fontFamily: 'inherit',
+                        color: theme.palette.text.primary,
+                        '& label': {
+                            color: theme.palette.primary.light,
+                            transition: '0.3s ease',
+                        },
+                        '& label.Mui-focused': {
+                            color: theme.palette.primary.main,
+                        },
+                        '& label.MuiInputLabel-shrink': {
+                            transform: 'translate(10px, -18px) scale(0.75)',
+                        },
+                    }),
+                },
+            },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    root: ({theme}) => ({
+                        height: '100%',
+                        borderRadius: '1rem',
+                        boxShadow: NEUMORPHIC_SHADOW.INNER_SHADOW(),
+                        paddingLeft: '1rem',
+                        color: theme.palette.text.primary,
+                        transition: 'box-shadow 0.3s ease',
+                        '&.Mui-focused': {
+                            boxShadow: NEUMORPHIC_SHADOW.SHADOW(),
+                            backgroundColor: theme.palette.background.default,
+                            color: theme.palette.text.primary,
+                            '& svg': {
+                                color: theme.palette.text.primary,
+                            },
+                        },
+                    }),
+                    notchedOutline: {
+                        border: 'none',
+                    },
+                },
+            },
+            // MuiInputAdornment: {
+            //     styleOverrides: {
+            //         root: ({theme}) => ({
+            //             position: 'absolute',
+            //             left: '1rem',
+            //             height: '100%',
+            //             display: 'flex',
+            //             alignItems: 'center',
+            //             color: theme.palette.grey["900"],
+            //             transition: 'color 0.3s ease',
+            //         }),
+            //     },
+            // },
         },
+
 
         ...genericThemeOption,
         typography: {

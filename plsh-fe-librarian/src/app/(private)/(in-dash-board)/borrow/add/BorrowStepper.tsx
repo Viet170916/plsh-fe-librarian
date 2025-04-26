@@ -1,7 +1,8 @@
 "use client";
+
 import {appToaster} from "@/components/primary/toaster";
 import appStrings from "@/helpers/appStrings";
-import {validateBorrowedBooks, validateBorrower} from "@/helpers/comparation";
+import {validateBorrowedBooks} from "@/helpers/comparation";
 import {objectToFormData} from "@/helpers/convert";
 import {mapToLoanApi, mergeToUploadImage} from "@/helpers/dataTransfer";
 import {capitalizeWords} from "@/helpers/text";
@@ -9,141 +10,189 @@ import {useAppDispatch} from "@/hooks/useDispatch";
 import {useCreateLoanMutation, useUploadBookBorrowingImagesMutation} from "@/stores/slices/api/borrow.api.slice";
 import {clearData} from "@/stores/slices/borrow-state/borrow.add-edit.slice";
 import {useAppStore} from "@/stores/store";
-import {Tooltip} from "@mui/material";
-import Box from '@mui/material/Box';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
+import {Box, Step, StepLabel, Stepper, Tooltip} from "@mui/material";
 import {usePathname, useRouter} from "next/navigation";
-import React, {memo, useEffect, useMemo} from "react";
-import {toast} from "sonner";
+import React, {memo, useCallback, useEffect, useMemo, useState} from "react";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import {useLazyValidateMemberQuery} from "@/stores/slices/api/member.api.slice";
+import {parsErrorToBaseResponse} from "@/helpers/error";
 
-// import { toast } from "@mui/material";
-function BorrowStepper() {
+const BorrowStepper = () => {
     const steps = useMemo(() => [
         {
             id: 0,
             label: `${capitalizeWords(appStrings.unit.STEP)} 1: ${appStrings.borrow.BOOKS_CONFIRM}`,
-            description: `Chọn và xác nhận danh sách sách bạn muốn mượn. Kiểm tra tình trạng sách trước khi mượn, bao gồm mô tả hư hỏng (nếu có) và hình ảnh minh họa. Đồng thời, nhập thông tin thời gian mượn và dự kiến trả sách.`,
+            description: `Chọn và xác nhận danh sách sách bạn muốn mượn...`,
             path: `/borrow/add`,
         },
         {
             id: 1,
             label: `${capitalizeWords(appStrings.unit.STEP)} 2: ${appStrings.borrow.BORROWER_CONFIRM}`,
-            description: `Xác nhận thông tin người mượn, bao gồm họ tên, mã thẻ thư viện và các thông tin liên quan.`,
+            description: `Xác nhận thông tin người mượn...`,
             path: `/borrow/add/borrower`,
         },
         {
             id: 2,
             label: `${capitalizeWords(appStrings.unit.STEP)} 3: ${appStrings.borrow.FINAL_CONFIRM}`,
-            description: `Kiểm tra lại toàn bộ thông tin mượn sách, bao gồm sách đã chọn và thông tin người mượn, trước khi hoàn tất.`,
+            description: `Kiểm tra lại toàn bộ thông tin...`,
             path: `/borrow/add/confirmation`,
         },
     ], []);
-    const store = useAppStore();
+
     const dispatch = useAppDispatch();
+    const store = useAppStore();
+    const router = useRouter();
+    const path = usePathname();
+
+    const [activeStep, setActiveStep] = useState(() => steps.find(st => st.path === path)?.id ?? 0);
+
     const [createLoan, {data: loanData, error: loanError, isLoading: isLoanLoading}] = useCreateLoanMutation();
     const [uploadBookBorrowingImages] = useUploadBookBorrowingImagesMutation();
-    const path = usePathname();
-    const router = useRouter();
-    const [activeStep, setActiveStep] = React.useState(steps.find(st => st.path === path)?.id ?? 0);
+    const [validateMember, {error, isFetching}] = useLazyValidateMemberQuery();
+
     useEffect(() => {
-        if (!(activeStep < 0 || activeStep > 2)) {
-            router.push(steps[activeStep].path);
+        if (error) {
+            appToaster.error(parsErrorToBaseResponse(error)?.message);
         }
-    }, [activeStep, steps, router]);
+    }, [error]);
     useEffect(() => {
+        const currentStep = steps.find(st => st.id === activeStep);
+        if (currentStep) router.push(currentStep.path);
+    }, [activeStep, router, steps]);
+    const validateCurrentStep = useCallback(async (): Promise<boolean> => {
         const borrowInfo = store.getState().addEditBorrowData;
-        if (path === steps[1].path || path === steps[2].path) {
+        const status = validateBorrowedBooks(borrowInfo.borrowedBooks);
+        if (status === "incomplete") {
+            setActiveStep(0);
+            return false;
+        }
+        if (!borrowInfo.borrower.id) {
+            setActiveStep(1);
+            return false;
+        }
+        const result = await validateMember(borrowInfo.borrower.id).unwrap();
+        if (result.data === "invalid" || result.data === "expired") {
+            setActiveStep(1);
+            return false;
+        }
+        if (result.data === "valid") {
+            return true;
+        }
+        return true;
+    }, [validateMember, store]);
+
+    const validateCurrentStep_WHEN_CLICK_NEXT = useCallback(async (): Promise<boolean> => {
+        const borrowInfo = store.getState().addEditBorrowData;
+        if (activeStep === 0) {
             const status = validateBorrowedBooks(borrowInfo.borrowedBooks);
-            switch (status) {
-                case "complete":
-                    break;
-                case "incomplete":
-                    appToaster.error(appStrings.error.BORROW_BOOK_WRONG_FIELD_REQUIRED, "top-center", 4000);
-                    setActiveStep(0);
-                    router.push(steps[0].path);
-                    break;
-                case "warning":
-                    if (path !== steps[2].path) {
-                        appToaster.warning(appStrings.warning.MISSING_BEFORE_BORROW_FIELDS, "top-center", 4000);
-                    }
-                    break;
+            if (status === "incomplete") {
+                appToaster.error(appStrings.error.BORROW_BOOK_WRONG_FIELD_REQUIRED, "top-center", 4000);
+                setActiveStep(0);
+                return false;
             }
         }
-        if (path === steps[2].path) {
-            const status = validateBorrower(borrowInfo.borrower);
-            if (status?.length > 0) {
-                appToaster.error(`${appStrings.warning.MISSING_BORROWER_FIELD}: ${status.map(s => s.fieldName).join(", ")}`, "top-center", 5000);
+
+        if (activeStep === 1) {
+            if (!borrowInfo.borrower.id) {
+                appToaster.error("Chưa chọn người mượn", "top-center", 5000);
                 setActiveStep(1);
-                router.push(steps[1].path);
+                return false;
+            }
+            const result = await validateMember(borrowInfo.borrower.id).unwrap();
+            if (result.data === "invalid" || result.data === "expired") {
+                appToaster.error(result.message, "top-center", 5000);
+                setActiveStep(1);
+                return false;
             }
         }
-    }, [path, store, router, steps]);
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-    const handleSubmit = async () => {
-        const borrowData = store.getState().addEditBorrowData;
-        const dataToRequest = await mapToLoanApi(borrowData);
-        const loanResponse = await createLoan(dataToRequest);
-        const checkedBorrowDataHasImage = borrowData.borrowedBooks.map(b => b.beforeBorrow.images).flat();
-        const dataHasFiles = await mapToLoanApi(borrowData, true);
-        if ((checkedBorrowDataHasImage.length > 0) && dataHasFiles && loanResponse.data?.data) {
-            const requestForm = objectToFormData(mergeToUploadImage(dataHasFiles.bookBorrowings, loanResponse.data.data.bookBorrowings));
-            await uploadBookBorrowingImages({loanId: loanResponse.data.data.id, data: requestForm});
-        }
-    };
+
+        return true;
+    }, [activeStep, store, validateMember]);
+
     useEffect(() => {
-        if (loanError) {
-            toast.error(appStrings.error.ADD_FAIL);
+        validateCurrentStep().then(isValid => {
+            if (isValid) {
+
+            }
+
+        })
+    }, [validateCurrentStep]);
+
+    const handleSubmit = useCallback(async () => {
+        const borrowInfo = store.getState().addEditBorrowData;
+
+        const valid = await validateCurrentStep();
+        if (!valid) return;
+
+        const dataToRequest = await mapToLoanApi(borrowInfo);
+        const loanResponse = await createLoan(dataToRequest);
+        const loan = loanResponse.data?.data;
+
+        if (!loan) return;
+
+        const hasImages = borrowInfo.borrowedBooks.some(b => b.beforeBorrow.images?.length);
+        if (hasImages) {
+            const dataWithFiles = await mapToLoanApi(borrowInfo, true);
+            const formData = objectToFormData(mergeToUploadImage(dataWithFiles.bookBorrowings, loan.bookBorrowings));
+            await uploadBookBorrowingImages({loanId: loan.id, data: formData});
         }
+    }, [store, createLoan, uploadBookBorrowingImages, validateCurrentStep]);
+
+    useEffect(() => {
+        if (loanError) appToaster.error(appStrings.error.ADD_FAIL);
     }, [loanError]);
+
     useEffect(() => {
         if (loanData) {
-            toast.success(appStrings.success.SAVE_SUCCESS);
+            appToaster.success(loanData?.message ?? appStrings.success.SAVE_SUCCESS);
             dispatch(clearData());
-            router.push(`/borrow/${loanData.data.id}`);
+            router.push(`/borrow/${loanData?.data?.id}`);
         }
     }, [loanData, dispatch, router]);
+
+    const handleNext = async () => {
+        const valid = await validateCurrentStep_WHEN_CLICK_NEXT();
+        if (!valid) return;
+
+        setActiveStep(prev => Math.min(prev + 1, steps.length - 1));
+    };
+
+    const handleBack = () => {
+        setActiveStep(prev => Math.max(prev - 1, 0));
+    };
+
     return (
-        <Box sx={{width: '100%'}}>
-            <React.Fragment>
-                <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
-                    <NeumorphicButton
-                        color="inherit"
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        sx={{mr: 1}}
-                    >
-                        {appStrings.GO_BACK}
-                    </NeumorphicButton>
-                    <Box sx={{flex: '1 1 auto'}}/>
-                    <NeumorphicButton loading={isLoanLoading} disabled={isLoanLoading}
-                                      onClick={activeStep === (steps.length - 1) ? handleSubmit : handleNext}>
-                        {activeStep === steps.length - 1 ? appStrings.borrow.CONFIRM : appStrings.NEXT}
-                    </NeumorphicButton>
-                </Box>
-            </React.Fragment>
-            <Stepper activeStep={steps.find(st => st.path === path)?.id ?? 0}>
-                {steps.map((step) => {
-                    const stepProps: { completed?: boolean } = {};
-                    return (
-                        <Tooltip key={step.label} title={step.description}>
-                            <Step  {...stepProps}>
-                                <StepLabel>{step.label}</StepLabel>
-                            </Step>
-                        </Tooltip>
-                    );
-                })}
+        <Box sx={{width: "100%"}}>
+            <Box sx={{display: "flex", flexDirection: "row", pt: 2, mb: 2}}>
+                <NeumorphicButton
+                    color="inherit"
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    sx={{mr: 1}}
+                >
+                    {appStrings.GO_BACK}
+                </NeumorphicButton>
+                <Box sx={{flex: "1 1 auto"}}/>
+                <NeumorphicButton
+                    loading={isLoanLoading || isFetching}
+                    disabled={isLoanLoading}
+                    onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+                >
+                    {activeStep === steps.length - 1 ? appStrings.borrow.CONFIRM : appStrings.NEXT}
+                </NeumorphicButton>
+            </Box>
+
+            <Stepper activeStep={activeStep}>
+                {steps.map((step) => (
+                    <Tooltip key={step.label} title={step.description}>
+                        <Step>
+                            <StepLabel>{step.label}</StepLabel>
+                        </Step>
+                    </Tooltip>
+                ))}
             </Stepper>
         </Box>
     );
-}
+};
 
 export default memo(BorrowStepper);
-

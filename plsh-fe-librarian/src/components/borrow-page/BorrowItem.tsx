@@ -5,7 +5,7 @@ import {useUpdateLoanStatusMutation} from "@/stores/slices/api/borrow.api.slice"
 import {Avatar, TableCell, TableRow, Typography} from "@mui/material";
 import Link from "next/link";
 import React, {memo} from "react";
-import {renderLoanStatusChip} from "@/app/(private)/(in-dash-board)/borrow/[code]/ChangeStatusButton";
+import {renderLoanStatusChip} from "@/app/(private)/(in-dash-board)/borrow/[code]/(page)/ChangeStatusButton";
 import TimeViewer from "@/components/primary/TimeViewer";
 import useFetchingToast from "@/hooks/useFetchingToast";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
