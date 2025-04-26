@@ -68,7 +68,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Build Image') {
             steps {
@@ -112,7 +112,7 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
 
 
         stage('Deploy to Staging') {
@@ -169,6 +169,7 @@ pipeline {
                     """
 
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
+                    def reportContent = readFile "zap_report-${timestamp}.html"
                 }
             }
         }
