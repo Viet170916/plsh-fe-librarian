@@ -168,8 +168,7 @@ pipeline {
                         sleep 60
 
                         curl -s "http://127.0.0.1:8090/OTHER/core/other/htmlreport/" -o "${WORKSPACE}/zap_report-${timestamp}.html"
-
-                        curl -s "http://127.0.0.1:8090/JSON/core/view/alerts/" > zap_report-${timestamp}.json
+                        curl -s "http://127.0.0.1:8090/OTHER/core/other/jsonreport/" -o "${WORKSPACE}/zap_report-${timestamp}.json"
 
                         curl -s "http://127.0.0.1:8090/JSON/core/action/shutdown/"
                     """
