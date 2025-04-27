@@ -179,14 +179,18 @@ pipeline {
 
                     // Đọc file JSON
                     def zapData = readJSON file: "zap_report-${timestamp}.json"
+
                     def highCount = 0
                     def mediumCount = 0
 
-                    zapData.alerts.each { alert ->
-                        if (alert.risk == "High") {
-                            highCount++
-                        } else if (alert.risk == "Medium") {
-                            mediumCount++
+                    // Đọc các alerts trong site
+                    zapData.site.each { site ->
+                        site.alerts.each { alert ->
+                            if (alert.riskdesc.startsWith("High")) {
+                                highCount++
+                            } else if (alert.riskdesc.startsWith("Medium")) {
+                                mediumCount++
+                            }
                         }
                     }
 
