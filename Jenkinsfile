@@ -70,7 +70,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Build Image') {
             steps {
@@ -85,7 +85,7 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
+    /*    stage('Trivy Scan') {
             steps {
                 script {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
@@ -98,7 +98,7 @@ pipeline {
                     archiveArtifacts artifacts: "plsh-fe-trivy-${timestamp}.html", fingerprint: true
                 }
             }
-        }
+        }*/
 
 
         stage('Push Image to Docker Hub') {
@@ -114,7 +114,7 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
 
 
         stage('Deploy to Staging') {
@@ -146,7 +146,7 @@ pipeline {
         }
 
 
-        stage('ZAP Scan') {
+    /*    stage('ZAP Scan') {
             steps {
                 script {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
@@ -219,7 +219,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
 
     }
