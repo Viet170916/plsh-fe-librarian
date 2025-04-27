@@ -175,6 +175,7 @@ pipeline {
 
                     // Lưu HTML report
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
+                    archiveArtifacts artifacts: "zap_report-${timestamp}.json", fingerprint: true
 
                     // Đọc file JSON
                     def zapData = readJSON file: "zap_report-${timestamp}.json"
