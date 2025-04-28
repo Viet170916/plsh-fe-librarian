@@ -147,6 +147,7 @@ export type EBook = {
     "htmlContent": string,
     "plainText": string;
     "title"?: string,
+    shortContent?:string,
 }
 //book
 export type BookData = {

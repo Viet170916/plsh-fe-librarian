@@ -12,7 +12,6 @@ export const bookApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["BookInstances", "Book", "Books", "BookInstance"],
     endpoints: (builder) => ({
-
         getFieldGenerate: builder.mutation<BaseResponse<{
             key: Path<BookData>,
             value: string | number | boolean
@@ -64,19 +63,6 @@ export const bookApi = createApi({
                 );
             },
             providesTags: ["BookInstance"]
-        }),
-        getTextChapter: builder.query<BaseResponse<{
-            text: string,
-            p: number
-        }[]>, { bookId: number, chapter?: number, lang?: LanguageCode }>({
-            query({bookId, ...params}) {
-                return (
-                    {
-                        url: `book/${bookId}/to-text`,
-                        params
-                    }
-                );
-            }
         }),
         getBooks: builder.query<BaseResponse<BookData[]>, FilterParams<BookData> & {
             authorId?: number,
@@ -169,7 +155,6 @@ export const {
     useLazyGetBookQuery,
     useGetBookQuery,
     useGetBookAiSearchMutation,
-    useLazyGetTextChapterQuery,
     useLazyGetBookImageFromGgsQuery,
     useAddBookInstancesMutation,
     useLazyGetCategoriesQuery,

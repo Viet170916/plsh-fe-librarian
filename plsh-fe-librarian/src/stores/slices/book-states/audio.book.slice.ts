@@ -8,7 +8,9 @@ import {RootState} from "@/stores/store";
 
 export type Chapter = {
     chapter: number;
-    paragraphs: Paragraph[];
+    text?: string;
+    audio?: Audio
+    // paragraphs: Paragraph[];
 }
 export type Paragraph = {
     text: string;
@@ -64,8 +66,8 @@ const audioBookStateSlice: AudioBookStateSlice = createSlice({
 //export
 export const selectCurrentChapter = createSelector(
     (state: RootState) => (state.audioBookState.chapters ?? []),
-    (state: RootState) => (state.audioBookState.currentChapter),
-    (chapters: Chapter[], chapter: number) => chapters?.find(ch => ch.chapter === chapter)
+    (_, id?: number) => (id),
+    (chapters: Chapter[], chapter?: number) => chapters?.find(ch => ch.chapter === chapter)
 );
 export const {
     setPropToAudioBookState,

@@ -19,6 +19,7 @@ import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 import {appToaster} from "@/components/primary/toaster";
 import {useTheme} from "@mui/material/styles";
+import {parsErrorToBaseResponse} from "@/helpers/error";
 
 function SignInForm(props: IProps): React.JSX.Element {
     const router = useRouter();
@@ -40,7 +41,7 @@ function SignInForm(props: IProps): React.JSX.Element {
                     localStorage.setItem("token", response.data.data);
                     router.push(`/`);
                 } else {
-                    appToaster.error(appStrings.error.LOGIN_FAIL);
+                    appToaster.error(parsErrorToBaseResponse(response.error)?.message);
                 }
             } else {
                 router.push(`/auth/register`);
@@ -65,13 +66,13 @@ function SignInForm(props: IProps): React.JSX.Element {
                     localStorage.setItem("token", response.data.data);
                     router.push(`/`);
                 } else {
-                    appToaster.error(appStrings.error.LOGIN_FAIL);
+                    appToaster.error(parsErrorToBaseResponse(response.error)?.message);
                 }
             } else {
                 router.push(`/auth/register/google`);
             }
         } else {
-            appToaster.error(appStrings.error.UNAUTHORIZED);
+            appToaster.error(parsErrorToBaseResponse(checkError)?.message);
         }
     };
     const theme = useTheme();

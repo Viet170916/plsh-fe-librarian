@@ -44,208 +44,204 @@ export const AfterLoad_Member = memo(({member}: { member: Member }) => {
     ];
 
     return (
-        <Box
-            sx={{
-                maxWidth: 800,
-                mx: "auto",
-                minHeight: "100%",
-                p: 3,
-                // border: "1px solid #ddd",
-                borderRadius: 2,
-                // bgcolor: "white",
-            }}
-        >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Box sx={{mt: 3}}>
-                    <Grid container spacing={3} alignItems="center">
-                        <Grid>
-                            <Avatar sx={{width: 80, height: 80}} src={member.avatarUrl} alt={member.fullName}/>
-                        </Grid>
-                        <Grid>
-                            <NeumorphicButton disabled variant="text" sx={{textTransform: "none"}}>
-                                {appStrings.UPLOAD_IMAGE}
-                            </NeumorphicButton>
-                        </Grid>
+
+        <Box component={"form"} onSubmit={handleSubmit(onSubmit)}
+             sx={{
+                 maxWidth: 800,
+                 mx: "auto",
+                 minHeight: "100%",
+                 p: 3,
+                 borderRadius: 2,
+             }}>
+            <Box sx={{mt: 3}}>
+                <Grid container spacing={3} alignItems="center">
+                    <Grid>
+                        <Avatar sx={{width: 80, height: 80}} src={member.avatarUrl} alt={member.fullName}/>
                     </Grid>
-                    <Grid container spacing={3} sx={{mt: 3}}>
-                        <Grid size={6}>
-                            <Controller
-                                name="fullName"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <NeumorphicTextField
-
-                                    fullWidth label={appStrings.member.FULLNAME} {...field}
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={6}>
-                            <Controller
-                                name="email"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth label={appStrings.member.EMAIL} {...field} disabled
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={6}>
-                            <Controller
-                                rules={{required: false}}
-                                name="phoneNumber"
-                                control={control}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth label={appStrings.member.PHONE} {...field}
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={6}>
-                            <Controller
-                                rules={{required: false}}
-                                name="birthdate"
-                                control={control}
-                                render={({field}) => (
-                                    <DatePicker
-
-                                        sx={{width: "100%"}}
-                                        label={appStrings.member.BIRTH}
-                                        value={field.value ? dayjs(field.value) : null}
-                                        onChange={(value) => field.onChange(value?.toDate().toISOString())}
-                                    />
-                                )}
-                            />
-                        </Grid>
-                        <Grid size={8}>
-                            <Controller
-                                name="address"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth label={appStrings.member.ADDRESS} {...field}
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={4}>
-
-                        </Grid>
-
-                        <Grid size={8}>
-                            <Controller
-                                name="role"
-                                control={control}
-                                defaultValue={"student"}
-                                rules={{required: false}}
-                                render={({field}) => (
-                                    <Autocomplete
-                                        {...field}
-                                        options={constants.roles}
-                                        renderInput={(params) => <NeumorphicTextField {...params}
-
-                                                                                      label={appStrings.member.ROLE}
-                                                                                      fullWidth
-                                        />}
-                                        onChange={(_, value) => field.onChange(value)}
-                                    />
-                                )}
-                            />
-                        </Grid>
-                        {member.role === "student" ?
-                            <Grid size={4}>
-                                <Controller
-                                    name="classRoom"
-                                    control={control}
-                                    rules={{required: false}}
-                                    render={({field}) => <NeumorphicTextField
-                                        fullWidth label={appStrings.member.CLASSNAME} {...field}
-                                        value={field.value ?? ""}
-                                        onChange={(e) => field.onChange(e.target.value)}
-                                    />}
-                                />
-                            </Grid> : <></>
-                        }
-                        <Grid size={6}>
-                            <Controller
-                                name="identityCardNumber"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth
-                                    label={appStrings.member.IDENTITY_CARD_NUMBER}
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={6}>
-                            <Controller
-                                name="cardMemberNumber"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <NeumorphicTextField
-                                    fullWidth label={appStrings.member.CARD_NUMBER}
-                                    type="number"
-                                    value={field.value ?? ""}
-                                    onChange={(e) => field.onChange(e.target.value)}
-                                />}
-                            />
-                        </Grid>
-                        <Grid size={6}>
-                            <Controller
-                                name="cardMemberStatus"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => <Select
-                                    value={field.value ?? -1}
-                                    label={appStrings.member.CARD_STATUS}
-                                    onChange={(event) => field.onChange(event.target.value)}
-                                    renderValue={(selected) => {
-                                        const option = statusOptions.find(opt => opt.value === selected) ?? statusOptions[0];
-                                        return <Box sx={{color: option.color}}>{option.label}</Box>;
-                                    }}
-                                >
-                                    {statusOptions.map((option) => (
-                                        <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
-                                            <Box sx={{color: option.color}}>{option.label}</Box>
-                                        </MenuItem>
-                                    ))}
-                                </Select>}
-                            />
-
-                        </Grid>
-                        <Grid
-                            size={6}
-                        >
-                            <Controller
-                                name="cardMemberExpiredDate"
-                                control={control}
-                                rules={{required: false}}
-                                render={({field}) => (
-                                    <DatePicker
-                                        sx={{width: "100%"}}
-                                        label={appStrings.member.CARD_EXPIRED_DATE}
-                                        value={field.value ? dayjs(field.value) : null}
-                                        onChange={(value) => field.onChange(value?.toDate().toISOString())}
-                                    />
-                                )}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Box sx={{mt: 3, display: "flex", gap: 2}}>
-                        <NeumorphicButton loading={isLoading} type="submit" variant_2="primary" color="primary"
-                                          disabled={!member.id}>
-                            {appStrings.SAVE}
+                    <Grid>
+                        <NeumorphicButton disabled variant="text" sx={{textTransform: "none"}}>
+                            {appStrings.UPLOAD_IMAGE}
                         </NeumorphicButton>
-                    </Box>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={3} sx={{mt: 3}}>
+                    <Grid size={6}>
+                        <Controller
+                            name="fullName"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <NeumorphicTextField
+
+                                fullWidth label={appStrings.member.FULLNAME} {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <Controller
+                            name="email"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <NeumorphicTextField
+                                fullWidth label={appStrings.member.EMAIL} {...field} disabled
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <Controller
+                            rules={{required: false}}
+                            name="phoneNumber"
+                            control={control}
+                            render={({field}) => <NeumorphicTextField
+                                fullWidth label={appStrings.member.PHONE} {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <Controller
+                            rules={{required: false}}
+                            name="birthdate"
+                            control={control}
+                            render={({field}) => (
+                                <DatePicker
+
+                                    sx={{width: "100%"}}
+                                    label={appStrings.member.BIRTH}
+                                    value={field.value ? dayjs(field.value) : null}
+                                    onChange={(value) => field.onChange(value?.toDate().toISOString())}
+                                />
+                            )}
+                        />
+                    </Grid>
+                    <Grid size={8}>
+                        <Controller
+                            name="address"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <NeumorphicTextField
+                                fullWidth label={appStrings.member.ADDRESS} {...field}
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={4}>
+
+                    </Grid>
+
+                    <Grid size={8}>
+                        <Controller
+                            name="role"
+                            control={control}
+                            defaultValue={"student"}
+                            rules={{required: false}}
+                            render={({field}) => (
+                                <Autocomplete
+                                    {...field}
+                                    options={constants.roles}
+                                    renderInput={(params) => <NeumorphicTextField {...params}
+
+                                                                                  label={appStrings.member.ROLE}
+                                                                                  fullWidth
+                                    />}
+                                    onChange={(_, value) => field.onChange(value)}
+                                />
+                            )}
+                        />
+                    </Grid>
+                    {member.role === "student" ?
+                        <Grid size={4}>
+                            <Controller
+                                name="classRoom"
+                                control={control}
+                                rules={{required: false}}
+                                render={({field}) => <NeumorphicTextField
+                                    fullWidth label={appStrings.member.CLASSNAME} {...field}
+                                    value={field.value ?? ""}
+                                    onChange={(e) => field.onChange(e.target.value)}
+                                />}
+                            />
+                        </Grid> : <></>
+                    }
+                    <Grid size={6}>
+                        <Controller
+                            name="identityCardNumber"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <NeumorphicTextField
+                                fullWidth
+                                label={appStrings.member.IDENTITY_CARD_NUMBER}
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <Controller
+                            name="cardMemberNumber"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <NeumorphicTextField
+                                fullWidth label={appStrings.member.CARD_NUMBER}
+                                type="number"
+                                value={field.value ?? ""}
+                                onChange={(e) => field.onChange(e.target.value)}
+                            />}
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <Controller
+                            name="cardMemberStatus"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => <Select
+                                value={field.value ?? -1}
+                                label={appStrings.member.CARD_STATUS}
+                                onChange={(event) => field.onChange(event.target.value)}
+                                renderValue={(selected) => {
+                                    const option = statusOptions.find(opt => opt.value === selected) ?? statusOptions[0];
+                                    return <Box sx={{color: option.color}}>{option.label}</Box>;
+                                }}
+                            >
+                                {statusOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
+                                        <Box sx={{color: option.color}}>{option.label}</Box>
+                                    </MenuItem>
+                                ))}
+                            </Select>}
+                        />
+
+                    </Grid>
+                    <Grid
+                        size={6}
+                    >
+                        <Controller
+                            name="cardMemberExpiredDate"
+                            control={control}
+                            rules={{required: false}}
+                            render={({field}) => (
+                                <DatePicker
+                                    sx={{width: "100%"}}
+                                    label={appStrings.member.CARD_EXPIRED_DATE}
+                                    value={field.value ? dayjs(field.value) : null}
+                                    onChange={(value) => field.onChange(value?.toDate().toISOString())}
+                                />
+                            )}
+                        />
+                    </Grid>
+                </Grid>
+                <Box sx={{mt: 3, display: "flex", gap: 2}}>
+                    <NeumorphicButton loading={isLoading} type="submit" variant_2="primary" color="primary"
+                                      disabled={!member.id}>
+                        {appStrings.SAVE}
+                    </NeumorphicButton>
                 </Box>
-            </form>
+            </Box>
         </Box>
     );
 });

@@ -1,114 +1,150 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {useLazyGetAudioQuery} from "@/stores/slices/api/audio-book.api.slice";
-import {useSelector} from "@/hooks/useSelector";
-import {selectCurrentChapter, setPropToChapter} from "@/stores/slices/book-states/audio.book.slice";
-import {useAppDispatch} from "@/hooks/useDispatch";
-import {shallowEqual} from "react-redux";
 
 export interface Alignment {
     word: string;
-    start: number; // in seconds
+    start: number;
     end: number;
 }
 
-interface UseAudioHighlighterOptions {
+interface UseAudioHighlighterProps {
     base64Audio: string;
     alignment: Alignment[];
     onEnd?: () => void;
-    onNearEnd?: () => void;
 }
 
-export const useAudioHighlighter = ({
-    base64Audio,
-    alignment,
-    onNearEnd,
-    onEnd,
-}: UseAudioHighlighterOptions) => {
+export function useAudioHighlighter({base64Audio, alignment, onEnd}: UseAudioHighlighterProps) {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [isRead, setIsRead] = useState(false);
     const [currentWordIndex, setCurrentWordIndex] = useState<number>(-1);
-    const [isRead, setIsRead] = useState<boolean>(false);
-    const hasNearEndFired = useRef(false);
+    const [volume, setVolume] = useState<number>(1);
+    const [isMuted, setIsMuted] = useState<boolean>(false);
+    const [currentTime, setCurrentTime] = useState<number>(0);
+    const [duration, setDuration] = useState<number>(0);
+    const [playbackRate, setPlaybackRate] = useState<number>(1);
 
+    // Only create audio when base64Audio changes
     useEffect(() => {
-        if (base64Audio) {
-            const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
-            audioRef.current = audio;
-            hasNearEndFired.current = false;
-        }
-    }, [base64Audio]);
-    const handleEnded = useCallback(() => {
-        setCurrentWordIndex(-1);
-        hasNearEndFired.current = false;
-        onEnd?.();
-    }, [onEnd]);
-    const handleNearEnd = useCallback(() => {
-        hasNearEndFired.current = true;
-        onNearEnd?.();
-    }, [onNearEnd]);
-    const handleTimeUpdate = useCallback(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        const currentTime = audio.currentTime;
-        const index = alignment.findIndex((item, i) =>
-            currentTime >= item.start &&
-            currentTime <= item.end &&
-            (i === alignment.length - 1 || currentTime < alignment[i + 1].start)
-        );
-        setCurrentWordIndex(index);
+        if (!base64Audio) return;
 
-        if (
-            audio.duration &&
-            audio.duration - currentTime <= 7 && audio.duration - currentTime > 5.5 &&
-            !hasNearEndFired.current
-        ) {
-            hasNearEndFired.current = true;
-            handleNearEnd();
-        }
-    }, [alignment, handleNearEnd]);
+        const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
+        audioRef.current = audio;
 
+        const handleLoadedMetadata = () => setDuration(audio.duration);
 
-    useEffect(() => {
-        return () => {
-            audioRef.current?.pause();
-            setIsRead(false);
+        const handleTimeUpdate = () => {
+            if (!audioRef.current) return;
+            setCurrentTime(audioRef.current.currentTime);
+
+            if (alignment.length) {
+                const index = alignment.findIndex(
+                    item => audioRef.current!.currentTime >= item.start && audioRef.current!.currentTime <= item.end
+                );
+                if (index !== -1) {
+                    setCurrentWordIndex(index);
+                }
+            }
         };
-    }, []);
+
+        const handleEnded = () => {
+            setIsRead(false);
+            setCurrentWordIndex(-1);
+            onEnd?.();
+        };
+
+        audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.addEventListener("timeupdate", handleTimeUpdate);
+        audio.addEventListener("ended", handleEnded);
+
+        return () => {
+            audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+            audio.removeEventListener("timeupdate", handleTimeUpdate);
+            audio.removeEventListener("ended", handleEnded);
+            audio.pause();
+            audioRef.current = null;
+        };
+    }, [base64Audio, alignment, onEnd]);
+
+    // Whenever volume/mute/speed change → update audioRef
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+        }
+    }, [volume]);
 
     useEffect(() => {
         if (audioRef.current) {
-            audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
-            audioRef.current.addEventListener("ended", handleEnded);
+            audioRef.current.muted = isMuted;
         }
-        return () => {
-            audioRef.current?.removeEventListener("timeupdate", handleTimeUpdate);
-            audioRef.current?.removeEventListener("ended", handleEnded);
-        };
-    }, [handleTimeUpdate, handleEnded]);
+    }, [isMuted]);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.playbackRate = playbackRate;
+        }
+    }, [playbackRate]);
 
     const play = useCallback(() => {
-        audioRef.current?.play().then();
-        setIsRead(true);
+        if (audioRef.current) {
+            audioRef.current.play();
+            setIsRead(true);
+        }
     }, []);
 
     const pause = useCallback(() => {
-        audioRef.current?.pause();
-        setIsRead(false);
+        if (audioRef.current) {
+            audioRef.current.pause();
+            setIsRead(false);
+        }
     }, []);
 
     const stop = useCallback(() => {
         if (audioRef.current) {
-            pause();
+            audioRef.current.pause();
             audioRef.current.currentTime = 0;
+            setIsRead(false);
             setCurrentWordIndex(-1);
-            hasNearEndFired.current = false;
         }
-    }, [pause]);
+    }, []);
+
+    const seek = useCallback((time: number) => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = time;
+        }
+    }, []);
+
+
+    const toggleMute = useCallback((forceMute?: boolean) => {
+        const newMuted = forceMute !== undefined ? forceMute : !isMuted;
+        setIsMuted(newMuted);
+    }, [isMuted]);
+    const changeVolume = useCallback((newVolume: number) => {
+        const clampedVolume = Math.min(1, Math.max(0, newVolume));
+        setVolume(clampedVolume);
+        if (clampedVolume > 0 && isMuted) {
+            toggleMute(false);
+        }
+    }, [isMuted, toggleMute]);
+
+    const changeSpeed = useCallback((speed: number) => {
+        const clampedSpeed = Math.min(2, Math.max(0.5, speed));
+        setPlaybackRate(clampedSpeed);
+    }, []);
 
     return {
-        isRead,
         currentWordIndex,
+        currentTime,
+        duration,
+        isRead,
+        volume,
+        isMuted,
+        playbackRate,
         play,
         pause,
         stop,
+        seek,
+        changeVolume,
+        toggleMute,
+        changeSpeed,
     };
-};
+}
+

@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React from "react";
 import Grid from "@mui/material/Grid2";
 import {TabBar} from "@/components/primary/navigation/TabBar";
 import Link from "next/link";
@@ -29,4 +29,4 @@ function BorrowLayout(props: IProps) {
         </Grid>);
 }
 
-export default memo(BorrowLayout);
+export default BorrowLayout;

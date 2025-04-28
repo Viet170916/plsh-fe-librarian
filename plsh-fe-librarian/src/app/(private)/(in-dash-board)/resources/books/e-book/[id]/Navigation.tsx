@@ -8,12 +8,12 @@ import {shallowEqual} from "react-redux";
 import {useParams} from "next/navigation";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {setPropToEBookState} from "@/stores/slices/book-states/e-book.book.slice";
-import {Button, Chip, LinearProgress, Pagination, Stack, Tooltip, Typography} from '@mui/material'
+import {LinearProgress, Stack} from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import appStrings from "@/helpers/appStrings";
 import {color} from "@/helpers/resources";
-import {shadowContainerStyle, shadowStyle} from "@/style/container.style";
+import {shadowContainerStyle} from "@/style/container.style";
 import AppPagination from "@/components/primary/Input/AppPagination";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 
@@ -41,11 +41,11 @@ function Navigation(): JSX.Element {
     return (
         <>
             {isFetching && <LinearProgress/>}
-            <ChapterChanger
-                currentPage={data?.page ?? (data?.currentPage ?? 1)}
-                totalPages={data?.pageCount ?? 1}
-                onPageChange={(value) => dispatch(setPropToEBookState({key: "currentChapter", value}))}
-            />
+            {/*<ChapterChanger*/}
+            {/*    currentPage={data?.page ?? (data?.currentPage ?? 1)}*/}
+            {/*    totalPages={data?.pageCount ?? 1}*/}
+            {/*    onPageChange={(value) => dispatch(setPropToEBookState({key: "currentChapter", value}))}*/}
+            {/*/>*/}
         </>
 
     );

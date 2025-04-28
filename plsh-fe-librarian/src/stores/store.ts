@@ -43,6 +43,8 @@ import bookStateReducer from "@/stores/slices/book-states/book.slice";
 import {reviewApi} from "@/stores/slices/api/review.api.slice";
 import eBookStateReducer from "@/stores/slices/book-states/e-book.book.slice";
 import bookInstanceStateReducer from "@/stores/slices/book-states/book-instance.book.slice";
+import {eBookApi} from "@/stores/slices/api/e-book.api.slice";
+import {createSelector} from "reselect";
 
 export const store = configureStore({
     reducer: {
@@ -84,6 +86,7 @@ export const store = configureStore({
         [geminiApi.reducerPath]: geminiApi.reducer,
         [audioBookApi.reducerPath]: audioBookApi.reducer,
         [reviewApi.reducerPath]: reviewApi.reducer,
+        [eBookApi.reducerPath]: eBookApi.reducer,
 
     },
     middleware: (getDefaultMiddleware) => {
@@ -101,10 +104,13 @@ export const store = configureStore({
                 .concat(geminiApi.middleware)
                 .concat(audioBookApi.middleware)
                 .concat(reviewApi.middleware)
+                .concat(eBookApi.middleware)
 
         );
     },
 });
+
+
 // store.ts
 export type AppDispatch = typeof store.dispatch;
 export const useAppStore = () => useStore<RootState>();
