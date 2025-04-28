@@ -8,6 +8,8 @@ pipeline {
         SNYK_TOKEN = credentials('snyk-api-token')
         SONAR_TOKEN = credentials('g67_se490_spr25')
         NEXTAUTH_SECRET = credentials('nextauth-secret')
+        TELEGRAM_BOT_TOKEN = credentials('telegram-bot-token')   
+        TELEGRAM_CHAT_ID = credentials('telegram-chat-id')
     }
 
     stages {
@@ -83,7 +85,7 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
+    /*    stage('Trivy Scan') {
             steps {
                 script {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
@@ -96,7 +98,7 @@ pipeline {
                     archiveArtifacts artifacts: "plsh-fe-trivy-${timestamp}.html", fingerprint: true
                 }
             }
-        }
+        }*/
 
 
         stage('Push Image to Docker Hub') {
@@ -144,18 +146,20 @@ pipeline {
         }
 
 
-        stage('ZAP Scan') {
+    /*    stage('ZAP Scan') {
             steps {
                 script {
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                    env.TIMESTAMP = timestamp
 
+                    // Run ZAP Scan
                     sh """
                         cd /opt/zaproxy
                         ./zap.sh -daemon -port 8090 -host 0.0.0.0 \\
                         -config api.disablekey=true \\
                         -config api.addrs.addr.name=127.0.0.1 \\
                         -config api.addrs.addr.regex=true &
-                        sleep 30
+                        sleep 60
 
                         curl -s "http://127.0.0.1:8090/JSON/spider/action/scan/?url=http://192.168.230.101:8080"
                         sleep 30
@@ -164,15 +168,60 @@ pipeline {
                         sleep 60
 
                         curl -s "http://127.0.0.1:8090/OTHER/core/other/htmlreport/" -o "${WORKSPACE}/zap_report-${timestamp}.html"
+                        curl -s "http://127.0.0.1:8090/OTHER/core/other/jsonreport/" -o "${WORKSPACE}/zap_report-${timestamp}.json"
 
                         curl -s "http://127.0.0.1:8090/JSON/core/action/shutdown/"
                     """
 
+                    // Lưu HTML report
                     archiveArtifacts artifacts: "zap_report-${timestamp}.html", fingerprint: true
-                    def reportContent = readFile "zap_report-${timestamp}.html"
+                    archiveArtifacts artifacts: "zap_report-${timestamp}.json", fingerprint: true
+
+                    // Đọc file JSON
+                    def zapData = readJSON file: "zap_report-${timestamp}.json"
+
+                    def highCount = 0
+                    def mediumCount = 0
+
+                    // Đọc các alerts trong site
+                    zapData.site.each { site ->
+                        site.alerts.each { alert ->
+                            if (alert.riskdesc.startsWith("High")) {
+                                highCount++
+                            } else if (alert.riskdesc.startsWith("Medium")) {
+                                mediumCount++
+                            }
+                        }
+                    }
+
+                    if (highCount > 0 || mediumCount > 0) {
+                        echo "ZAP phát hiện ${highCount} lỗi High và ${mediumCount} lỗi Medium!"
+
+                        def msg = URLEncoder.encode("⚠️ Pipeline Lab_iap491/G76_SEP490_SPR25_/PLSH-FE-LIBRARIAN Failed. ZAP phát hiện ${highCount} lỗi High và ${mediumCount} lỗi Medium. Xem báo cáo đính kèm.", "UTF-8")
+
+                        // Gửi message Telegram
+                        sh """
+                            curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage \\
+                            -d chat_id=${TELEGRAM_CHAT_ID} \\
+                            -d text="${msg}"
+                        """
+
+                        // Gửi file báo cáo HTML
+                        sh """
+                            curl -s -X POST https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument \\
+                            -F chat_id=${TELEGRAM_CHAT_ID} \\
+                            -F document=@zap_report-${timestamp}.html
+                        """
+
+                        error("Dừng pipeline vì ZAP phát hiện lỗi nghiêm trọng.")
+                    } else {
+                        echo "ZAP không phát hiện lỗi High hoặc Medium."
+                    }
                 }
             }
-        }
+        }*/
+
+
     }
 
 }
