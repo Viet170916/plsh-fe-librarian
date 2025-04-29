@@ -15,6 +15,7 @@ import {setPropToNotificationState} from "@/stores/slices/notification/notificat
 import appStrings from "@/helpers/appStrings";
 import {Notification} from "@/components/notification/notification";
 import {useReadNotificationMutation} from "@/stores/slices/api/notification.api.slice";
+import Link from "next/link";
 
 const AppActionBar = () => {
     const [open, setOpen] = useState(false);
@@ -116,9 +117,8 @@ const AppActionBar = () => {
                             </Badge>
                         </IconButton>
                     </Tooltip>
-
                     <Tooltip title={"Tài khoản"}>
-                        <IconButton>
+                        <IconButton component={Link} href={`/user/info`}>
                             <TiUserOutline color={color.PRIMARY}/>
                         </IconButton>
                     </Tooltip>

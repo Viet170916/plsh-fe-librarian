@@ -1,6 +1,5 @@
 "use client"
 import React, {JSX, memo} from "react";
-import {TabBar} from "@/components/primary/navigation/TabBar";
 import Grid from "@mui/material/Grid2";
 import ShelfTabs from "@/app/(private)/(in-dash-board)/resources/library-room/shelf/[id]/ShelfTabs";
 
@@ -14,9 +13,8 @@ function layout({children}: layoutProps): JSX.Element {
         <Grid container width={"100%"} height={"100%"} direction={"column"}>
             <Grid>
                 <ShelfTabs/>
-
             </Grid>
-            <Grid size={"grow"}>
+            <Grid size={"grow"} sx={{overflowY: "auto"}}>
                 {children}
             </Grid>
         </Grid>

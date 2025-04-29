@@ -55,6 +55,16 @@ const API = createApi({
                 },
                 invalidatesTags: (_, error) => error ? [] : [{type: "GetMember"},{type: "GetMembers"}],
             }),
+            updateMe: builder.mutation<BaseResponse<Member>, Member>({
+                query: (param) => {
+                    return ({
+                        url: `account/borrower/update`,
+                        method: httpMethods.PUT,
+                        body: param,
+                    });
+                },
+                invalidatesTags: (_, error) => error ? [] : [{type: "GetMember"},{type: "GetMembers"}],
+            }),
             getMember: builder.query<BaseResponse<Member>, { id: number }>({
                 query: (param) => {
                     return ({
@@ -72,6 +82,7 @@ export const memberApiMiddleware = API.middleware;
 export const {
     useCreateMemberMutation,
     useLazyValidateMemberQuery,
+    useUpdateMeMutation,
     useLazyGetMembersQuery,
     useGetMemberQuery,
     useUpdateMemberMutation,

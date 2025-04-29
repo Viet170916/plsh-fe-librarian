@@ -102,7 +102,6 @@ const RoleChoosing = memo(function Compo({register}: {
     }, []);
     return (<>
         <Grid size={12}>
-            <InputLabel id="role-select-label">{ROLE_IN_SCHOOL}</InputLabel>
             <Select
                 labelId="role-select-label"
                 fullWidth={true}

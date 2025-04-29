@@ -42,7 +42,8 @@ export const TabBar = memo(({tabs, left, bgcolor, right}: {
             <Grid container width={"100%"} alignItems={"center"}
                   sx={{
                       bgcolor: theme.palette.primary.main, pt: 1,
-                      alignItems: "stretch"
+                      alignItems: "stretch",
+                      overflowX: "auto",
                   }}>
                 {left &&
                     <Grid justifySelf={"start"}

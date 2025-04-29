@@ -26,7 +26,7 @@ const navItems = [
         label: appStrings.LIBRARY_ROOM,
         icon: <HiOutlineLibrary size={24}/>,
     },
-    {label: appStrings.SETTING, icon: <IoSettings size={24}/>, href: '/setting'},
+    // {label: appStrings.SETTING, icon: <IoSettings size={24}/>, href: '/setting'},
     {label: appStrings.LOGOUT, icon: <IoLogOut size={24}/>, href: '/logout'},
 ]
 
@@ -68,6 +68,52 @@ export const AppNavigation = () => {
 
             {navItems.map((item) => {
                 const isActive = pathname.startsWith(item.href)
+                if (item.href === "/logout") {
+                    return (
+                        <Box
+                            key={item.label}
+
+                            // href={item.href}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                localStorage.removeItem('token');
+                                window.location.reload();
+                            }}
+                            sx={{textDecoration: 'none', cursor: "pointer"}}
+                        >
+                            <motion.div
+                                initial={{y: 0}}
+                                animate={{y: isActive ? 10 : 0}}
+                                transition={{type: 'spring', stiffness: 300}}
+                            >
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 2,
+                                        px: 2,
+                                        py: 1.5,
+                                        borderRadius: '999px',
+                                        boxShadow: isActive ? NEUMORPHIC_SHADOW.INNER_SHADOW() : "none",
+                                        bgcolor: isActive ? theme.palette.background.default : 'transparent',
+                                        color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
+                                        transition: 'all 0.3s ease',
+                                        '&:hover': {
+                                            bgcolor: isActive ? theme.palette.text.secondary : theme.palette.primary.main,
+                                        },
+                                    }}
+                                >
+                                    {item.icon}
+                                    {expanded && (
+                                        <Typography fontSize={16} fontWeight="medium">
+                                            {item.label}
+                                        </Typography>
+                                    )}
+                                </Box>
+                            </motion.div>
+                        </Box>
+                    )
+                }
                 return (
                     <Link
                         key={item.label}

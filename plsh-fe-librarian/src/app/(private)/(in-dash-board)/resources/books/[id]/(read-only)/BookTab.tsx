@@ -23,16 +23,16 @@ function BookTab(): JSX.Element {
                     href: `/resources/books/${id}/review`,
                     index: 2
                 },
-                {
-                    label: appStrings.book.LIST,
-                    href: `/resources/books/${id}/list`,
-                    index: 3
-                },
-                {
-                    label: appStrings.book.RELATED,
-                    href: `/resources/books/${id}/related`,
-                    index: 4
-                },
+                // {
+                //     label: appStrings.book.LIST,
+                //     href: `/resources/books/${id}/list`,
+                //     index: 3
+                // },
+                // {
+                //     label: appStrings.book.RELATED,
+                //     href: `/resources/books/${id}/related`,
+                //     index: 4
+                // },
             ]
         )
     }, [id]);

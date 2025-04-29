@@ -17,19 +17,22 @@ const tabLinks: TabItem[] = [{
     kind: "link",
     segment: "borrow-request",
     title: appStrings.member.BORROW_REQUEST,
-}, {
-    kind: "link",
-    segment: "history",
-    title: appStrings.member.HISTORY,
-}, {
-    kind: "link",
-    segment: "reading",
-    title: appStrings.member.READING,
-}, {
-    kind: "link",
-    segment: "setting",
-    title: appStrings.member.SETTING,
-}];
+},
+//     {
+    //     kind: "link",
+    //     segment: "history",
+    //     title: appStrings.member.HISTORY,
+    // },
+//     {
+    //     kind: "link",
+    //     segment: "reading",
+    //     title: appStrings.member.READING,
+    // }, {
+    //     kind: "link",
+    //     segment: "setting",
+    //     title: appStrings.member.SETTING,
+    // }
+];
 
 function TabLink(): JSX.Element {
     const params = useParams<{ id: string }>();

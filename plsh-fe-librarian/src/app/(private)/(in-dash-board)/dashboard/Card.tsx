@@ -51,7 +51,6 @@ function PostCard({left, children, reverse = false}: PostCardProps) {
                         flex: 1,
                         px: 4,
                         py: 4,
-                        bgcolor: 'white',
                         borderTopRightRadius: reverse ? 0 : 32,
                         borderBottomRightRadius: reverse ? 0 : 32,
                         borderTopLeftRadius: reverse ? 32 : 0,
