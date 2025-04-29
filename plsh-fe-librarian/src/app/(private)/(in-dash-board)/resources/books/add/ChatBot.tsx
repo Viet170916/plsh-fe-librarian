@@ -36,10 +36,10 @@ function ChatBot(): JSX.Element {
             }));
             const old: AddEditBookData = store.getState().addEditBookData;
             const bookData = {};
-            data.data.forEach(({key, value}) => {
-                set(bookData, key, value);
-            });
-            const newAddEditedBook = mergeBookDataToAddEdit(bookData as BookData, old);
+            // data.data.forEach(({key, value}) => {
+            //     set(bookData, key, value);
+            // });
+            const newAddEditedBook = mergeBookDataToAddEdit(data.data, old);
             dispatch(setAddEditBookData(newAddEditedBook));
         }
     }, [dispatch, data, store]);

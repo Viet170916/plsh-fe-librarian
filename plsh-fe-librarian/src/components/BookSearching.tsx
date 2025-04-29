@@ -54,7 +54,7 @@ function SearchWithScanner({onResult}: { onResult?: (books: BookData) => void })
 
     return (
         <Grid container spacing={3} width={"100%"} size={12} height={"fit-content"}>
-            <AiSupport open={openAiSupport} setOpen={setOpenAiSupport}/>
+            {/*<AiSupport open={openAiSupport} setOpen={setOpenAiSupport}/>*/}
             <BarcodeScanner onScanDone={onScanDone}/>
             <Grid size={12} height={"fit-content"}>
                 <NeumorphicButton loading={isFetching} fullWidth startIcon={<FaBarcode/>} onClick={() => setOpen(true)}

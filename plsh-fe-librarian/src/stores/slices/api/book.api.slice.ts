@@ -12,10 +12,7 @@ export const bookApi = createApi({
     baseQuery: baseQueryWithReAuth,
     tagTypes: ["BookInstances", "Book", "Books", "BookInstance"],
     endpoints: (builder) => ({
-        getFieldGenerate: builder.mutation<BaseResponse<{
-            key: Path<BookData>,
-            value: string | number | boolean
-        }[]>, { bookName: string, prompt: string }>({
+        getFieldGenerate: builder.mutation<BaseResponse<BookData>, { bookName: string, prompt: string }>({
             query(params) {
                 return (
                     {
