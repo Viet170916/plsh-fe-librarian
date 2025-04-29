@@ -4,7 +4,6 @@ import Grid from "@mui/material/Grid2";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import {FaPause, FaPlay} from "react-icons/fa6";
 import {useAudioHighlighter} from "@/hooks/useTtsPlayer";
-import data_2 from "./data2.json"
 import {IoPlayBack, IoPlayForward} from "react-icons/io5";
 import {MenuItem, Select, Slider} from "@mui/material";
 import AppChip from "@/components/primary/display/AppChip";

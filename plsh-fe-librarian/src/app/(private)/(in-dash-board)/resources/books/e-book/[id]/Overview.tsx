@@ -1,5 +1,5 @@
 "use client"
-import React, {JSX, memo, useEffect, useRef, useState} from "react";
+import React, {JSX, memo, useCallback, useEffect, useRef, useState} from "react";
 
 import {Box, Card, CardContent, IconButton, LinearProgress, Typography} from '@mui/material';
 import {useDispatch, useSelector} from 'react-redux';
@@ -49,9 +49,9 @@ function Overview(): JSX.Element {
         }
     }, [chapterError]);
 
-    const loadChapters = (page: number) => {
+    const loadChapters = useCallback((page: number) => {
         getChapters({bookId: Number.parseInt(id), page});
-    };
+    }, [getChapters]);
 
     useEffect(() => {
         if (data?.data) {
@@ -74,7 +74,7 @@ function Overview(): JSX.Element {
 
     useEffect(() => {
         loadChapters(1);
-    }, [id ,loadChapters]);
+    }, [id, loadChapters]);
 
     const handleLoadMore = (e: React.MouseEvent) => {
         e.stopPropagation();
