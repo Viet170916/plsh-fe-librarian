@@ -117,8 +117,8 @@ function HandleSaveChangeButton(): JSX.Element {
             appToaster.success(bookResponse.data?.message);
             dispatch(bookApi.util.resetApiState());
             dispatch(clearData());
-            if (bookResponse.data.data?.id)
-                router.push(`/resources/books/${bookResponse.data.data.id}/edit`);
+            // if (bookResponse.data.data?.id)
+            //     router.push(`/resources/books/${bookResponse.data.data.id}/edit`);
         };
         if(bookResponse?.error){
             appToaster.error(parsErrorToBaseResponse(bookResponse.error)?.message);
