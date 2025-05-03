@@ -3,7 +3,7 @@ import {appToaster} from "@/components/primary/toaster";
 import {BookData} from "@/helpers/appType";
 import {parsErrorToBaseResponse} from "@/helpers/error";
 import {useAppDispatch} from "@/hooks/useDispatch";
-import {useLazyGetBooksQuery} from "@/stores/slices/api/book.api.slice";
+import {useGetBooksQuery} from "@/stores/slices/api/book.api.slice";
 import {setPropToBookState} from "@/stores/slices/book-states/book.slice";
 import {ListItemButton, ListItemText} from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -19,6 +19,7 @@ import Link from "next/link";
 import appStrings from "@/helpers/appStrings";
 import AppPagination from "@/components/primary/Input/AppPagination";
 import {useSelector} from "@/hooks/useSelector";
+import {shallowEqual} from "react-redux";
 
 function BookDisplay(): JSX.Element {
     const dispatch = useAppDispatch();
@@ -26,12 +27,13 @@ function BookDisplay(): JSX.Element {
         id: number | null,
         anchorEl: HTMLElement | null
     } | null>(null);
-    const filter = useSelector(state => state.bookState.booksFilter);
-    const [getBooks, {data: books, isFetching, error}] = useLazyGetBooksQuery();
-    useEffect(() => {
-        // if (filter)
-        getBooks(filter ?? {page: 1, limit: 18});
-    }, [getBooks, filter]);
+    const filter = useSelector(state => state.bookState.booksFilter, shallowEqual);
+    const {data: books, isFetching, error} = useGetBooksQuery(filter ?? {page: 1, limit: 18});
+
+    const onSelectBook = useCallback((book: BookData) => {
+        dispatch(setPropToBookState({key: "currentBook", value: book}));
+    }, [dispatch]);
+
     useEffect(() => {
         setMenuBookSelected(null);
     }, [books]);
@@ -41,9 +43,7 @@ function BookDisplay(): JSX.Element {
             appToaster.error(parsErrorToBaseResponse(error)?.message);
         }
     }, [error]);
-    const onSelectBook = useCallback((book: BookData) => {
-        dispatch(setPropToBookState({key: "currentBook", value: book}));
-    }, [dispatch]);
+    console.log("23456789")
     return (
         <>
             <LoadingModal open={isFetching}/>

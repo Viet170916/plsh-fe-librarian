@@ -122,7 +122,7 @@ export const bookApi = createApi({
                 return `category/check-duplicate${objectToQueryParams(param)}`;
             },
         }),
-        addUpdateBook: builder.mutation<BookData, BookData>({
+        addUpdateBook: builder.mutation<BaseResponse<BookData>, BookData>({
             query: (payload) => ({
                 url: `/book/add`,
                 method: httpMethods.POST,
@@ -147,6 +147,7 @@ export const {
     useModifyBookInstancesMutation,
     useLazyGetBookInstancesQuery,
     useLazyGetBooksQuery,
+    useGetBooksQuery,
     useGetFieldGenerateMutation,
     useGetBookInstanceQuery,
     useLazyGetBookQuery,

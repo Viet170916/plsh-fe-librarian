@@ -38,7 +38,7 @@ export const BookCard = memo(({book, newBook, onMenuSelect}: {
     } | null)) | { id: number | null; anchorEl: HTMLElement | null } | null)) => void
 }) => {
     return (
-        <Grid component={NeumorphicButton} boxShadow={NEUMORPHIC_SHADOW.SHADOW()}
+        <Grid boxShadow={NEUMORPHIC_SHADOW.SHADOW()}
               sx={{p: 2, borderRadius: 3, position: "relative"}} spacing={1}
               width={"100%"}
               container height={"100%"}>

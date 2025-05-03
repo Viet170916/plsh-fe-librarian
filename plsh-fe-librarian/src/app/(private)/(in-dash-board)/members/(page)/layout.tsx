@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid2";
 import {TabBar} from "@/components/primary/navigation/TabBar";
 import CreateMemberForm from "@/app/(private)/(in-dash-board)/members/add-member/CreateMemberForm";
 import {FilterForm} from "@/app/(private)/(in-dash-board)/members/(page)/ClientRender";
+import MemberAnalytic from "@/app/(private)/(in-dash-board)/members/(page)/MemberAnalytic";
 
 type layoutProps = {
     children?: React.ReactNode;
@@ -23,6 +24,7 @@ function layout({children}: layoutProps): JSX.Element {
             <Grid size={"grow"} width={"100%"} sx={{overflowY: "auto"}}>
                 {children}
             </Grid>
+
         </Grid>
     );
 }

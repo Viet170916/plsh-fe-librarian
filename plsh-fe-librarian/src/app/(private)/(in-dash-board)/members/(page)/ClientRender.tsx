@@ -17,6 +17,7 @@ import {setStateToMemberState} from "@/stores/slices/member-states/member.slice"
 import AppPagination from "@/components/primary/Input/AppPagination";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
+import MemberAnalytic from "@/app/(private)/(in-dash-board)/members/(page)/MemberAnalytic";
 
 
 type ClientRenderProps = {
@@ -35,7 +36,7 @@ export type FilterParams<OrderByKeys> = {
 
 function ClientRender({}: ClientRenderProps): JSX.Element {
     const dispatch = useAppDispatch();
-    const membersFilter = useSelector((state) => state.memberState.filter, shallowEqual);
+    const membersFilter = useSelector((state) => state.memberState.filter);
     const [getMembers, {data: memberResponse, error, isFetching,}] = useLazyGetMembersQuery();
     useEffect(() => {
         if (error) {
@@ -57,13 +58,16 @@ function ClientRender({}: ClientRenderProps): JSX.Element {
         <>
             <Grid width={"100%"} container minHeight={"100%"} direction={"column"} spacing={2}>
                 {isFetching && <LinearProgress/>}
-                <Grid>
+                <Grid size={12}>
+                    <MemberAnalytic/>
+                </Grid>
+                <Grid size={12}>
                     <MemberDisplay/>
                 </Grid>
-                <Grid>
+                <Grid size={12}>
                     <AppPagination
-                        page={memberResponse?.page ?? 1}
-                        count={Math.ceil((memberResponse?.count ?? 1) / (memberResponse?.limit ?? 10))}
+                        page={memberResponse?.page ?? memberResponse?.currentPage ?? 1}
+                        count={Math.ceil((memberResponse?.pageCount ?? 1))}
                         onChange={(_, page) => {
                             dispatch(setStateToMemberState({key: "filter.page", value: page}))
                         }}

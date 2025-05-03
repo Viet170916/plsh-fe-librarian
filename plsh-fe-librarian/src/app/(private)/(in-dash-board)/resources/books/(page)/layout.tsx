@@ -6,6 +6,7 @@ import appStrings from "@/helpers/appStrings";
 import Link from "next/link";
 import Filter from "@/app/(private)/(in-dash-board)/resources/books/(page)/Filter";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
+import WithClientOnly from "@/components/primary/WithClientOnly";
 
 type layoutProps = {
     children?: React.ReactNode;
@@ -18,18 +19,22 @@ function layout({children}: layoutProps): JSX.Element {
     ]
     return (
         <Grid container width={"100%"} direction={"column"}>
-            <Grid size={12}>{
-                <TabBar left={
-                    <Grid container width={"100%"} alignItems={"center"} spacing={2}>
-                        <NeumorphicButton variant_2={"primary"} component={Link} href={`/resources/books/add`}>
-                            {appStrings.book.ADD_BOOK}
-                        </NeumorphicButton>
-                        <Grid size={"grow"}>
-                            <Filter/>
-                        </Grid>
-                    </Grid>
+            <Grid size={12}>
+                <WithClientOnly>
 
-                } tabs={tabs}/>}</Grid>
+                    <TabBar left={
+                        <Grid container width={"100%"} alignItems={"center"} spacing={2}>
+                            <NeumorphicButton variant_2={"primary"} component={Link} href={`/resources/books/add`}>
+                                {appStrings.book.ADD_BOOK}
+                            </NeumorphicButton>
+                            <Grid size={"grow"}>
+                                <Filter/>
+                            </Grid>
+                        </Grid>
+
+                    } tabs={tabs}/>
+                </WithClientOnly>
+            </Grid>
             <Grid size={"grow"} sx={{overflowY: "auto"}} width={"100%"}>
                 {children}
             </Grid>

@@ -26,6 +26,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {toast} from "sonner";
 import NeumorphicButton from "@/components/primary/neumorphic/Button";
 import {useRouter} from "next/navigation";
+import {parsErrorToBaseResponse} from "@/helpers/error";
 
 function HandleSaveChangeButton(): JSX.Element {
     const store = useAppStore();
@@ -76,48 +77,54 @@ function HandleSaveChangeButton(): JSX.Element {
             payload.category = data.baseInfo.category;
         }
         const bookResponse = await addBook(payload);
-        if (!bookResponse.data || !bookResponse.data.id) return;
-        if (eBook?.kind === "epub" && eBook.resource && eBook.resource.localUrl) {
-            try {
-                const fileAfterConverted = await urlToFile(eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip");
-                const resourceUpload = await uploadResource({
-                    bookId: bookResponse.data.id,
-                    data: objectToFormData({...eBook.resource, file: fileAfterConverted})
-                });
-            } catch {
-                toast.error(appStrings.error.FAIL_TO_UPLOAD_EBOOK);
+        if (bookResponse.data?.data.id) {
+            if (eBook?.kind === "epub" && eBook.resource && eBook.resource.localUrl) {
+                try {
+                    const fileAfterConverted = await urlToFile(eBook.resource.localUrl, eBook.resource.name ?? "unknown", eBook.resource.fileType ?? "application/epub+zip");
+                    const resourceUpload = await uploadResource({
+                        bookId: bookResponse.data.data.id,
+                        data: objectToFormData({...eBook.resource, file: fileAfterConverted})
+                    });
+                } catch {
+                    toast.error(appStrings.error.FAIL_TO_UPLOAD_EBOOK);
+                }
             }
-        }
-        if (audioBook?.kind === "audio" && audioBook.resource && audioBook.resource.localUrl) {
-            try {
-                const fileAfterConverted = await compressImage(await urlToFile(audioBook.resource.localUrl, audioBook.resource.name ?? "unknown", audioBook.resource.fileType ?? "audio/mpeg"), "LOWEST_240P");
-                const resourceUpload = await uploadResource({
-                    bookId: bookResponse.data.id,
-                    data: objectToFormData({...audioBook.resource, fileAfferConverted: fileAfterConverted})
-                });
-            } catch {
-                toast.error(appStrings.error.FAIL_TO_UPLOAD_AUDIO_BOOK);
+            if (audioBook?.kind === "audio" && audioBook.resource && audioBook.resource.localUrl) {
+                try {
+                    const fileAfterConverted = await compressImage(await urlToFile(audioBook.resource.localUrl, audioBook.resource.name ?? "unknown", audioBook.resource.fileType ?? "audio/mpeg"), "LOWEST_240P");
+                    const resourceUpload = await uploadResource({
+                        bookId: bookResponse.data.data.id,
+                        data: objectToFormData({...audioBook.resource, fileAfferConverted: fileAfterConverted})
+                    });
+                } catch {
+                    toast.error(appStrings.error.FAIL_TO_UPLOAD_AUDIO_BOOK);
+                }
             }
-        }
-        if (coverImage && coverImage.localUrl && isInternalUrl(coverImage.localUrl) === "blob") {
-            try {
-                const fileAfterConverted = await urlToFile(coverImage.localUrl, coverImage.name ?? "unknown", coverImage.fileType ?? "image/png");
-                const resourceUpload = await uploadResource({
-                    bookId: bookResponse.data.id,
-                    data: objectToFormData({
-                        ...coverImage,
-                        file: await compressImage(fileAfterConverted, "LOWEST_240P")
-                    })
-                });
-            } catch {
-                toast.error(appStrings.error.FAIL_TO_UPLOAD_COVER);
+            if (coverImage && coverImage.localUrl && isInternalUrl(coverImage.localUrl) === "blob") {
+                try {
+                    const fileAfterConverted = await urlToFile(coverImage.localUrl, coverImage.name ?? "unknown", coverImage.fileType ?? "image/png");
+                    const resourceUpload = await uploadResource({
+                        bookId: bookResponse.data.data.id,
+                        data: objectToFormData({
+                            ...coverImage,
+                            file: await compressImage(fileAfterConverted, "LOWEST_240P")
+                        })
+                    });
+                } catch {
+                    toast.error(appStrings.error.FAIL_TO_UPLOAD_COVER);
+                }
             }
+            appToaster.success(bookResponse.data?.message);
+            dispatch(bookApi.util.resetApiState());
+            dispatch(clearData());
+            if (bookResponse.data.data?.id)
+                router.push(`/resources/books/${bookResponse.data.data.id}/edit`);
+        };
+        if(bookResponse?.error){
+            appToaster.error(parsErrorToBaseResponse(bookResponse.error)?.message);
         }
-        dispatch(bookApi.util.resetApiState());
-        dispatch(clearData());
-        if (bookData?.id)
-            router.push(`/resources/books/${bookData.id}/edit`);
-    }, [store, addBook, dispatch, uploadResource, bookData?.id, router]);
+
+    }, [store, addBook, dispatch, uploadResource, bookData?.data.id, router]);
     const
         onSubmit = async () => {
             if (!deepEqual(store.getState().global.editedBook_g, store.getState().addEditBookData)) {
@@ -142,7 +149,7 @@ function HandleSaveChangeButton(): JSX.Element {
     }, [resourceError]);
     useEffect(() => {
         if (bookError)
-            appToaster.error(appStrings.error.REQUEST_ERROR);
+            appToaster.error(parsErrorToBaseResponse(bookError)?.message);
     }, [bookError]);
     useEffect(() => {
         if (errorCategory)
