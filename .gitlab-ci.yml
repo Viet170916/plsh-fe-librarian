@@ -72,21 +72,3 @@ deploy_plsh-fe-librarian:
     - client/librarian/develop
 
 
-build_fe_borrower_project:
-  stage: build
-  image: node:22.13.0
-  cache:
-    paths:
-      - node_modules/
-  before_script:
-    - source ~/.profile
-    - source ~/.bashrc
-    - export PATH="$PATH:~/.nvm/versions/node/v22.13.0/bin"
-  script:
-    - cd ./plsh-fe-borrower
-    - yarn install
-    - npm run build
-  only:
-    - merge_requests
-    - client/borrower/develop
-
