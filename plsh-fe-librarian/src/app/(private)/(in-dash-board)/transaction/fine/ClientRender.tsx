@@ -131,7 +131,7 @@ const PaymentPage: React.FC = () => {
     const steps = ['Chọn phạt', 'Thanh toán', 'Hoàn tất'];
 
     return (
-        <Box width={"100%"} mx="auto" p={{xs: 2, md: 3}} bgcolor="background.paper" borderRadius={1}>
+        <Box width={"100%"} mx="auto" p={{xs: 2, md: 3}} bgcolor="primary.main" borderRadius={1}>
             {isLoadingFines && <LinearProgress/>}
             {/*<Box mb={3}>*/}
             {/*    <Typography variant="h4" fontWeight="bold" gutterBottom>*/}
@@ -179,7 +179,7 @@ const PaymentPage: React.FC = () => {
                         ))}
                     </Box>
                 ) : fines.length === 0 ? (
-                    <Box textAlign="center" py={4} bgcolor="background.default" borderRadius={1}>
+                    <Box textAlign="center" py={4} bgcolor="primary.light" borderRadius={1}>
                         <Typography color="text.primary">
                             Không có khoản phạt nào cần thanh toán
                         </Typography>
