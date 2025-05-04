@@ -31,7 +31,7 @@ function EBookDisplay(): JSX.Element {
     const {data: books, isFetching, error} = useGetBooksQuery(filter ? {...filter, isEBook: true} : {
         page: 1,
         limit: 18,
-        isEBook: true
+        isEBook: true,
     });
 
     const onSelectBook = useCallback((book: BookData) => {
