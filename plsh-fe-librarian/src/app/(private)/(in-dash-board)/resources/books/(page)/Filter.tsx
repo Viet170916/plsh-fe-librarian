@@ -1,6 +1,6 @@
 "use client"
 import React, {JSX, memo, useCallback, useEffect, useMemo, useState} from "react";
-import {Autocomplete, Box} from "@mui/material";
+import {Autocomplete, Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {useLazyGetCategoriesQuery} from "@/stores/slices/api/book.api.slice";
 import {debounce} from "@mui/material/utils";
 import StarRating from "@/components/primary/StarRating";
@@ -65,6 +65,7 @@ function Filter(): JSX.Element {
     const [keyword, setKeyword] = React.useState('')
     const [selectedGenres, setSelectedGenres] = React.useState<Category[]>([])
     const [selectedRating, setSelectedRating] = React.useState<number | null>(null);
+
     React.useEffect(() => {
         if (keyword !== '' || selectedGenres.length > 0 || selectedRating) {
             dispatch(setPropToBookState({
@@ -119,9 +120,46 @@ function Filter(): JSX.Element {
                 isOptionEqualToValue={(option, value) => option === value}
                 sx={{minWidth: 200}}
             />
+            <SupportSelector onSelect={(isEBook) => dispatch(dispatch(setPropToBookState({
+                key: "booksFilter", value: isEBook,
+            })))}/>
         </Box>
     )
 }
 
-export default memo(Filter);
 
+type SupportType = 'all' | 'ebook' | 'audiobook';
+
+interface SupportSelectorProps {
+    onSelect: (isSupported: boolean) => void;
+    label?: string;
+}
+
+export const SupportSelector: React.FC<SupportSelectorProps> = ({onSelect, label = 'Hỗ trợ'}) => {
+    const [selectedType, setSelectedType] = React.useState<SupportType>('all');
+
+    const handleChange = (event: SelectChangeEvent<SupportType>) => {
+        const value = event.target.value as SupportType;
+        setSelectedType(value);
+        onSelect(value !== 'all');
+    };
+
+    return (
+        <FormControl fullWidth variant="outlined" sx={{minWidth: 250}}>
+            <InputLabel id="support-select-label">{label}</InputLabel>
+            <Select
+                labelId="support-select-label"
+                id="support-select"
+                value={selectedType}
+                onChange={handleChange}
+                label={label}
+            >
+                <MenuItem value="all">Tất cả</MenuItem>
+                <MenuItem value="ebook">Hỗ trợ sách điện tử/Sách nói</MenuItem>
+                {/*<MenuItem value="audiobook"></MenuItem>*/}
+            </Select>
+        </FormControl>
+    );
+};
+
+export default memo(Filter);
