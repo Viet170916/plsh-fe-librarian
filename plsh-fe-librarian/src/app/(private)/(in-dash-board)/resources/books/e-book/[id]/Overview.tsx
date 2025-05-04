@@ -51,7 +51,7 @@ function Overview(): JSX.Element {
 
     const loadChapters = useCallback((page: number) => {
         getChapters({bookId: Number.parseInt(id), page});
-    }, [getChapters]);
+    }, [getChapters, id]);
 
     useEffect(() => {
         if (data?.data) {

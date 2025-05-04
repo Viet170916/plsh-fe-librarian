@@ -412,7 +412,12 @@ const appStrings =
         NEXT_PAGE: "Trang sau", APPLY_SUCCESS: "Áp dụng thành công",
         APPLY_FOR_ALL: "Áp dụng cho tất cả",
         GET_NOW: "Hiện giờ",
-        ADD_ONSHELF: "Chuyển lên kệ"
+        ADD_ONSHELF: "Chuyển lên kệ",
+        TRANSACTION: "Danh sách phạt",
+        transaction: {
+            HISTORY: "Lịch sử giao dịch"
+            
+        }
 
 
     };

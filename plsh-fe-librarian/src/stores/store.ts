@@ -45,6 +45,7 @@ import eBookStateReducer from "@/stores/slices/book-states/e-book.book.slice";
 import bookInstanceStateReducer from "@/stores/slices/book-states/book-instance.book.slice";
 import {eBookApi} from "@/stores/slices/api/e-book.api.slice";
 import {createSelector} from "reselect";
+import {paymentApi} from "@/stores/slices/api/transaction.api.slice";
 
 export const store = configureStore({
     reducer: {
@@ -87,6 +88,7 @@ export const store = configureStore({
         [audioBookApi.reducerPath]: audioBookApi.reducer,
         [reviewApi.reducerPath]: reviewApi.reducer,
         [eBookApi.reducerPath]: eBookApi.reducer,
+        [paymentApi.reducerPath]: paymentApi.reducer,
 
     },
     middleware: (getDefaultMiddleware) => {
@@ -105,6 +107,7 @@ export const store = configureStore({
                 .concat(audioBookApi.middleware)
                 .concat(reviewApi.middleware)
                 .concat(eBookApi.middleware)
+                .concat(paymentApi.middleware)
 
         );
     },

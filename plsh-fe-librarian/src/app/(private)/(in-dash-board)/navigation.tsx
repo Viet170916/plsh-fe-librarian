@@ -4,9 +4,9 @@ import {Box, Typography, useMediaQuery} from '@mui/material'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {color} from "@/helpers/resources";
-import {TbLayoutDashboardFilled} from "react-icons/tb";
+import {TbHistory, TbLayoutDashboardFilled} from "react-icons/tb";
 import appStrings from "@/helpers/appStrings";
-import {FaBookBookmark} from "react-icons/fa6";
+import {FaBookBookmark, FaMoneyBillTransfer} from "react-icons/fa6";
 import {FaUsers} from "react-icons/fa";
 import {ImBooks} from "react-icons/im";
 import {IoLogOut, IoSettings} from "react-icons/io5";
@@ -21,6 +21,15 @@ const navItems = [
     {label: appStrings.BORROW, icon: <FaBookBookmark size={24}/>, href: '/borrow'},
     {label: appStrings.MEMBERS, icon: <FaUsers size={24}/>, href: '/members'},
     {label: appStrings.BOOK, icon: <ImBooks size={24}/>, href: '/resources/books'},
+    {
+        label: appStrings.TRANSACTION,
+        icon: <FaMoneyBillTransfer size={24}/>,
+        href: `/transaction/fine`
+    },{
+        label: appStrings.transaction.HISTORY,
+        icon: <TbHistory size={24}/>,
+        href: `/transaction/history`
+    },
     {
         href: "/resources/library-room",
         label: appStrings.LIBRARY_ROOM,
