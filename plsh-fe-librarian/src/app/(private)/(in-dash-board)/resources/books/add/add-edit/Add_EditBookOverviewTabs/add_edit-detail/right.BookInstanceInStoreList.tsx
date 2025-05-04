@@ -15,6 +15,7 @@ import {LinearProgress} from "@mui/material";
 import {appToaster} from "@/components/primary/toaster";
 import NeumorphicTextField from "@/components/primary/neumorphic/TextField";
 import {Controller, useForm} from "react-hook-form";
+import {parsErrorToBaseResponse} from "@/helpers/error";
 
 type BookInstanceInStoreListProps = {
     bookId: number;
@@ -40,7 +41,7 @@ function RightBookInstanceInStoreList({bookId, shelfId, rowShelfId}: BookInstanc
         if (bookShelfRows) {
             const booksOnShelfRes = await modifyBooksOnShelfPut(bookShelfRows);
             if (booksOnShelfRes?.data) {
-                appToaster.success(appStrings.success.SAVE_SUCCESS);
+                appToaster.success(booksOnShelfRes.data?.message);
                 if (rowShelfId && shelfId) {
                     dispatch(addBooksToRow({
                         rowId: rowShelfId,
@@ -50,7 +51,7 @@ function RightBookInstanceInStoreList({bookId, shelfId, rowShelfId}: BookInstanc
                     }));
                 }
             } else {
-                appToaster.error(appStrings.error.EDIT_FAIL);
+                appToaster.error(parsErrorToBaseResponse(booksOnShelfRes.error)?.message);
             }
         }
     };

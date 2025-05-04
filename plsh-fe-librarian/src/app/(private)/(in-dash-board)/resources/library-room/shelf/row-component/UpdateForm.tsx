@@ -44,8 +44,7 @@ function UpdateForm({rowId}: UpdateFormProps): JSX.Element {
             }
             return false;
         }
-        ,
-        [getRowOnShelf]);
+        , [getRowOnShelf]);
     useFetchingToast(data, error);
 
     return (
