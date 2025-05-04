@@ -1,10 +1,9 @@
-import {BaseResponse, BookData, BookInstance, FilterParams, LanguageCode, Resource} from "@/helpers/appType";
+import {BaseResponse, BookData, BookInstance, FilterParams, Resource} from "@/helpers/appType";
 import {constants} from "@/helpers/constants";
 import {objectToQueryParams} from "@/helpers/convert";
 import {baseQueryWithReAuth} from "@/stores/slices/api/api.config";
 import {Category} from "@/stores/slices/book-states/book.add-edit.slice";
 import {createApi} from "@reduxjs/toolkit/query/react";
-import {Path} from "react-hook-form";
 
 const httpMethods = constants.http.method;
 export const bookApi = createApi({
@@ -63,6 +62,7 @@ export const bookApi = createApi({
         }),
         getBooks: builder.query<BaseResponse<BookData[]>, FilterParams<BookData> & {
             authorId?: number,
+            isEBook?: boolean,
         }>({
             query: (param) => ({
                 url: `/book`,

@@ -120,9 +120,9 @@ function Filter(): JSX.Element {
                 isOptionEqualToValue={(option, value) => option === value}
                 sx={{minWidth: 200}}
             />
-            <SupportSelector onSelect={(isEBook) => dispatch(dispatch(setPropToBookState({
-                key: "booksFilter", value: isEBook,
-            })))}/>
+            {/*<SupportSelector onSelect={(isEBook) => dispatch(dispatch(setPropToBookState({*/}
+            {/*    key: "booksFilter", value: isEBook,*/}
+            {/*})))}/>*/}
         </Box>
     )
 }
