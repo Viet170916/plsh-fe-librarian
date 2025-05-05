@@ -22,7 +22,7 @@ export default async function Element(): Promise<React.JSX.Element> {
                     <Typography fontSize={15} sx={{color: color.DARK_LIGHTER_TEXT, justifySelf: "center"}}
                                 variant="body2"
                                 gutterBottom>
-                        {BOTH_STUDENTS_N_TEACHERS}
+                        {"Dành cho thủ thư"}
 
                     </Typography>
 

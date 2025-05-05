@@ -39,12 +39,12 @@ const BorrowTable = ({items}: IProps) => {
                                 <TableCell>{appStrings.borrow.CODE}</TableCell>
                                 <TableCell>{appStrings.member.FULLNAME}</TableCell>
                                 <TableCell>{appStrings.member.EMAIL}</TableCell>
-                                <TableCell>{appStrings.borrow.USAGE_DATE_COUNT}</TableCell>
+                                {/*<TableCell>{appStrings.borrow.USAGE_DATE_COUNT}</TableCell>*/}
                                 <TableCell>{appStrings.book.BOOK_COUNT}</TableCell>
                                 <TableCell>{appStrings.borrow.STATUS}</TableCell>
                                 <TableCell>{appStrings.OTHER}</TableCell>
                                 <TableCell>{appStrings.borrow.BORROW_DATE}</TableCell>
-                                <TableCell>{appStrings.ACTION}</TableCell>
+                                {/*<TableCell>{appStrings.ACTION}</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>

@@ -33,7 +33,7 @@ const BorrowItem = ({borrowItem, onSelected}: { borrowItem: LoanDto, onSelected:
             </TableCell>
             <TableCell>{borrowItem.borrower?.fullName}</TableCell>
             <TableCell>{borrowItem.borrower?.email}</TableCell>
-            <TableCell>{`${borrowItem.dayUsageCount} ${appStrings.unit.DAY}`}</TableCell>
+            {/*<TableCell>{`${borrowItem.dayUsageCount} ${appStrings.unit.DAY}`}</TableCell>*/}
             <TableCell>{`${borrowItem.bookBorrowings?.length} ${appStrings.unit.BOOK}`}</TableCell>
             <TableCell>
                 {borrowItem?.aprovalStatus && renderLoanStatusChip(borrowItem.aprovalStatus)}
@@ -44,14 +44,14 @@ const BorrowItem = ({borrowItem, onSelected}: { borrowItem: LoanDto, onSelected:
             <TableCell>
                 <TimeViewer targetDateTime={borrowItem.borrowingDate}/>
             </TableCell>
-            <TableCell>
-                <NeumorphicButton variant="outlined" onClick={(e) => {
-                    e.stopPropagation();
-                    onApprove().then();
-                }}>
-                    {appStrings.borrow.APPROVE}
-                </NeumorphicButton>
-            </TableCell>
+            {/*<TableCell>*/}
+            {/*    <NeumorphicButton variant="outlined" onClick={(e) => {*/}
+            {/*        e.stopPropagation();*/}
+            {/*        onApprove().then();*/}
+            {/*    }}>*/}
+            {/*        {appStrings.borrow.APPROVE}*/}
+            {/*    </NeumorphicButton>*/}
+            {/*</TableCell>*/}
         </TableRow>
     );
 };

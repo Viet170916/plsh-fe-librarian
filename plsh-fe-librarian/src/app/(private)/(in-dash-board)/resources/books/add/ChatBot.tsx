@@ -1,7 +1,7 @@
 "use client"
 import React, {JSX, memo, useCallback, useEffect} from "react";
 import ChatBox from "@/components/primary/ChatBox";
-import {BookData, MessageDto} from "@/helpers/appType";
+import {MessageDto} from "@/helpers/appType";
 import {useSelector} from "@/hooks/useSelector";
 import {useAppDispatch} from "@/hooks/useDispatch";
 import {shallowEqual} from "react-redux";
@@ -10,7 +10,6 @@ import {addChatToCurrentRoom} from "@/stores/slices/chat-state/chat.slice";
 import dayjs from "dayjs";
 import {generateRandomNumber} from "@/helpers/generate";
 import {AddEditBookData, setAddEditBookData} from "@/stores/slices/book-states/book.add-edit.slice";
-import {set} from "react-hook-form";
 import {mergeBookDataToAddEdit} from "@/helpers/dataTransfer";
 import {useAppStore} from "@/stores/store";
 
@@ -25,7 +24,7 @@ function ChatBot(): JSX.Element {
             dispatch(addChatToCurrentRoom(value));
             getFields({bookName: bookTitle, prompt: value.content});
         }
-    }, [bookTitle, dispatch,getFields]);
+    }, [bookTitle, dispatch, getFields]);
 
     useEffect(() => {
         if (data) {
@@ -39,8 +38,11 @@ function ChatBot(): JSX.Element {
             // data.data.forEach(({key, value}) => {
             //     set(bookData, key, value);
             // });
-            const newAddEditedBook = mergeBookDataToAddEdit(data.data, old);
-            dispatch(setAddEditBookData(newAddEditedBook));
+            if (data?.data) {
+                const newAddEditedBook = mergeBookDataToAddEdit(data.data, old);
+                dispatch(setAddEditBookData(newAddEditedBook));
+            }
+
         }
     }, [dispatch, data, store]);
 

@@ -17,7 +17,7 @@ import {useTheme} from "@mui/material/styles";
 import {NEUMORPHIC_SHADOW} from "@/style/theme/neumorphic.orange";
 
 const navItems = [
-    {label: appStrings.DASHBOARD, icon: <TbLayoutDashboardFilled size={24}/>, href: '/dashboard'},
+    // {label: appStrings.DASHBOARD, icon: <TbLayoutDashboardFilled size={24}/>, href: '/dashboard'},
     {label: appStrings.BORROW, icon: <FaBookBookmark size={24}/>, href: '/borrow'},
     {label: appStrings.MEMBERS, icon: <FaUsers size={24}/>, href: '/members'},
     {label: appStrings.BOOK, icon: <ImBooks size={24}/>, href: '/resources/books'},

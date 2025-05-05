@@ -78,22 +78,22 @@ function SignInForm(props: IProps): React.JSX.Element {
     const theme = useTheme();
     return (
         <Container sx={{...signInFormContainerStyle, bgcolor: theme.palette.background.default}}>
-            <Grid component={"form"} onSubmit={handleSubmit(onSubmit)} container spacing={2}>
-                <Grid size={12}>
-                    <NeumorphicTextField fullWidth type="email" label="Email"
-                                         variant="outlined" {...register("email")}
-                                         required/>
-                </Grid>
-                <Grid size={12}>
-                    <NeumorphicTextField fullWidth type="password" label={PASS}
-                                         variant="outlined" {...register("password")}
-                                         required/>
-                </Grid>
-                <Grid size={12} justifyContent="center" alignItems="center" container>
-                    <NeumorphicButton loading={isLoading || ggLoading} fullWidth sx={signInButtonStyle}
-                                      type="submit">{NEXT}</NeumorphicButton>
-                </Grid>
-            </Grid>
+            {/*<Grid component={"form"} onSubmit={handleSubmit(onSubmit)} container spacing={2}>*/}
+            {/*    <Grid size={12}>*/}
+            {/*        <NeumorphicTextField fullWidth type="email" label="Email"*/}
+            {/*                             variant="outlined" {...register("email")}*/}
+            {/*                             required/>*/}
+            {/*    </Grid>*/}
+            {/*    <Grid size={12}>*/}
+            {/*        <NeumorphicTextField fullWidth type="password" label={PASS}*/}
+            {/*                             variant="outlined" {...register("password")}*/}
+            {/*                             required/>*/}
+            {/*    </Grid>*/}
+            {/*    <Grid size={12} justifyContent="center" alignItems="center" container>*/}
+            {/*        <NeumorphicButton loading={isLoading || ggLoading} fullWidth sx={signInButtonStyle}*/}
+            {/*                          type="submit">{NEXT}</NeumorphicButton>*/}
+            {/*    </Grid>*/}
+            {/*</Grid>*/}
             <Grid container spacing={2} marginTop={1}>
                 <GoogleOAuthProvider
                     clientId="597774498082-72b6uc8gh7foe6rn6rav880djmq3b0ua.apps.googleusercontent.com">
@@ -105,15 +105,15 @@ function SignInForm(props: IProps): React.JSX.Element {
                     />
                 </GoogleOAuthProvider>
                 <Grid size={12} container spacing={2}>
-                    <Grid container spacing={1} size={6}>
-                        <PrimaryTypography>{ALREADY_HAVE_ACCOUNT}</PrimaryTypography>
-                        <Link href="/" sx={{color: color.DARK_TEXT}}>
-                            <PrimaryTypography>{LOGIN}</PrimaryTypography>
-                        </Link>
-                    </Grid>
+                    {/*<Grid container spacing={1} size={6}>*/}
+                    {/*    <PrimaryTypography>{ALREADY_HAVE_ACCOUNT}</PrimaryTypography>*/}
+                    {/*    <Link href="/" sx={{color: color.DARK_TEXT}}>*/}
+                    {/*        <PrimaryTypography>{LOGIN}</PrimaryTypography>*/}
+                    {/*    </Link>*/}
+                    {/*</Grid>*/}
                     <Grid size={6}>
-                        <Link href="/" sx={{color: color.DARK_TEXT}} underline="hover">
-                            <PrimaryTypography>{USE_AS_GUEST}</PrimaryTypography>
+                        <Link href="https://book-hive.space" sx={{color: color.DARK_TEXT}} underline="hover">
+                            <PrimaryTypography>{"Đến trang chủ"}</PrimaryTypography>
                         </Link>
                     </Grid>
                 </Grid>

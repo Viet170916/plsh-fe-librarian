@@ -148,28 +148,28 @@ function BookDetails(): JSX.Element {
                                 />
                             </Link>
                         </Tooltip>
-                        <Tooltip
-                            title={
-                                !(book.audioResource && true)
-                                    ? appStrings.UNAVAILABLE
-                                    : appStrings.HAS_SUPPORT
-                            }
-                        >
-                            <Link
-                                href={
-                                    book.epubResource && true
-                                        ? `/resources/books/audio/${book.id}`
-                                        : ""
-                                }
-                                aria-disabled={!(book.audioResource && true)}
-                            >
-                                <AvailabilityItem
-                                    kind={"audio"}
-                                    title={appStrings.book.AUDIO_BOOK}
-                                    isChecked={book.audioResource && true}
-                                />
-                            </Link>
-                        </Tooltip>
+                        {/*<Tooltip*/}
+                        {/*    title={*/}
+                        {/*        !(book.audioResource && true)*/}
+                        {/*            ? appStrings.UNAVAILABLE*/}
+                        {/*            : appStrings.HAS_SUPPORT*/}
+                        {/*    }*/}
+                        {/*>*/}
+                        {/*    <Link*/}
+                        {/*        href={*/}
+                        {/*            book.epubResource && true*/}
+                        {/*                ? `/resources/books/audio/${book.id}`*/}
+                        {/*                : ""*/}
+                        {/*        }*/}
+                        {/*        aria-disabled={!(book.audioResource && true)}*/}
+                        {/*    >*/}
+                        {/*        <AvailabilityItem*/}
+                        {/*            kind={"audio"}*/}
+                        {/*            title={appStrings.book.AUDIO_BOOK}*/}
+                        {/*            isChecked={book.audioResource && true}*/}
+                        {/*        />*/}
+                        {/*    </Link>*/}
+                        {/*</Tooltip>*/}
                     </List>
                 </Box>
                 <Box>
